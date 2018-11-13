@@ -1,0 +1,22 @@
+{
+  "name": "trailhead",
+  "version": "0.0.1",
+  "description": "Shared adventures",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_PATH=src node index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Munkkeli/trailhead.me.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Munkkeli/trailhead.me/issues"
+  },
+  "homepage": "https://trailhead.me",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
