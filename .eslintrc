@@ -1,0 +1,15 @@
+{
+  "extends": "airbnb",
+  "rules": {
+    "no-bitwise": ["error", { "int32Hint": true }],
+    "newline-per-chained-call": ["warn", { "ignoreChainWithDepth": 8 }],
+    "guard-for-in": "warn",
+    "no-restricted-syntax": "off",
+    "arrow-body-style": "off",
+    "import/no-extraneous-dependencies": "off",
+    "no-await-in-loop": "off",
+    "import/no-unresolved": "off",
+    "no-underscore-dangle": "off",
+    "max-len": "warn"
+  }
+}
