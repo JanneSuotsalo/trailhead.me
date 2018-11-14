@@ -73,6 +73,9 @@ CREATE TABLE `post`
 
   CONSTRAINT `post_user_userID_fk`
   FOREIGN KEY (`userID`) REFERENCES `user` (`userID`)
+    ON DELETE CASCADE,
+  CONSTRAINT `post_location_locationID_fk`
+  FOREIGN KEY (`locationID`) REFERENCES `location` (`locationID`)
     ON DELETE CASCADE
 );
 
