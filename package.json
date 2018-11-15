@@ -4,7 +4,7 @@
   "description": "Shared adventures",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_PATH=src node index"
+    "start": "cross-env NODE_PATH=src node index"
   },
   "repository": {
     "type": "git",
@@ -23,5 +23,8 @@
     "express": "^4.16.4",
     "joi": "^14.0.6",
     "mysql2": "^1.6.4"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.0"
   }
 }
