@@ -1,3 +1,4 @@
 const helloWorldRoutes = require('./helloWorldRoutes');
+const userRoutes = require('./userRoutes');
 
-module.exports = [helloWorldRoutes];
+module.exports = [helloWorldRoutes, userRoutes];
