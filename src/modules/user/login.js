@@ -18,7 +18,7 @@ module.exports = request(async (req, res) => {
 
   // Find the user that is trying to log in
   const [[user]] = await db.connection.execute(
-    `SELECT email, username, password FROM user WHERE email = ?`,
+    `SELECT userID, email, username, password FROM user WHERE email = ?`,
     [req.body.email]
   );
 
@@ -32,6 +32,9 @@ module.exports = request(async (req, res) => {
   if (!pw.validate(req.body.password, user.password)) {
     return { status: 'invalid credentials', error: 'Invalid credentials' };
   }
+
+  // Set the session
+  req.session = user;
 
   return { status: 'ok' };
 });

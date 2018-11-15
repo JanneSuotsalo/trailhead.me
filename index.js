@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieSession = require('cookie-session');
 const app = express();
 
 const db = require('modules/db');
@@ -7,6 +8,15 @@ const db = require('modules/db');
 require('dotenv').config();
 
 app.use(bodyParser.json());
+
+// TODO: Should be replaced with a Redis session storage in the future when time is on our side
+app.use(
+  cookieSession({
+    name: 'session',
+    keys: [process.env.COOKIE_KEY],
+    maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
+  })
+);
 
 // Initialize the server
 const init = async () => {
