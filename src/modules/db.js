@@ -2,6 +2,9 @@ const mysql = require('mysql2/promise');
 
 let connection = null;
 
+/**
+ * Connect to the database
+ */
 const connect = async () => {
   // Connect to the database
   connection = await mysql.createConnection({
