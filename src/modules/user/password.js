@@ -17,7 +17,7 @@ const sha256 = password => {
  */
 const hash = password => {
   // Return the bcrypt hash generated from the sha256 hash
-  return bcrypt.hashSync(sha256(password), process.env.SALT_ROUNDS);
+  return bcrypt.hashSync(sha256(password), Number(process.env.SALT_ROUNDS));
 };
 
 /**

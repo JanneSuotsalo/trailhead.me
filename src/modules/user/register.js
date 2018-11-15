@@ -1,5 +1,4 @@
 const joi = require('joi');
-const db = require('modules/db');
 const pw = require('./password');
 const { request } = require('modules/util');
 
@@ -10,7 +9,7 @@ const schema = joi.object({
   password: joi.string().min(6).max(1024).required(), // TODO: Add validation for secure password
 });
 
-module.exports = request(async (req, res) => {
+module.exports = request(async (trx, req, res) => {
   // Validate the incoming request with Joi
   const valid = joi.validate(req.body, schema);
   if (valid.error) {
@@ -23,7 +22,7 @@ module.exports = request(async (req, res) => {
     password: pw.hash(req.body.password),
   };
 
-  const [[available]] = await db.connection.execute(
+  const [[available]] = await trx.execute(
     `SELECT (SELECT COUNT(*) FROM user WHERE email = ?) as email, (SELECT COUNT(*) FROM user WHERE username = ?) as username;`,
     [user.email, user.username]
   );
@@ -50,10 +49,12 @@ module.exports = request(async (req, res) => {
   }
 
   // Create the new user
-  await db.connection.execute(
+  await trx.execute(
     `INSERT INTO user (email, username, password) VALUES (?, ?, ?);`,
     [user.email, user.username, user.password]
   );
+
+  asdsad;
 
   return { status: 'ok' };
 });

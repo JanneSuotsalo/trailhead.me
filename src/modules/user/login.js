@@ -1,5 +1,4 @@
 const joi = require('joi');
-const db = require('modules/db');
 const pw = require('./password');
 const { request } = require('modules/util');
 
@@ -9,7 +8,7 @@ const schema = joi.object({
   password: joi.string().min(6).max(1024).required(),
 });
 
-module.exports = request(async (req, res) => {
+module.exports = request(async (trx, req, res) => {
   // Validate the incoming request with Joi
   const valid = joi.validate(req.body, schema);
   if (valid.error) {
@@ -17,7 +16,7 @@ module.exports = request(async (req, res) => {
   }
 
   // Find the user that is trying to log in
-  const [[user]] = await db.connection.execute(
+  const [[user]] = await trx.execute(
     `SELECT userID, email, username, password FROM user WHERE email = ?`,
     [req.body.email]
   );
