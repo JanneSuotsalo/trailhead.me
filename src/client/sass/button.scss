@@ -1,5 +1,6 @@
 @import 'util';
 
+.button,
 button {
   position: relative;
   float: right;
@@ -8,7 +9,7 @@ button {
   min-width: 32px;
   height: 36px;
   line-height: 36px;
-  font-style: bold;
+  text-decoration: none;
   font-family: $font-family-body;
   font-size: 0.9rem;
   font-weight: bold;

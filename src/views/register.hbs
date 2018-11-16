@@ -1,0 +1,30 @@
+<div class="page full login">
+  <div class="logo"></div>
+
+  <form class="modal" novalidate>
+    <h2>Register</h2>
+
+    <label for="email">Email</label>
+    <input id="email" type="email" name="email" placeholder="example@trailhead.me" />
+
+    <label for="username">Username</label>
+    <input id="username" type="text" name="username" placeholder="trailhead" />
+
+    <label for="password">Password</label>
+    <input id="password" type="password" name="password" placeholder="••••••••" />
+
+    <label for="repassword">Confirm Password</label>
+    <input id="repassword" type="password" name="repassword" placeholder="••••••••" />
+
+    <div class="sink">
+      <button type="submit">Register</button>
+      <a href="/login" class="button secondary">Log In</a>
+    </div>
+  </form>
+
+  <div class="background"></div>
+</div>
+
+{{#section 'style'}}
+<link href="/static/css/login.css" rel="stylesheet" />
+{{/section}}
