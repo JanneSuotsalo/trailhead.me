@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
+const handlebars = require('express-handlebars');
 const app = express();
 
 const db = require('modules/db');
@@ -8,6 +9,20 @@ const db = require('modules/db');
 require('dotenv').config();
 
 app.use(bodyParser.json());
+
+app.set('views', __dirname + '/src/views');
+
+app.engine(
+  'hbs',
+  handlebars({
+    extname: '.hbs',
+    defaultLayout: 'layout',
+    layoutsDir: 'src/views',
+    partialsDir: 'src/views/partials',
+  })
+);
+
+app.set('view engine', 'hbs');
 
 // TODO: Should be replaced with a Redis session storage in the future when time is on our side
 app.use(

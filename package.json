@@ -4,7 +4,8 @@
   "description": "Shared adventures",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_PATH=src node index"
+    "start": "cross-env NODE_PATH=src gulp start",
+    "build": "gulp"
   },
   "repository": {
     "type": "git",
@@ -22,10 +23,20 @@
     "cookie-session": "^2.0.0-beta.3",
     "dotenv": "^6.1.0",
     "express": "^4.16.4",
+    "express-handlebars": "^3.0.0",
     "joi": "^14.0.6",
     "mysql2": "^1.6.4"
   },
   "devDependencies": {
-    "cross-env": "^5.2.0"
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "cross-env": "^5.2.0",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^8.0.0",
+    "gulp-nodemon": "^2.4.1",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.4",
+    "gulp-uglify": "^3.0.1",
+    "node-sass": "^4.10.0"
   }
 }
