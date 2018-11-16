@@ -1,0 +1,26 @@
+@import 'util';
+
+.page.full.login {
+  > div.background {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    overflow: hidden;
+    z-index: -1;
+
+    &:before {
+      content: '';
+      display: block;
+      margin: -8px 0 0 -8px;
+      width: calc(100% + 16px);
+      height: calc(100% + 16px);
+      background-image: url('/static/img/login.jpg');
+      background-position: center;
+      background-size: 100%;
+      opacity: 0.75;
+
+      filter: blur(8px);
+    }
+  }
+}

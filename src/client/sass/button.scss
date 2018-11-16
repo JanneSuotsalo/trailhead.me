@@ -1,0 +1,46 @@
+@import 'util';
+
+button {
+  position: relative;
+  float: right;
+  margin: 0 0 0 8px;
+  padding: 0 16px;
+  min-width: 32px;
+  height: 36px;
+  line-height: 36px;
+  font-style: bold;
+  font-family: $font-family-body;
+  font-size: 0.9rem;
+  font-weight: bold;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+  background-color: $color-primary;
+  color: $color-white;
+  cursor: pointer;
+
+  box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08);
+
+  transition: transform $animation-easing $animation-time,
+    box-shadow $animation-easing $animation-time,
+    background-color $animation-easing $animation-time,
+    opacity $animation-easing $animation-time,
+    color $animation-easing $animation-time,
+    border-color $animation-easing $animation-time;
+
+  &.secondary {
+    background-color: transparent;
+    color: $color-dark;
+
+    box-shadow: none;
+
+    &:hover {
+      background-color: $color-gray;
+    }
+  }
+
+  &:hover {
+    box-shadow: 0 7px 14px rgba(50, 50, 93, 0.1), 0 3px 6px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+  }
+}
