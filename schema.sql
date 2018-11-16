@@ -2,6 +2,7 @@ CREATE TABLE `file`
 (
   `fileID` INT AUTO_INCREMENT,
   `fileTypeID` TINYINT NOT NULL,
+  `fileStateID` TINYINT NOT NULL,
   `filename` VARCHAR(256) NULL,
   `path` TEXT NULL,
   `updatedAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -38,6 +39,7 @@ ALTER TABLE `location`
 CREATE TABLE `user`
 (
   `userID` INT AUTO_INCREMENT,
+  `userTypeID` TINYINT NOT NULL DEFAULT 1,
   `email` VARCHAR(254) NOT NULL,
   `username` VARCHAR(32) NOT NULL,
   `displayName` VARCHAR(32) NOT NULL,
