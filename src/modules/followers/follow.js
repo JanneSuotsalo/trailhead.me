@@ -3,7 +3,7 @@ const { request } = require('modules/util');
 
 // prettier-ignore
 const schema = joi.object({
-  commentID: joi.number().integer().min(1).required(),
+  userID: joi.number().integer().min(1).required(),
 });
 
 module.exports = request(async (trx, req, res) => {
@@ -21,31 +21,26 @@ module.exports = request(async (trx, req, res) => {
     };
   }
 
-  // Find the comment that the user is trying to edit
-  const [[comment]] = await trx.execute(
-    `SELECT userID, commentID FROM comment WHERE commentID = ?`,
-    [req.body.commentID]
+  // Find the user that the user is trying to follow
+  const [[user]] = await trx.execute(
+    `SELECT userID FROM user WHERE userID = ?`,
+    [req.body.userID]
   );
 
-  // Check if the comment exists
-  if (!comment) {
+  // Check if the user exists that the follower tries to follow
+  if (!user) {
     return {
       status: 'availability error',
-      error: "Comment doesn't exist",
+      error: "User doesn't exist",
     };
   }
 
-  // Is the comment user's comment
-  if (comment.userID !== req.session.userID) {
-    return {
-      status: 'forbidden',
-      error: 'No right to remove comment',
-    };
-  }
+  // Check that the user is not already following the other user
 
-  // Deletes comment
-  await trx.execute(`DELETE FROM comment WHERE commentID = ?;`, [
-    comment.commentID,
+  // Start following
+  await trx.execute(`INSERT INTO follower (followerID, userID) VALUES (?,?);`, [
+    req.session.userID,
+    req.body.userID,
   ]);
 
   return { status: 'ok' };

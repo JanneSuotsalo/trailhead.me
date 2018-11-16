@@ -54,7 +54,5 @@ module.exports = request(async (trx, req, res) => {
     [user.email, user.username, user.password]
   );
 
-  asdsad;
-
   return { status: 'ok' };
 });
