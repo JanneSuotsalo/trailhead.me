@@ -35,7 +35,7 @@ module.exports = request(async (trx, req, res) => {
     };
   }
 
-  // Is the comment users comment
+  // Is the comment user's comment
   if (comment.userID !== req.session.userID) {
     return {
       status: 'forbidden',
