@@ -1,12 +1,24 @@
-<form class="modal" novalidate>
-  <label for="email">Email</label>
-  <input id="email" type="email" name="email" placeholder="example@example.com" />
+<div class="page full login">
+  <div class="logo"></div>
 
-  <label for="password">Password</label>
-  <input id="password" type="password" name="password" placeholder="‎●‎●‎●‎●‎●‎●‎●‎●" />
+  <form class="modal" novalidate>
+    <h2>Log In</h2>
 
-  <div class="sink">
-    <button class="secondary">Cancel</button>
-    <button type="submit">Log In</button>
-  </div>
-</form>
+    <label for="email">Email</label>
+    <input id="email" type="email" name="email" placeholder="example@example.com" />
+
+    <label for="password">Password</label>
+    <input id="password" type="password" name="password" placeholder="••••••••" />
+
+    <div class="sink">
+      <button type="submit">Log In</button>
+      <button class="secondary">Cancel</button>
+    </div>
+  </form>
+
+  <div class="background"></div>
+</div>
+
+{{#section 'style'}}
+<link href="/static/css/login.css" rel="stylesheet" />
+{{/section}}
