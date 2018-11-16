@@ -10,6 +10,7 @@ sass.compiler = require('node-sass');
 const path = {
   js: 'src/client/js/*.js',
   scss: ['src/client/sass/*.scss', '!src/client/sass/util.scss'],
+  img: 'src/client/img/*.*',
 };
 
 gulp.task('js', () => {
@@ -31,18 +32,21 @@ gulp.task('scss', () => {
     .pipe(gulp.dest('dist/css'));
 });
 
+gulp.task('img', () => {
+  return gulp.src(path.img).pipe(gulp.dest('dist/img'));
+});
+
 gulp.task('default', ['js', 'scss']);
 
-gulp.task('watch', ['js', 'scss'], () => {
+gulp.task('watch', ['js', 'scss', 'img'], () => {
   gulp.watch(path.js, ['js']);
   gulp.watch(path.scss, ['scss']);
+  gulp.watch(path.img, ['img']);
 });
 
 gulp.task('start', ['watch'], () => {
   return nodemon({
     script: 'index.js',
     ignore: ['dist/*', 'src/client/*'],
-  }).on('restart', () => {
-    console.log('Trailhead reloaded');
   });
 });
