@@ -1,10 +1,11 @@
 const joi = require('joi');
 const { request } = require('modules/util');
+const emoji = require('./emoji');
 
 // prettier-ignore
 const schema = joi.object({
   postID: joi.number().integer().min(1).required(),
-  text: joi.string().max(256).required()
+  emoji: joi.string().allow(emoji.list).required()
 });
 
 module.exports = request(async (trx, req, res) => {
@@ -36,10 +37,23 @@ module.exports = request(async (trx, req, res) => {
     };
   }
 
-  // Create a comment
+  // Check if the user has already reacted to the post
+  const [[react]] = await trx.execute(
+    'SELECT COUNT(*) as "exists" FROM postReact WHERE userID = ? AND postID = ?;',
+    [req.session.userID, req.body.postID]
+  );
+
+  if (react.exists) {
+    return {
+      status: 'forbidden',
+      error: 'Already reacted to post...',
+    };
+  }
+
+  // Create reaction
   await trx.execute(
-    `INSERT INTO comment (text, userID, postID) VALUES (?,?,?);`,
-    [req.body.text, req.session.userID, req.body.postID]
+    `INSERT INTO postReact (reactID, userID, postID) VALUES (?,?,?);`,
+    [emoji.value[req.body.emoji], req.session.userID, req.body.postID]
   );
 
   return { status: 'ok' };
