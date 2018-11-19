@@ -30,7 +30,7 @@ module.exports = request(async (trx, req, res) => {
   // Check if the comment exists
   if (!comment) {
     return {
-      status: 'availability error',
+      status: 'forbidden',
       error: "Comment doesn't exist",
     };
   }

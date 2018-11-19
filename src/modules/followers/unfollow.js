@@ -9,13 +9,13 @@ module.exports = request(async (trx, req, res) => {
     };
   }
 
-  // Find the userID of the user, that the other user is trying to follow
+  // Find the userID of the user, that the other user is trying to unfollow
   const [[user]] = await trx.execute(
     `SELECT userID FROM user WHERE username = ?`,
     [req.params.username]
   );
 
-  // Check if the user exists that the follower tries to follow
+  // Check if the user exists that the follower tries to unfollow
   if (!user) {
     return {
       status: 'forbidden',
@@ -23,32 +23,31 @@ module.exports = request(async (trx, req, res) => {
     };
   }
 
-  // Check that the user is not trying to follow itself
+  // Check that the user is not trying to unfollow itself
   if (user.userID === req.session.userID) {
     return {
       status: 'forbidden',
-      error: 'Can not follow itself...',
+      error: 'Can not unfollow itself...',
     };
   }
-
-  // Check that the user is not already following the other user
+  // Check if the user is already following the other user
   const [[follower]] = await trx.execute(
     'SELECT COUNT(*) as "exists" FROM follower WHERE followerID = ? AND userID = ?;',
     [req.session.userID, user.userID]
   );
 
-  if (follower.exists) {
+  if (!follower.exists) {
     return {
       status: 'forbidden',
-      error: 'Already following...',
+      error: 'Not following the user...',
     };
   }
 
-  // Start following
-  await trx.execute(`INSERT INTO follower (followerID, userID) VALUES (?,?);`, [
-    req.session.userID,
-    user.userID,
-  ]);
+  // Unfollow
+  await trx.execute(
+    `DELETE FROM follower WHERE followerID = ? AND userID = ?;`,
+    [req.session.userID, user.userID]
+  );
 
   return { status: 'ok' };
 });

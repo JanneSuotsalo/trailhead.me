@@ -22,7 +22,7 @@ module.exports = request(async (trx, req, res) => {
   // Check if the post exists
   if (!post) {
     return {
-      status: 'availability error',
+      status: 'forbidden',
       error: "Post doesn't exist",
     };
   }
