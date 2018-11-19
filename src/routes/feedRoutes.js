@@ -1,5 +1,7 @@
 const feed = require('modules/feed/feed');
+const userFeed = require('modules/feed/userFeed');
 
 module.exports = app => {
-  app.get('/feed', feed);
+  app.post('/feed', feed);
+  app.post('/userFeed', userFeed);
 };
