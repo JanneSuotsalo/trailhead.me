@@ -13,6 +13,7 @@ module.exports = request(async (trx, req, res) => {
     return { status: 'validation error', error: valid.error };
   }
 
+  //Check if the user is logged in
   if (!req.session.isPopulated) {
     return {
       status: 'forbidden',
@@ -20,7 +21,7 @@ module.exports = request(async (trx, req, res) => {
     };
   }
 
-  //Feed for posts by the loggged in user
+  //Feed for posts by users the logged in user has followed
   const [posts] = await trx.execute(
     'SELECT * FROM post, follower WHERE follower.followerID = ? AND follower.userID = post.userID ORDER BY post.createdAt DESC LIMIT ?, ?;',
     [req.session.userID, Number(req.body.page) * 10, 10]

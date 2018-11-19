@@ -6,4 +6,8 @@ module.exports = app => {
   app.post('/feed', feed);
   app.post('/userFeed', userFeed);
   app.post('/personalFeed', personalFeed);
+
+  app.get('/feed', (req, res) => res.render());
+  app.get('/userFeed', (req, res) => res.render());
+  app.get('/personalFeed', (req, res) => res.render());
 };
