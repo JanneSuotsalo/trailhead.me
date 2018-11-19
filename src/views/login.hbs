@@ -1,7 +1,7 @@
 <div class="page full login">
   <div class="logo"></div>
 
-  <form class="modal" novalidate>
+  <form id="login" method="post" action="/register" class="modal" novalidate>
     <h2>Log In</h2>
 
     <label for="email">Email</label>
@@ -9,6 +9,8 @@
 
     <label for="password">Password</label>
     <input id="password" type="password" name="password" placeholder="••••••••" />
+
+    <div id="error"></div>
 
     <div class="sink">
       <button type="submit">Log In</button>
@@ -21,4 +23,8 @@
 
 {{#section 'style'}}
 <link href="/static/css/login.css" rel="stylesheet" />
+{{/section}}
+
+{{#section 'script'}}
+<script src="/static/js/login.js"></script>
 {{/section}}
