@@ -207,36 +207,15 @@ CREATE TABLE `flagFile`
 );
 
 
-CREATE TABLE `react`
-(
-  `reactID` INT AUTO_INCREMENT,
-  `emoji` VARCHAR(16) NOT NULL,
-  `updatedAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-    ON UPDATE CURRENT_TIMESTAMP,
-  `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-  CONSTRAINT `react_reactID_uindex`
-  UNIQUE (`reactID`),
-  CONSTRAINT `user_emoji_uindex`
-  UNIQUE (`emoji`)
-);
-
-ALTER TABLE `react`
-  ADD PRIMARY KEY (`reactID`);
-
-
 CREATE TABLE `postReact`
 (
   `postID` INT NOT NULL,
-  `reactID` INT NOT NULL,
+  `reactID` TINYINT NOT NULL,
   `userID` INT NOT NULL,
   `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   CONSTRAINT `postReact_post_postID_fk`
   FOREIGN KEY (`postID`) REFERENCES `post` (`postID`)
-    ON DELETE CASCADE,
-  CONSTRAINT `postReact_react_reactID_fk`
-  FOREIGN KEY (`reactID`) REFERENCES `react` (`reactID`)
     ON DELETE CASCADE,
   CONSTRAINT `postReact_user_userID_fk`
   FOREIGN KEY (`userID`) REFERENCES `user` (`userID`)
