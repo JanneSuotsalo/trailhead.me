@@ -12,6 +12,12 @@
     const repassword = document.querySelector('[name="repassword"]').value;
 
     const error = document.getElementById('error');
+    error.style.display = 'none;';
+
+    const showError = text => {
+      error.style.display = 'block;';
+      error.innerText = text;
+    };
 
     if (password !== repassword) {
       error.innerText = 'Passwords do not match';
@@ -39,13 +45,13 @@
         if (json.status !== 'ok') {
           switch (json.status) {
             case 'availability error':
-              error.innerText = 'Username has already been taken';
+              showError('Username has already been taken');
               return;
             case 'validation error':
-              error.innerText = 'Some fields contain invalid values';
+              showError('Some fields contain invalid values');
               return;
             default:
-              error.innerText = 'An error occurred, please try again...';
+              showError('An error occurred, please try again...');
               return;
           }
         } else {

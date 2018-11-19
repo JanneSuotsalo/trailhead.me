@@ -102,8 +102,66 @@ label {
 
   @include shadow;
 
+  #error {
+    margin: 0 0 24px 0;
+    padding: 8px 12px;
+    text-align: left;
+    font-family: $font-family-body;
+    font-size: 0.7rem;
+    border: 2px solid $color-error;
+    border-radius: 3px;
+    font-weight: bold;
+    color: $color-error;
+
+    box-sizing: border-box;
+  }
+
   > .sink {
     padding: 8px 0 0 0;
     height: 36px;
+  }
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 400px;
+  height: 80px;
+  background-color: $color-white;
+
+  box-sizing: border-box;
+
+  .logo {
+    width: 160px;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-image: url('/static/img/logo.svg');
+    background-position: center;
+    background-size: 100%;
+  }
+
+  .search {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    input {
+      margin: 20px auto 0 auto;
+      padding-left: 16px;
+      width: 300px;
+      border-radius: 32px;
+      border-color: $color-gray;
+    }
+  }
+
+  .profile {
+    .image {
+      width: 32px;
+      height: 32px;
+      background-size: 100%;
+      border-radius: 50%;
+    }
   }
 }
