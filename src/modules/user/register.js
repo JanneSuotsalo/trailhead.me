@@ -5,7 +5,7 @@ const { request } = require('modules/util');
 // prettier-ignore
 const schema = joi.object({
   email: joi.string().email().max(256).required(),
-  username: joi.string().alphanum().min(2).max(32).regex(/^[a-z0-9_-]{2,32}$/).required(),
+  username: joi.string().regex(/^[a-z0-9_-]{2,32}$/).required(),
   password: joi.string().min(6).max(1024).required(), // TODO: Add validation for secure password
 });
 
