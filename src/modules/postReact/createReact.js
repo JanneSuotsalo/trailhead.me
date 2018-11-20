@@ -1,6 +1,7 @@
 const joi = require('joi');
 const { request } = require('modules/util');
 const emoji = require('./emoji');
+const ID = require('modules/id');
 
 // prettier-ignore
 const schema = joi.object({
@@ -14,6 +15,15 @@ module.exports = request(async (trx, req, res) => {
     return { status: 'validation error', error: valid.error };
   }
 
+  // Convert hash id onto a numerical one
+  const postID = ID.post.decode(req.params.post)[0];
+  if (!postID) {
+    return {
+      status: 'not found',
+      error: 'Post does not exist',
+    };
+  }
+
   // Check if user is logged in
   if (!req.session.isPopulated) {
     return {
@@ -25,7 +35,7 @@ module.exports = request(async (trx, req, res) => {
   // Find the post
   const [[post]] = await trx.execute(
     `SELECT postID FROM post,user WHERE postID = ? AND user.userID = post.userID AND user.username = ?`,
-    [req.params.postID, req.params.username]
+    [postID, req.params.username]
   );
 
   // Check if the post exists
@@ -39,7 +49,7 @@ module.exports = request(async (trx, req, res) => {
   // Check if the user has already reacted to the post
   const [[react]] = await trx.execute(
     'SELECT COUNT(*) as "exists" FROM postReact WHERE userID = ? AND postID = ?;',
-    [req.session.userID, req.params.postID]
+    [req.session.userID, postID]
   );
 
   if (react.exists) {
@@ -52,7 +62,7 @@ module.exports = request(async (trx, req, res) => {
   // Create reaction
   await trx.execute(
     `INSERT INTO postReact (reactID, userID, postID) VALUES (?,?,?);`,
-    [emoji.value[req.body.emoji], req.session.userID, req.params.postID]
+    [emoji.value[req.body.emoji], req.session.userID, postID]
   );
 
   return { status: 'ok' };
