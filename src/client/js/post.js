@@ -3,6 +3,8 @@
   const input = document.querySelector('.input.file input');
 
   const upload = files => {
+    document.querySelector('.gallery .message').style.display = 'none';
+
     const data = new FormData();
     for (const file of files) {
       data.append('list', file);
