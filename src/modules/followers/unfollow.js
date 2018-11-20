@@ -19,7 +19,7 @@ module.exports = request(async (trx, req, res) => {
   if (!user) {
     return {
       status: 'forbidden',
-      error: "User doesn't exist",
+      error: 'User does not exist',
     };
   }
 

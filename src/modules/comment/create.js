@@ -32,7 +32,7 @@ module.exports = request(async (trx, req, res) => {
   if (!post) {
     return {
       status: 'forbidden',
-      error: "Post doesn't exist",
+      error: 'Post does not exist',
     };
   }
 
