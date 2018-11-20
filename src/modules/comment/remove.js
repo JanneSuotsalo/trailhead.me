@@ -1,5 +1,6 @@
 const joi = require('joi');
 const { request } = require('modules/util');
+const ID = require('modules/id');
 
 // prettier-ignore
 const schema = joi.object({
@@ -13,6 +14,15 @@ module.exports = request(async (trx, req, res) => {
     return { status: 'validation error', error: valid.error };
   }
 
+  // Convert hash id onto a numerical one
+  const postID = ID.post.decode(req.params.post)[0];
+  if (!postID) {
+    return {
+      status: 'not found',
+      error: 'Post does not exist',
+    };
+  }
+
   // Check if user is logged in
   if (!req.session.isPopulated) {
     return {
@@ -23,8 +33,8 @@ module.exports = request(async (trx, req, res) => {
 
   // Find the comment that the user is trying to edit
   const [[comment]] = await trx.execute(
-    `SELECT userID, commentID FROM comment WHERE commentID = ?`,
-    [req.body.commentID]
+    `SELECT userID, commentID FROM comment WHERE commentID = ? and postID = ?`,
+    [req.body.commentID, postID]
   );
 
   // Check if the comment exists
