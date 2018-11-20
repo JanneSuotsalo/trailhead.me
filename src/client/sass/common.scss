@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css?family=Playfair+Display:700|Raleway:400,700');
+@import url('https://cdn.materialdesignicons.com/2.8.94/css/materialdesignicons.min.css');
 
 @import 'util';
 @import 'button';
@@ -36,6 +37,83 @@ input {
 
   &:focus {
     border-color: $color-primary;
+  }
+}
+
+.input.file {
+  position: relative;
+  width: 100%;
+  height: 128px;
+  border: 2px dashed $color-dimgray;
+  border-radius: 3px;
+  cursor: pointer;
+
+  box-sizing: border-box;
+
+  transition: background-color $animation-easing $animation-time,
+    border $animation-easing $animation-time;
+
+  &:hover {
+    .help span {
+      transform: translateY(4px);
+    }
+  }
+
+  &.drag {
+    border: 2px solid $color-primary;
+    background-color: $color-primary;
+
+    .help {
+      span {
+        color: $color-white;
+
+        transform: translateY(4px);
+      }
+
+      p {
+        color: rgba($color-white, 0.5);
+      }
+    }
+  }
+
+  input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    z-index: 1;
+
+    display: none;
+  }
+
+  .help {
+    position: absolute;
+    top: 36px;
+    width: 100%;
+    text-align: center;
+    font-family: $font-family-body;
+    font-size: 0.7rem;
+    font-weight: bold;
+    z-index: 2;
+    pointer-events: none;
+
+    span {
+      display: block;
+      position: relative;
+      font-size: 1.8rem;
+      color: $color-primary;
+
+      transition: color $animation-easing $animation-time,
+        transform $animation-easing $animation-time;
+    }
+
+    p {
+      margin: 8px 0 0 0;
+      color: $color-dimgray;
+
+      transition: color $animation-easing $animation-time;
+    }
   }
 }
 
@@ -95,6 +173,7 @@ label {
 }
 
 .modal {
+  margin: 32px auto 0 auto;
   padding: 32px;
   width: 300px;
   border-radius: 4px;

@@ -3,6 +3,7 @@ const commentRoutes = require('./commentRoutes');
 const feedRoutes = require('./feedRoutes');
 const followersRoutes = require('./followersRoutes');
 const reactRoutes = require('./reactRoutes');
+const postRoutes = require('./postRoutes');
 
 module.exports = [
   userRoutes,
@@ -10,4 +11,5 @@ module.exports = [
   followersRoutes,
   feedRoutes,
   reactRoutes,
+  postRoutes,
 ];
