@@ -1,11 +1,18 @@
 {{> navigation}}
 
 <content>
-  {{#each posts}}
-  <div class="post">
-    <p>{{text}}</p>
-    <span>{{createdAt}}</span>
-    <a href="/{{username}}/{{postID}}">View</a>
+  <div id="wrapper">
+    <div class="feed">
+      {{#each posts}}
+      <div class="post">
+        <p>{{text}}</p>
+        <span>{{createdAt}}</span>
+        <a href="/{{username}}/{{postID}}">View</a>
+      </div>
+      {{/each}}
+    </div>
   </div>
-  {{/each}}
+
+
+
 </content>

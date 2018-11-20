@@ -244,3 +244,23 @@ nav {
     }
   }
 }
+#wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 1px;
+}
+
+.feed {
+  font-family: 'Raleway';
+  display: flex;
+  flex-flow: column;
+  flex-basis: 600px;
+  align-items: center;
+  @include shadow;
+  background-color: $color-white;
+}
+
+.post {
+  box-shadow: 0px 1px gray;
+  padding: 0 0 8px 0;
+}

@@ -1,29 +1,28 @@
 const joi = require('joi');
 const { request } = require('modules/util');
-
-// prettier-ignore
-const schema = joi.object({
-  postID: joi.number().integer().min(1).required()
-});
+const ID = require('modules/id');
 
 module.exports = request(async (trx, req, res) => {
-  // Validate the incoming request with Joi
-  const valid = joi.validate(req.body, schema);
-  if (valid.error) {
-    return { status: 'validation error', error: valid.error };
+  // Convert hash id onto a numerical one
+  const postID = ID.post.decode(req.params.post)[0];
+  if (!postID) {
+    return {
+      status: 'not found',
+      error: 'Post does not exist',
+    };
   }
 
   // Find the post
   const [[post]] = await trx.execute(
     `SELECT postID FROM post WHERE postID = ?`,
-    [req.body.postID]
+    [postID]
   );
 
   // Check if the post exists
   if (!post) {
     return {
       status: 'forbidden',
-      error: "Post doesn't exist",
+      error: 'Post does not exist',
     };
   }
 
@@ -44,7 +43,7 @@ module.exports = request(async (trx, req, res) => {
     WHERE 
     comment.postID = ? AND user.userID = comment.userID
     ORDER BY comment.createdAt DESC;`,
-    [req.body.postID]
+    [postID]
   );
 
   return { status: 'ok', list };
