@@ -25,23 +25,20 @@ module.exports = request(async (trx, req, res) => {
     };
   }
 
-  // Find all the comments of a post
+  // Find all the reactions of a post
   const [list] = await trx.execute(
     `SELECT 
-    comment.commentID,
-    comment.userID,
-    comment.postID,
-    comment.text,
-    comment.updatedAt,
-    comment.createdAt,
+    postReact.postID,
+    postReact.reactID,
+    postReact.userID,
     user.displayName,
     user.userName
     FROM 
-    comment,
+    postReact,
     user
     WHERE 
-    comment.postID = ? AND user.userID = comment.userID
-    ORDER BY comment.createdAt DESC;`,
+    postReact.postID = ? AND user.userID = postReact.userID
+    ORDER BY postReact.createdAt DESC;`,
     [postID]
   );
 
