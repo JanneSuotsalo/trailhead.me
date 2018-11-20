@@ -1,3 +1,30 @@
 .modal.post {
   width: 450px;
+
+  .input.file {
+    margin-bottom: 16px;
+  }
+
+  .gallery {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: calc(16px - 2%);
+    width: 102%;
+
+    .empty {
+      margin-right: 0;
+      margin-bottom: 2%;
+      padding-top: 23%;
+      width: 0;
+    }
+
+    > div {
+      margin-right: 2%;
+      margin-bottom: 2%;
+      padding-top: 23%;
+      width: 23%;
+      background-size: cover;
+      border-radius: 3px;
+    }
+  }
 }

@@ -2,6 +2,38 @@
   const zone = document.querySelector('.input.file');
   const input = document.querySelector('.input.file input');
 
+  const upload = files => {
+    const data = new FormData();
+    for (const file of files) {
+      data.append('list', file);
+    }
+
+    fetch('/file', {
+      method: 'POST',
+      body: data,
+    })
+      .then(
+        response => response.json() // if the response is a JSON object
+      )
+      .then(status => {
+        if (status.status !== 'ok') {
+          console.error(status);
+        } else {
+          const gallery = document.querySelector('.gallery');
+          gallery.classList.remove('empty');
+
+          for (const file of status.fileIDs) {
+            const image = document.createElement('div');
+            image.style.backgroundImage = `url(/file/${file})`;
+            gallery.appendChild(image);
+          }
+        }
+      })
+      .catch(
+        error => console.log(error) // Handle the error response object
+      );
+  };
+
   const dropHandler = event => {
     console.log('File(s) dropped');
 
@@ -30,7 +62,10 @@
   };
 
   const selectHandler = event => {
-    console.log(event.target.files);
+    // TODO: Properly limit files to only 8
+    if (event.target.files.length > 0 && event.target.files.length <= 8) {
+      upload(event.target.files);
+    }
   };
 
   zone.addEventListener('drop', dropHandler);

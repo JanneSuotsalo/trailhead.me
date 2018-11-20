@@ -3,12 +3,19 @@
 <content>
   <div class="modal post">
     <label class="input file">
-      <input type="file" />
+      <input type="file" accept=".png,.jpg,.jpeg,.webm,.mp4" multiple />
       <div class="help">
         <span class="mdi mdi-file-download"></span>
-        <p>.png .jpg .jpeg .mp4</p>
+        <p>.png .jpg .jpeg .mp4 .webm</p>
       </div>
     </label>
+
+    <div class="gallery">
+      <div class="empty"></div>
+    </div>
+
+    <label for="text">Text</label>
+    <input id="text" name="text" type="text" />
   </div>
 </content>
 
