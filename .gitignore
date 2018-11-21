@@ -1,5 +1,6 @@
 node_modules/
 dist/
 storage/
+cert/
 package-lock.json
 .env
