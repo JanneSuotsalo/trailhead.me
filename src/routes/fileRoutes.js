@@ -7,6 +7,7 @@ const upload = multer({
 
 module.exports = app => {
   app.get('/file/:file', serve);
-  app.get('/file/:file/:width/:height', serve);
+  app.get('/file/:file/:size', serve); // Serve with predefined image sizes
+  app.get('/file/:file/:width/:height', serve); // Serve with custom thumbnail size
   app.post('/file', upload.array('list', 8), recieve);
 };

@@ -4,10 +4,21 @@
 
   const upload = files => {
     document.querySelector('.gallery .message').style.display = 'none';
+    zone.classList.remove('drag');
 
+    const gallery = document.querySelector('.gallery');
+    gallery.classList.remove('empty');
+
+    const elements = [];
     const data = new FormData();
     for (const file of files) {
       data.append('list', file);
+
+      const element = document.createElement('div');
+      element.style.backgroundImage = `url(/file/${file})`;
+      gallery.appendChild(element);
+
+      elements.push(element);
     }
 
     fetch('/file', {
@@ -21,13 +32,12 @@
         if (status.status !== 'ok') {
           console.error(status);
         } else {
-          const gallery = document.querySelector('.gallery');
-          gallery.classList.remove('empty');
-
-          for (const file of status.fileIDs) {
-            const image = document.createElement('div');
-            image.style.backgroundImage = `url(/file/${file})`;
-            gallery.appendChild(image);
+          for (const file in status.fileIDs) {
+            const element = elements[file];
+            element.style.backgroundImage = `url(/file/${
+              status.fileIDs[file]
+            })`;
+            element.style.backgroundSize = '100%';
           }
         }
       })
@@ -37,30 +47,8 @@
   };
 
   const dropHandler = event => {
-    console.log('File(s) dropped');
-
-    zone.classList.remove('drag');
-
-    // Prevent default behavior (Prevent file from being opened)
     event.preventDefault();
-
-    if (event.dataTransfer.items) {
-      // Use DataTransferItemList interface to access the file(s)
-      for (var i = 0; i < event.dataTransfer.items.length; i++) {
-        // If dropped items aren't files, reject them
-        if (event.dataTransfer.items[i].kind === 'file') {
-          var file = event.dataTransfer.items[i].getAsFile();
-          console.log('... file[' + i + '].name = ' + file.name);
-        }
-      }
-    } else {
-      // Use DataTransfer interface to access the file(s)
-      for (var i = 0; i < event.dataTransfer.files.length; i++) {
-        console.log(
-          '... file[' + i + '].name = ' + event.dataTransfer.files[i].name
-        );
-      }
-    }
+    upload(event.dataTransfer.files);
   };
 
   const selectHandler = event => {

@@ -1,5 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+const sharp = require('sharp');
+const util = require('util');
+const nodeStream = require('stream');
 const { request } = require('modules/util');
 const { fileTypeIDs, fileStateIDs } = require('modules/constants');
 const ID = require('modules/id');
@@ -8,6 +11,16 @@ const imageMimeTypes = ['image/jpeg', 'image/png'];
 const videoMimeTypes = ['video/webm', 'video/mp4'];
 
 const supportedMimeTypes = [...imageMimeTypes, ...videoMimeTypes];
+
+// Helper for using promises with pipelines
+const pipeline = util.promisify(nodeStream.pipeline);
+
+const root = path.join(__dirname, '../../storage');
+
+// Check that /storage/upload folder exists, if not, create it
+if (!fs.existsSync(path.join(root, '/upload'))) {
+  fs.mkdirSync(path.join(root, '/upload'));
+}
 
 const filter = (req, file, callback) => {
   if (supportedMimeTypes.includes(file.mimetype)) {
@@ -20,7 +33,7 @@ const filter = (req, file, callback) => {
 };
 
 const stream = file => {
-  const url = path.join(__dirname, '../../storage', file);
+  const url = path.join(root, file);
   const exists = fs.existsSync(url);
   if (!exists) return false;
   return fs.createReadStream(url);
@@ -52,13 +65,38 @@ const serve = request(async (trx, req, res) => {
 
   // Create a read stream
   const output = stream(
-    (file.fileStateID === fileStateIDs.TEMPORARY ? 'temp/' : 'public/') +
+    (file.fileStateID === fileStateIDs.TEMPORARY ? 'upload/' : 'public/') +
       file.path
   );
 
+  let transform = null;
+
+  // Check if predefined size is requested
+  if (req.params.size) {
+    let size = 256;
+    if (req.params.size === 'xs') size = 32;
+    if (req.params.size === 's') size = 128;
+    if (req.params.size === 'm') size = 256;
+    if (req.params.size === 'l') size = 512;
+    if (req.params.size === 'xl') size = 1024;
+
+    transform = sharp().resize({ width: size, fit: 'inside' });
+  }
+
+  // Check for custom size
+  if (req.params.width && req.params.height) {
+    let width = Math.min(Number(req.params.width) || 256, 4096);
+    let height = Math.min(Number(req.params.height) || 256, 4096);
+    transform = sharp().resize({ width, height, fit: 'inside' });
+  }
+
   // Stream file to client
   res.setHeader('Content-Type', file.mimeType);
-  output.pipe(res);
+  if (transform) {
+    output.pipe(transform).pipe(res);
+  } else {
+    output.pipe(res);
+  }
 });
 
 const recieve = request(async (trx, req, res) => {
@@ -78,6 +116,20 @@ const recieve = request(async (trx, req, res) => {
     let fileTypeID = null;
     if (imageMimeTypes.includes(file.mimetype)) fileTypeID = fileTypeIDs.IMAGE;
     if (videoMimeTypes.includes(file.mimetype)) fileTypeID = fileTypeIDs.VIDEO;
+
+    // TODO: Extract EXIF data before stripping it
+
+    // Strip EXIF data & rotate .jpg according to its EXIF
+    const transform = sharp().rotate();
+    const input = fs.createReadStream(file.path);
+    const output = fs.createWriteStream(
+      path.join(root, '/upload/', file.filename)
+    );
+
+    await pipeline(input, transform, output);
+
+    // Remove the temporary file
+    fs.unlinkSync(file.path);
 
     await trx.execute(
       `INSERT INTO file (fileTypeID, fileStateID, filename, mimeType, path) VALUES (?, ?, ?, ?, ?);`,
