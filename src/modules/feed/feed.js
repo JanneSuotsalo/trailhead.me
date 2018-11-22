@@ -11,14 +11,23 @@ const feed = async (trx, { page }) => {
   //Feed for anonymous users, ordered by date
   const [result] = await trx.execute(
     'SELECT p.postID, p.text, username, p.createdAt FROM post as p, user WHERE user.userID = p.userID ORDER BY createdAt DESC LIMIT ?, ?',
-    [Number(page) * 10, 10]
+    [Number(page) * 10, 10],
+    'SELECT f.filename, f.path FROM file as f, postFile as pf WHERE pf.fileID = f.fileID;'
+  );
+  const [image] = await trx.query(
+    'SELECT pf.fileID, pf.postID FROM postFile as pf WHERE pf.postID IN (?)',
+    [result.map(x => x.postID)]
   );
 
   // Convert numerical id to a hash id
   const posts = result.map(x => ({
     ...x,
     postID: ID.post.encode(Number(x.postID)),
+    media: image
+      .filter(y => y.postID == x.postID)
+      .map(y => ID.file.encode(y.fileID)),
   }));
+  console.log(posts);
 
   return { status: 'ok', posts };
 };

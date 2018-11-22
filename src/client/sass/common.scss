@@ -258,9 +258,13 @@ nav {
   align-items: center;
   @include shadow;
   background-color: $color-white;
+  border-radius: 3px;
 }
 
 .post {
+  display: flex;
+  flex-flow: column;
   box-shadow: 0px 1px gray;
-  padding: 0 0 8px 0;
+  padding: 16px 0 8px 0;
+  align-items: center;
 }

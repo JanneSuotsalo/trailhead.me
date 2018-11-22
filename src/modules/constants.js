@@ -2,6 +2,7 @@ module.exports = {
   fileTypeIDs: {
     IMAGE: 1,
     VIDEO: 2,
+    GEO: 3,
   },
   fileStateIDs: {
     TEMPORARY: 1,
