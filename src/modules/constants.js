@@ -13,4 +13,8 @@ module.exports = {
     INAPPROPRIATE: 2,
     OTHER: 3,
   },
+  flagStateIDs: {
+    PENDING: 1,
+    RESOLVED: 2,
+  },
 };
