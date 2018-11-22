@@ -5,6 +5,9 @@
     <div class="feed">
       {{#each posts}}
       <div class="post">
+        {{#each media}}
+        <img id="image" src="/file/{{this}}/400/400"></img>
+        {{/each}}
         <p>{{text}}</p>
         <span>{{createdAt}}</span>
         <a href="/{{username}}/{{postID}}">View</a>
