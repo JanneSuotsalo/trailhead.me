@@ -1,3 +1,6 @@
 module.exports = app => {
-  app.get('/post', (req, res) => res.render('editPost'));
+  app.get('/post', (req, res) => {
+    console.log('post get');
+    res.render('editPost');
+  });
 };
