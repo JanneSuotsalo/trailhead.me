@@ -38,7 +38,6 @@ const get = request(async (trx, req, res) => {
   const status = await feed(trx, { page: 0 });
 
   res.render('index', {
-    user: req.session.isPopulated ? req.session.user : null,
     posts: status.posts,
   });
 });

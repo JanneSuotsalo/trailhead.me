@@ -18,6 +18,14 @@
 <body>
   {{{body}}}
 
+  {{#if user}}
+  <script>
+    window.user = {
+      username: '{{user.username}}'
+    };
+  </script>
+  {{/if}}
+
   {{{_sections.script}}}
 </body>
 

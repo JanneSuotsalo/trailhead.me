@@ -62,6 +62,12 @@ app.use(
   })
 );
 
+// Set session data to be used with the view engine
+app.use((req, res, next) => {
+  res.locals.user = req.session.isPopulated ? req.session : null;
+  return next();
+});
+
 // Serve static files from "./dist"
 app.use('/static', express.static('dist'));
 

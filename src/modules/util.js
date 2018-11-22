@@ -35,6 +35,23 @@ const request = action => (req, res, next) =>
     }
   });
 
+/**
+ * An Express helper to make sure the user is authenticated
+ */
+const authenticated = (req, res, next) => {
+  if (req.session.isPopulated) return next();
+
+  if (req.method === 'GET') {
+    return res.redirect('/login');
+  } else {
+    return res.send({
+      status: 'forbidden',
+      error: 'Invalid session, please login again...',
+    });
+  }
+};
+
 module.exports = {
   request,
+  authenticated,
 };

@@ -2,6 +2,7 @@
   const zone = document.querySelector('.input.file');
   const input = document.querySelector('.input.file input');
   const error = document.getElementById('error');
+  const submit = document.querySelector('[type="submit"]');
 
   const uploadedFiles = [];
 
@@ -92,4 +93,47 @@
   });
 
   input.addEventListener('change', selectHandler);
+
+  const savePost = () => {
+    const text = document.getElementById('text').value;
+
+    if (!uploadedFiles.length) {
+      showError('Post has to contain at least one media item');
+      return;
+    }
+
+    if (uploadedFiles.length > 8) {
+      showError('Post contains too many media items, maximum is 8');
+      return;
+    }
+
+    fetch('/post', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text, files: uploadedFiles }),
+    })
+      .then(data => data.json())
+      .then(json => {
+        if (json.status !== 'ok') {
+          switch (json.status) {
+            case 'invalid credentials':
+              showError('Invalid credentials, please try again...');
+              return;
+            case 'validation error':
+              showError('Some fields contain invalid values');
+              return;
+            default:
+              showError('An error occurred, please try again...');
+              return;
+          }
+        } else {
+          window.location.replace(`/${window.user.username}/${json.postID}`);
+        }
+      });
+  };
+
+  submit.addEventListener('click', savePost);
 })();
