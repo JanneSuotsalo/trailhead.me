@@ -1,7 +1,9 @@
 {{> navigation}}
 
 <content>
-  <div class="modal post">
+  <div class="modal editPost">
+    <h2>Create a new post</h2>
+
     <label class="input file">
       <input type="file" accept=".png,.jpg,.jpeg,.webm,.mp4" multiple />
       <div class="help">
@@ -12,10 +14,22 @@
 
     <div class="gallery">
       <div class="empty"></div>
+
+      <span class="message">
+        <span class="mdi mdi-information-outline"></span>
+        Upload something to get started!<br />You can upload up to 8 items.
+      </span>
     </div>
 
     <label for="text">Text</label>
     <input id="text" name="text" type="text" />
+
+    <div id="error" style="display: none;"></div>
+
+    <div class="sink">
+      <button type="submit">Publish</button>
+      <a href="/" class="button secondary">Cancel</a>
+    </div>
   </div>
 </content>
 

@@ -1,71 +1,83 @@
 (() => {
   const zone = document.querySelector('.input.file');
   const input = document.querySelector('.input.file input');
+  const error = document.getElementById('error');
+  const submit = document.querySelector('[type="submit"]');
+
+  const uploadedFiles = [];
+
+  const showError = text => {
+    error.style.display = 'block';
+    error.innerHTML = text;
+  };
 
   const upload = files => {
+    error.style.display = 'none';
+    zone.classList.remove('drag');
+
+    if (uploadedFiles.length >= 8) {
+      showError('Maximum media count is 8, no more media can be added');
+      return;
+    }
+
+    if (files.length > 8 - uploadedFiles.length) {
+      showError(
+        'Post media count would go over 8, please select fewer files...'
+      );
+      return;
+    }
+
+    document.querySelector('.gallery .message').style.display = 'none';
+
+    const gallery = document.querySelector('.gallery');
+    gallery.classList.remove('empty');
+
+    const elements = [];
     const data = new FormData();
     for (const file of files) {
       data.append('list', file);
+
+      const element = document.createElement('div');
+      element.style.backgroundImage = `url(/file/${file})`;
+      gallery.appendChild(element);
+
+      elements.push(element);
     }
 
     fetch('/file', {
       method: 'POST',
       body: data,
     })
-      .then(
-        response => response.json() // if the response is a JSON object
-      )
+      .then(response => response.json())
       .then(status => {
         if (status.status !== 'ok') {
           console.error(status);
+          for (const element of elements) {
+            element.remove();
+          }
+          showError('Something went wrong, please try again...');
+          return;
         } else {
-          const gallery = document.querySelector('.gallery');
-          gallery.classList.remove('empty');
-
-          for (const file of status.fileIDs) {
-            const image = document.createElement('div');
-            image.style.backgroundImage = `url(/file/${file})`;
-            gallery.appendChild(image);
+          for (const file in status.fileIDs) {
+            const element = elements[file];
+            element.style.backgroundImage = `url(/file/${
+              status.fileIDs[file]
+            })`;
+            element.style.backgroundSize = '100%';
+            uploadedFiles.push(status.fileIDs[file]);
           }
         }
       })
-      .catch(
-        error => console.log(error) // Handle the error response object
-      );
+      .catch(error => console.log(error));
   };
 
   const dropHandler = event => {
-    console.log('File(s) dropped');
-
-    zone.classList.remove('drag');
-
-    // Prevent default behavior (Prevent file from being opened)
     event.preventDefault();
-
-    if (event.dataTransfer.items) {
-      // Use DataTransferItemList interface to access the file(s)
-      for (var i = 0; i < event.dataTransfer.items.length; i++) {
-        // If dropped items aren't files, reject them
-        if (event.dataTransfer.items[i].kind === 'file') {
-          var file = event.dataTransfer.items[i].getAsFile();
-          console.log('... file[' + i + '].name = ' + file.name);
-        }
-      }
-    } else {
-      // Use DataTransfer interface to access the file(s)
-      for (var i = 0; i < event.dataTransfer.files.length; i++) {
-        console.log(
-          '... file[' + i + '].name = ' + event.dataTransfer.files[i].name
-        );
-      }
-    }
+    upload(event.dataTransfer.files);
   };
 
   const selectHandler = event => {
-    // TODO: Properly limit files to only 8
-    if (event.target.files.length > 0 && event.target.files.length <= 8) {
-      upload(event.target.files);
-    }
+    if (event.target.files.length > 0) upload(event.target.files);
   };
 
   zone.addEventListener('drop', dropHandler);
@@ -81,4 +93,47 @@
   });
 
   input.addEventListener('change', selectHandler);
+
+  const savePost = () => {
+    const text = document.getElementById('text').value;
+
+    if (!uploadedFiles.length) {
+      showError('Post has to contain at least one media item');
+      return;
+    }
+
+    if (uploadedFiles.length > 8) {
+      showError('Post contains too many media items, maximum is 8');
+      return;
+    }
+
+    fetch('/post', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ text, files: uploadedFiles }),
+    })
+      .then(data => data.json())
+      .then(json => {
+        if (json.status !== 'ok') {
+          switch (json.status) {
+            case 'invalid credentials':
+              showError('Invalid credentials, please try again...');
+              return;
+            case 'validation error':
+              showError('Some fields contain invalid values');
+              return;
+            default:
+              showError('An error occurred, please try again...');
+              return;
+          }
+        } else {
+          window.location.replace(`/${window.user.username}/${json.postID}`);
+        }
+      });
+  };
+
+  submit.addEventListener('click', savePost);
 })();

@@ -142,33 +142,6 @@ label {
       background-position: center;
       background-size: auto 100%;
     }
-
-    %glyph {
-      content: '';
-      display: block;
-      flex: 1;
-      margin: 4px 0 0 0;
-      height: 16px;
-      background-size: auto 100%;
-      background-position: 60% 0;
-      background-repeat: no-repeat;
-      background-image: url('/static/img/havu.svg');
-    }
-
-    h2 {
-      display: flex;
-      margin: 8px 0 (32px + 8px) 0;
-      align-items: center;
-
-      &:before {
-        @extend %glyph;
-      }
-
-      &:after {
-        @extend %glyph;
-        transform: scaleX(-1);
-      }
-    }
   }
 }
 
@@ -180,6 +153,33 @@ label {
   background-color: $color-white;
 
   @include shadow;
+
+  %glyph {
+    content: '';
+    display: block;
+    flex: 1;
+    margin: 4px 0 0 0;
+    height: 16px;
+    background-size: auto 100%;
+    background-position: 60% 0;
+    background-repeat: no-repeat;
+    background-image: url('/static/img/havu.svg');
+  }
+
+  h2 {
+    display: flex;
+    margin: 8px 0 (32px + 8px) 0;
+    align-items: center;
+
+    &:before {
+      @extend %glyph;
+    }
+
+    &:after {
+      @extend %glyph;
+      transform: scaleX(-1);
+    }
+  }
 
   #error {
     margin: 0 0 24px 0;

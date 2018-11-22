@@ -2,11 +2,28 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const handlebars = require('express-handlebars');
+const fs = require('fs');
+const https = require('https');
+const http = require('http');
 const app = express();
 
 const db = require('modules/db');
 
 require('dotenv').config();
+
+let credentials = null;
+
+try {
+  credentials = {
+    key: fs.readFileSync(__dirname + '/cert/private.key'),
+    cert: fs.readFileSync(__dirname + '/cert/certificate.crt'),
+    ca: fs.readFileSync(__dirname + '/cert/ca_bundle.crt'),
+  };
+} catch (e) {
+  if (process.env.NODE_ENV !== 'development') {
+    console.error('HTTPS credentials missing', e);
+  }
+}
 
 app.use(bodyParser.json());
 
@@ -45,8 +62,25 @@ app.use(
   })
 );
 
+// Set session data to be used with the view engine
+app.use((req, res, next) => {
+  res.locals.user = req.session.isPopulated ? req.session : null;
+  return next();
+});
+
 // Serve static files from "./dist"
 app.use('/static', express.static('dist'));
+
+// Redirect all HTTP requests to HTTPS
+if (process.env.NODE_ENV !== 'development') {
+  app.use((req, res, next) => {
+    if (req.secure) return next();
+    return res.redirect(`https://${req.headers.host}${req.url}`);
+  });
+}
+
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(credentials, app);
 
 // Initialize the server
 const init = async () => {
@@ -61,9 +95,20 @@ const init = async () => {
     });
 
     // Start the server
-    app.listen(process.env.PORT, () =>
-      console.log(`Example app listening on port ${process.env.PORT}!`)
-    );
+    if (process.env.NODE_ENV === 'development') {
+      httpServer.listen(process.env.PORT, () =>
+        console.log(
+          `Trailhead HTTP development server running on port ${
+            process.env.PORT
+          }`
+        )
+      );
+    } else {
+      httpServer.listen(80);
+      httpsServer.listen(443, () =>
+        console.log(`Trailhead HTTPS production server running`)
+      );
+    }
   } catch (e) {
     throw ('Unable to start server', e);
   }
