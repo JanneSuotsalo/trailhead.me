@@ -1,0 +1,26 @@
+{{> navigation}}
+
+<content>
+    <div id="wrapper">
+        <div class="comments">
+            {{#each list}}
+            <div>
+                <div id="flex">
+                    <img src="https://i.imgur.com/MQcuk3n.jpg" alt="Profile pic" id="profilePic">
+                    <p id="username">{{displayName}}</p>
+                </div>
+                <p id="commentText">{{text}}</p>
+                <span id="time">{{createdAt}}</span>
+                <br>
+                <div class="line"></div>
+                <br>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+
+</content>
+
+{{#section 'style'}}
+<link href="/static/css/commentList.css" rel="stylesheet" />
+{{/section}}

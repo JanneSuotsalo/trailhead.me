@@ -3,7 +3,9 @@ const remove = require('modules/comment/remove');
 const list = require('modules/comment/list');
 
 module.exports = app => {
-  app.post('/:post/comment', create);
-  app.post('/:post/comment/list', list);
-  app.delete('/:post/comment/:comment', remove);
+  app.post('/:username/:post/comment', create);
+  app.post('/:username/:post/comment/list', list.post);
+  app.delete('/:username/:post/comment/:comment', remove);
+
+  app.get('/:username/:post/comment/list', list.get);
 };
