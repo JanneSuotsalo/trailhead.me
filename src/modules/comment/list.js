@@ -26,7 +26,7 @@ module.exports = request(async (trx, req, res) => {
   }
 
   // Find all the comments of a post
-  const [list] = await trx.execute(
+  const [result] = await trx.execute(
     `SELECT 
     comment.commentID,
     comment.userID,
@@ -44,6 +44,12 @@ module.exports = request(async (trx, req, res) => {
     ORDER BY comment.createdAt DESC;`,
     [postID]
   );
+
+  // Convert numerical id to a hash id
+  const list = result.map(x => ({
+    ...x,
+    commentID: ID.comment.encode(Number(x.commentID)),
+  }));
 
   return { status: 'ok', list };
 });
