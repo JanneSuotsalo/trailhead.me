@@ -254,17 +254,24 @@ nav {
   font-family: 'Raleway';
   display: flex;
   flex-flow: column;
-  flex-basis: 600px;
+  flex-basis: 300px;
   align-items: center;
-  @include shadow;
-  background-color: $color-white;
   border-radius: 3px;
 }
 
 .post {
   display: flex;
   flex-flow: column;
-  box-shadow: 0px 1px gray;
-  padding: 16px 0 8px 0;
+  @include shadow;
+  padding: 0px 0 8px 0;
   align-items: center;
+  background-color: $color-white;
+  margin-bottom: 8px;
+}
+
+#image {
+  width: 300px;
+  height: 300px;
+  background-size: cover;
+  background-position: center;
 }
