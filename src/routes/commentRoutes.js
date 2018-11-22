@@ -5,5 +5,5 @@ const list = require('modules/comment/list');
 module.exports = app => {
   app.post('/:post/comment', create);
   app.post('/:post/comment/list', list);
-  app.delete('/:post/comment', remove);
+  app.delete('/:post/comment/:comment', remove);
 };
