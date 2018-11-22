@@ -20,7 +20,9 @@ try {
     ca: fs.readFileSync(__dirname + '/cert/ca_bundle.crt'),
   };
 } catch (e) {
-  console.error('HTTPS credentials missing', e);
+  if (process.env.NODE_ENV !== 'development') {
+    console.error('HTTPS credentials missing', e);
+  }
 }
 
 app.use(bodyParser.json());

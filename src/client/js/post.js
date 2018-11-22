@@ -1,10 +1,32 @@
 (() => {
   const zone = document.querySelector('.input.file');
   const input = document.querySelector('.input.file input');
+  const error = document.getElementById('error');
+
+  const uploadedFiles = [];
+
+  const showError = text => {
+    error.style.display = 'block';
+    error.innerHTML = text;
+  };
 
   const upload = files => {
-    document.querySelector('.gallery .message').style.display = 'none';
+    error.style.display = 'none';
     zone.classList.remove('drag');
+
+    if (uploadedFiles.length >= 8) {
+      showError('Maximum media count is 8, no more media can be added');
+      return;
+    }
+
+    if (files.length > 8 - uploadedFiles.length) {
+      showError(
+        'Post media count would go over 8, please select fewer files...'
+      );
+      return;
+    }
+
+    document.querySelector('.gallery .message').style.display = 'none';
 
     const gallery = document.querySelector('.gallery');
     gallery.classList.remove('empty');
@@ -25,12 +47,15 @@
       method: 'POST',
       body: data,
     })
-      .then(
-        response => response.json() // if the response is a JSON object
-      )
+      .then(response => response.json())
       .then(status => {
         if (status.status !== 'ok') {
           console.error(status);
+          for (const element of elements) {
+            element.remove();
+          }
+          showError('Something went wrong, please try again...');
+          return;
         } else {
           for (const file in status.fileIDs) {
             const element = elements[file];
@@ -38,12 +63,11 @@
               status.fileIDs[file]
             })`;
             element.style.backgroundSize = '100%';
+            uploadedFiles.push(status.fileIDs[file]);
           }
         }
       })
-      .catch(
-        error => console.log(error) // Handle the error response object
-      );
+      .catch(error => console.log(error));
   };
 
   const dropHandler = event => {
@@ -52,10 +76,7 @@
   };
 
   const selectHandler = event => {
-    // TODO: Properly limit files to only 8
-    if (event.target.files.length > 0 && event.target.files.length <= 8) {
-      upload(event.target.files);
-    }
+    if (event.target.files.length > 0) upload(event.target.files);
   };
 
   zone.addEventListener('drop', dropHandler);
