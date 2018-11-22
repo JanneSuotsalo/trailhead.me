@@ -263,10 +263,18 @@ nav {
   display: flex;
   flex-flow: column;
   @include shadow;
-  padding: 0px 0 8px 0;
+  padding: 0px 0 16px 0;
   align-items: center;
   background-color: $color-white;
   margin-bottom: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+#postLink {
+  text-decoration: none;
+  color: inherit;
+  padding: 0 16px;
 }
 
 #image {

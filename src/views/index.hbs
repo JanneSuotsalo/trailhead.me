@@ -10,9 +10,10 @@
           <div id="image" style="background-image: url(/file/{{this}}/m);"></div>
         </a>
         {{/each}}
-        <p>{{text}}</p>
-        <span>{{createdAt}}</span>
-        <a href="/{{username}}/{{postID}}">View</a>
+        <a href="/{{username}}/{{postID}}" id="postLink">
+          <p>{{text}}</p>
+          <span>{{createdAt}}</span>
+        </a>
       </div>
       {{/each}}
     </div>
