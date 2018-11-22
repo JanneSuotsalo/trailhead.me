@@ -27,8 +27,6 @@ const post = request(async (trx, req, res) => {
 
 // Express GET middleware
 const get = request(async (trx, req, res) => {
-  console.log('userfeed get');
-
   const status = await userFeed(trx, { ...req.params, page: 0 });
 
   res.render('profile', {
