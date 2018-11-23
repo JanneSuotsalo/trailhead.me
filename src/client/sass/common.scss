@@ -18,7 +18,7 @@ h5 {
   color: $color-black;
 }
 
-input {
+textarea, input {
   display: block;
   margin: 0 0 24px 0;
   padding: 10px;
@@ -38,6 +38,14 @@ input {
   &:focus {
     border-color: $color-primary;
   }
+}
+
+textarea {
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+  min-height: 41px;
+  max-height: 300px;
 }
 
 .input.file {
