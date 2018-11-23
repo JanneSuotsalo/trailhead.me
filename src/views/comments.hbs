@@ -2,23 +2,32 @@
 
 <content>
     <div id="wrapper">
-        <div class="comments">
-            {{#each list}}
-            <div>
-                <div id="flex">
-                    <img src="https://i.imgur.com/MQcuk3n.jpg" alt="Profile pic" id="profilePic">
-                    <p id="username">{{displayName}}</p>
+        <div id="comments">
+            <div class="commentlist">
+                {{#each list}}
+                <div>
+                    <div id="flex">
+                        <img src="https://i.imgur.com/MQcuk3n.jpg" alt="Profile pic" id="profilePic">
+                        <p id="username">{{displayName}}</p>
+                    </div>
+                    <p id="commentText">{{text}}</p>
+                    <span id="time">{{createdAt}}</span>
+                    <br>
+                    <div class="line"></div>
+                    <br>
                 </div>
-                <p id="commentText">{{text}}</p>
-                <span id="time">{{createdAt}}</span>
-                <br>
-                <div class="line"></div>
-                <br>
+                {{/each}}
             </div>
-            {{/each}}
+
+            <div id="flex">
+                <img src="https://i.imgur.com/MQcuk3n.jpg" alt="Profile pic" id="profilePic">
+                <div class="comment">
+                    <textarea id="commentTextarea" rows="4" cols="50" placeholder="Type your comment here... "></textarea>
+                </div>
+            </div>
+            <button type='submit' value='Submit'>Send</button>
         </div>
     </div>
-
 </content>
 
 {{#section 'style'}}
