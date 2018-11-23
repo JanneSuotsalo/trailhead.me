@@ -4,6 +4,26 @@
   const error = document.getElementById('error');
   const submit = document.querySelector('[type="submit"]');
 
+  const placeholders = [
+    'We went on a hike...',
+    'I checked out...',
+    'The weather was...',
+    'It was beautiful at...',
+    'The view was...',
+    'We travelled to...',
+    'I visited the...',
+    'Had a good walk in...',
+    'Great jogging route at...',
+    'Camped near the...',
+    'What a day at...',
+  ];
+
+  const textarea = document.querySelector('[name="text"]');
+  textarea.setAttribute(
+    'placeholder',
+    placeholders[Math.floor(Math.random() * placeholders.length)]
+  );
+
   const uploadedFiles = [];
 
   const showError = text => {
@@ -136,4 +156,19 @@
   };
 
   submit.addEventListener('click', savePost);
+
+  const highlight = document.querySelector('.textarea .highlight');
+  const highlightUpdate = () => {
+    highlight.innerHTML = textarea.value
+      .replace(/\n$/g, '\n\n')
+      .replace(/\B(\#[a-zA-Z]{1,16}\b)(?!;)/gm, x => `<span>${x}</span>`);
+  };
+  const highlightScroll = () => {
+    console.log('scroll');
+    highlight.scrollTop = textarea.scrollTop;
+  };
+
+  textarea.addEventListener('input', highlightUpdate);
+  textarea.addEventListener('chnage', highlightUpdate);
+  textarea.addEventListener('scroll', highlightScroll);
 })();
