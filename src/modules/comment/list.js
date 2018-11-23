@@ -1,9 +1,9 @@
 const { request } = require('modules/util');
 const ID = require('modules/id');
 
-module.exports = request(async (trx, req, res) => {
+const commentList = async (trx, { post }) => {
   // Convert hash id onto a numerical one
-  const postID = ID.post.decode(req.params.post)[0];
+  const postID = ID.post.decode(post)[0];
   if (!postID) {
     return {
       status: 'not found',
@@ -12,13 +12,13 @@ module.exports = request(async (trx, req, res) => {
   }
 
   // Find the post
-  const [[post]] = await trx.execute(
+  const [[posts]] = await trx.execute(
     `SELECT postID FROM post WHERE postID = ?`,
     [postID]
   );
 
   // Check if the post exists
-  if (!post) {
+  if (!posts) {
     return {
       status: 'forbidden',
       error: 'Post does not exist',
@@ -45,11 +45,30 @@ module.exports = request(async (trx, req, res) => {
     [postID]
   );
 
-  // Convert numerical id to a hash id
+  // Convert comment's numerical id to a hash id
   const list = result.map(x => ({
     ...x,
     commentID: ID.comment.encode(Number(x.commentID)),
   }));
 
   return { status: 'ok', list };
+};
+
+// Express POST middleware
+const post = request(async (trx, req, res) => {
+  return await commentList(trx, req.params);
 });
+
+// Express GET middleware
+const get = request(async (trx, req, res) => {
+  const status = await commentList(trx, req.params);
+
+  res.render('comments', {
+    list: status.list,
+  });
+});
+
+module.exports = {
+  post,
+  get,
+};
