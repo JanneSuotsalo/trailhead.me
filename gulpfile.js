@@ -18,6 +18,7 @@ gulp.task('js', () => {
     .src(path.js)
     .pipe(sourcemaps.init())
     .pipe(babel({ presets: ['@babel/env'] }))
+    .on('error', console.error.bind(console))
     .pipe(uglify())
     .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('dist/js'));
