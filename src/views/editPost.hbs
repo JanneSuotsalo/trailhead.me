@@ -33,13 +33,16 @@
 
     <input id="place" name="place" placeholder="Search for a place..." />
     <ul id="list">
-
+      <span class="message">
+        <span class="mdi mdi-information-outline"></span>
+        Search for a general location of this post.<br />You can also click on the map to add a custom location.
+      </span>
     </ul>
 
     <div id="error" style="display: none;"></div>
 
     <div class="sink">
-      <button type="submit">Publish</button>
+      <button type="submit" disabled>Publish</button>
       <a href="/" class="button secondary">Cancel</a>
     </div>
   </div>

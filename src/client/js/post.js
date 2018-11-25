@@ -1,3 +1,42 @@
+window.postData = {
+  fileIDs: [],
+  text: '',
+  location: null,
+};
+
+window.postDataCheck = () => {
+  console.log(
+    !!window.postData.fileIDs.length,
+    !!window.postData.text,
+    !!window.postData.location
+  );
+
+  const submit = document.querySelector('[type="submit"]');
+
+  if (
+    window.postData.fileIDs.length &&
+    window.postData.text &&
+    window.postData.location
+  ) {
+    submit.removeAttribute('disabled');
+  } else {
+    submit.setAttribute('disabled', true);
+  }
+
+  /*
+  document
+    .querySelector('[type="submit"]')
+    .setAttribute(
+      'disabled',
+      !(
+        window.postData.fileIDs.length &&
+        window.postData.text &&
+        window.postData.location
+      )
+    );
+    */
+};
+
 (() => {
   const zone = document.querySelector('.input.file');
   const input = document.querySelector('.input.file input');
@@ -24,8 +63,6 @@
     placeholders[Math.floor(Math.random() * placeholders.length)]
   );
 
-  const uploadedFiles = [];
-
   const showError = text => {
     error.style.display = 'block';
     error.innerHTML = text;
@@ -35,12 +72,12 @@
     error.style.display = 'none';
     zone.classList.remove('drag');
 
-    if (uploadedFiles.length >= 8) {
+    if (window.postData.fileIDs.length >= 8) {
       showError('Maximum media count is 8, no more media can be added');
       return;
     }
 
-    if (files.length > 8 - uploadedFiles.length) {
+    if (files.length > 8 - window.postData.fileIDs.length) {
       showError(
         'Post media count would go over 8, please select fewer files...'
       );
@@ -84,8 +121,10 @@
               status.fileIDs[file]
             })`;
             element.style.backgroundSize = '100%';
-            uploadedFiles.push(status.fileIDs[file]);
+            window.postData.fileIDs.push(status.fileIDs[file]);
           }
+
+          window.postDataCheck();
         }
       })
       .catch(error => console.log(error));
@@ -115,15 +154,23 @@
   input.addEventListener('change', selectHandler);
 
   const savePost = () => {
-    const text = document.getElementById('text').value;
+    if (!window.postData.text || window.postData.text.length < 2) {
+      showError('Post text has to contain at least two characters.');
+      return;
+    }
 
-    if (!uploadedFiles.length) {
+    if (!window.postData.fileIDs.length) {
       showError('Post has to contain at least one media item');
       return;
     }
 
-    if (uploadedFiles.length > 8) {
+    if (window.postData.fileIDs.length > 8) {
       showError('Post contains too many media items, maximum is 8');
+      return;
+    }
+
+    if (!window.postData.location) {
+      showError('Post has to have a location.');
       return;
     }
 
@@ -133,7 +180,7 @@
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ text, files: uploadedFiles }),
+      body: JSON.stringify(window.postData),
     })
       .then(data => data.json())
       .then(json => {
@@ -159,6 +206,9 @@
 
   const highlight = document.querySelector('.textarea .highlight');
   const highlightUpdate = () => {
+    window.postData.text = textarea.value;
+    window.postDataCheck();
+
     highlight.innerHTML = textarea.value
       .replace(/\n$/g, '\n\n')
       .replace(/\B(\#[a-zA-Z]{1,16}\b)(?!;)/gm, x => `<span>${x}</span>`);
@@ -169,6 +219,5 @@
   };
 
   textarea.addEventListener('input', highlightUpdate);
-  textarea.addEventListener('chnage', highlightUpdate);
   textarea.addEventListener('scroll', highlightScroll);
 })();

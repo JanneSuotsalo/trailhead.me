@@ -4,8 +4,8 @@ const ID = require('modules/id');
 
 // prettier-ignore
 const schema = joi.object({
+  fileIDs: joi.array().items(joi.string().min(4).max(128).alphanum()).min(1).max(8),
   text: joi.string().min(1).max(1024).required(),
-  files: joi.array().items(joi.string().min(4).max(128).alphanum()).min(1).max(8),
 });
 
 module.exports = request(async (trx, req, res) => {
@@ -32,7 +32,7 @@ module.exports = request(async (trx, req, res) => {
   );
 
   // Add all uploaded files into the post
-  for (const file of req.body.files) {
+  for (const file of req.body.fileIDs) {
     const postFile = {
       postID: insert.id,
       fileID: ID.file.decode(file)[0],

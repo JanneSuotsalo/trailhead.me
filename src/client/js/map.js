@@ -23,8 +23,7 @@
   map.setView([60.1549393, 24.7265844], 10);
   gl.addTo(map);
 
-  const serach = document.querySelector('[name="place"]');
-  serach.addEventListener('change', () => {
+  const loadLocations = () => {
     fetch(
       `https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&q=${
         serach.value
@@ -37,11 +36,18 @@
         const list = document.getElementById('list');
         const used = [];
         list.innerHTML = '';
-        json.forEach(x => {
+
+        if (!json || !json.length) {
+          list.innerHTML =
+            '<span class="message"><span class="mdi mdi-close-circle-outline"></span>Nothing was found<br />Try using a simpler search term.</span>';
+        }
+
+        const processLocation = (data, selected) => {
           const {
             city,
             attraction,
             country,
+            suburb,
             island,
             town,
             locality,
@@ -56,7 +62,7 @@
             raceway,
             water,
             state,
-          } = x.address;
+          } = data.address;
 
           // Create a sub location name
           const location = city || town || state;
@@ -65,10 +71,10 @@
             .join(', ');
 
           // Identify some unknown address names
-          let identified = Object.keys(x.address).find(x =>
+          let identified = Object.keys(data.address).find(x =>
             /address[0-9]+/.test(x)
           );
-          if (identified) identified = x.address[identified];
+          if (identified) identified = data.address[identified];
 
           // Construct the main location name based on availability and importance
           const name =
@@ -84,6 +90,7 @@
             raceway ||
             road ||
             island ||
+            suburb ||
             city ||
             town ||
             state ||
@@ -103,11 +110,37 @@
 
           // Add the element to the DOM
           const element = document.createElement('li');
+          if (selected) element.classList.add('selected');
           element.innerHTML = `${
-            icon ? `<span class="mdi mdi-${icon}">` : ''
-          }<p>${name}</p><small>${subname}</small>`;
+            icon ? `<span class="mdi mdi-${icon}"></span>` : ''
+          }<div><p>${name}</p><small>${subname}</small></div>`;
+
+          element.addEventListener('click', () => {
+            window.postData.location = { ...data };
+            window.postDataCheck();
+
+            [...list.children].forEach(x => x.classList.remove('selected'));
+
+            element.classList.add('selected');
+
+            map.setView([data.lat, data.lon], 12);
+          });
+
           list.appendChild(element);
-        });
+        };
+
+        if (window.postData.location) {
+          processLocation(window.postData.location, true);
+        }
+
+        json.forEach(x => processLocation(x));
       });
+  };
+
+  const serach = document.querySelector('[name="place"]');
+  let timeoutRef = null;
+  serach.addEventListener('input', () => {
+    if (timeoutRef) clearTimeout(timeoutRef);
+    timeoutRef = setTimeout(loadLocations, 1000);
   });
 })();
