@@ -5,11 +5,20 @@
         <div class="feed">
             {{#each posts}}
             <div class="post">
-                <p>{{text}}</p>
-                <span>{{createdAt}}</span>
-                <a href="/{{username}}/{{postID}}">View</a>
+                {{#each media}}
+                <a href="/file/{{this}}">
+                    <div id="image" style="background-image: url(/file/{{this}}/m);"></div>
+                </a>
+                {{/each}}
+                <a href="/{{username}}/{{postID}}" id="postLink">
+                    <p>{{text}}</p>
+                    <span>{{createdAt}}</span>
+                </a>
             </div>
             {{/each}}
         </div>
     </div>
+
+
+
 </content>
