@@ -2,6 +2,7 @@ const joi = require('joi');
 const { request } = require('modules/util');
 const ID = require('modules/id');
 const { locationTypeIDs, fileStateIDs } = require('modules/constants');
+const fs = require('fs');
 
 // prettier-ignore
 const schema = joi.object({

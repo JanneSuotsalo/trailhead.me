@@ -37,7 +37,7 @@
         const used = [];
         list.innerHTML = '';
 
-        if (!json || !json.length) {
+        if ((!json || !json.length) && !window.postData.location) {
           list.innerHTML =
             '<span class="message"><span class="mdi mdi-close-circle-outline"></span>Nothing was found<br />Try using a simpler search term.</span>';
         }

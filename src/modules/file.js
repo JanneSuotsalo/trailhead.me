@@ -64,10 +64,7 @@ const serve = request(async (trx, req, res) => {
   }
 
   // Create a read stream
-  const output = stream(
-    (file.fileStateID === fileStateIDs.TEMPORARY ? 'upload/' : 'public/') +
-      file.path
-  );
+  const output = stream('upload/' + file.path);
 
   let transform = null;
 
