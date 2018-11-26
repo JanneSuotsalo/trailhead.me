@@ -180,7 +180,19 @@ window.postDataCheck = () => {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(window.postData),
+      body: JSON.stringify({
+        ...window.postData,
+        location: {
+          locationTypeID: window.postData.location.typeID,
+          uuid: window.postData.location.identifier,
+          name: window.postData.location.name,
+          address: window.postData.location.subname,
+          coordinates: {
+            lat: window.postData.location.lat,
+            lon: window.postData.location.lon,
+          },
+        },
+      }),
     })
       .then(data => data.json())
       .then(json => {

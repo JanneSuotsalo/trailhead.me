@@ -21,8 +21,9 @@ CREATE TABLE `location`
 (
   `locationID` INT AUTO_INCREMENT,
   `locationTypeID` TINYINT NOT NULL,
-  `googlePlaceID` VARCHAR(128) NULL,
+  `uuid` VARCHAR(128) NULL,
   `name` TEXT NULL,
+  `address` TEXT NULL,
   `coordinates` POINT NULL,
   `updatedAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
     ON UPDATE CURRENT_TIMESTAMP,

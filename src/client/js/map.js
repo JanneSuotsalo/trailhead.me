@@ -103,10 +103,23 @@
 
           // Place an icon next to important places
           let icon = '';
-          if (park) icon = 'nature-people';
-          if (peak) icon = 'image-filter-hdr';
-          if (attraction) icon = 'star';
-          if (information) icon = 'information';
+          let typeID = 1;
+          if (park) {
+            icon = 'nature-people';
+            typeID = 2;
+          }
+          if (peak) {
+            icon = 'image-filter-hdr';
+            typeID = 3;
+          }
+          if (attraction) {
+            icon = 'star';
+            typeID = 4;
+          }
+          if (information) {
+            icon = 'information';
+            typeID = 5;
+          }
 
           // Add the element to the DOM
           const element = document.createElement('li');
@@ -116,7 +129,13 @@
           }<div><p>${name}</p><small>${subname}</small></div>`;
 
           element.addEventListener('click', () => {
-            window.postData.location = { ...data };
+            window.postData.location = {
+              ...data,
+              typeID,
+              identifier,
+              name,
+              subname,
+            };
             window.postDataCheck();
 
             [...list.children].forEach(x => x.classList.remove('selected'));

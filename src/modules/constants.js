@@ -17,4 +17,11 @@ module.exports = {
     PENDING: 1,
     RESOLVED: 2,
   },
+  locationTypeIDs: {
+    OTHER: 1,
+    PARK: 2,
+    PEAK: 3,
+    ATTRACTION: 4,
+    INFORMATION: 5,
+  },
 };
