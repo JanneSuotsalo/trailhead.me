@@ -69,22 +69,24 @@ const serve = request(async (trx, req, res) => {
   let transform = null;
 
   // Check if predefined size is requested
-  if (req.params.size) {
-    let size = 256;
-    if (req.params.size === 'xs') size = 32;
-    if (req.params.size === 's') size = 128;
-    if (req.params.size === 'm') size = 256;
-    if (req.params.size === 'l') size = 512;
-    if (req.params.size === 'xl') size = 1024;
+  if (file.fileTypeID === fileTypeIDs.IMAGE) {
+    if (req.params.size) {
+      let size = 256;
+      if (req.params.size === 'xs') size = 32;
+      if (req.params.size === 's') size = 128;
+      if (req.params.size === 'm') size = 256;
+      if (req.params.size === 'l') size = 512;
+      if (req.params.size === 'xl') size = 1024;
 
-    transform = sharp().resize({ width: size, fit: 'inside' });
-  }
+      transform = sharp().resize({ width: size, fit: 'inside' });
+    }
 
-  // Check for custom size
-  if (req.params.width && req.params.height) {
-    let width = Math.min(Number(req.params.width) || 256, 4096);
-    let height = Math.min(Number(req.params.height) || 256, 4096);
-    transform = sharp().resize({ width, height, fit: 'inside' });
+    // Check for custom size
+    if (req.params.width && req.params.height) {
+      let width = Math.min(Number(req.params.width) || 256, 4096);
+      let height = Math.min(Number(req.params.height) || 256, 4096);
+      transform = sharp().resize({ width, height, fit: 'inside' });
+    }
   }
 
   // Stream file to client
@@ -116,17 +118,22 @@ const recieve = request(async (trx, req, res) => {
 
     // TODO: Extract EXIF data before stripping it
 
-    // Strip EXIF data & rotate .jpg according to its EXIF
-    const transform = sharp().rotate();
-    const input = fs.createReadStream(file.path);
-    const output = fs.createWriteStream(
-      path.join(root, '/upload/', file.filename)
-    );
+    if (fileTypeID === fileTypeIDs.IMAGE) {
+      // Strip EXIF data & rotate .jpg according to its EXIF
+      const transform = sharp().rotate();
+      const input = fs.createReadStream(file.path);
+      const output = fs.createWriteStream(
+        path.join(root, '/upload/', file.filename)
+      );
 
-    await pipeline(input, transform, output);
+      await pipeline(input, transform, output);
 
-    // Remove the temporary file
-    fs.unlinkSync(file.path);
+      // Remove the temporary file
+      fs.unlinkSync(file.path);
+    } else {
+      // Move file
+      fs.renameSync(file.path, path.join(root, '/upload/', file.filename));
+    }
 
     await trx.execute(
       `INSERT INTO file (fileTypeID, fileStateID, filename, mimeType, path) VALUES (?, ?, ?, ?, ?);`,
