@@ -86,14 +86,25 @@ input[name='place'] {
 
     box-sizing: border-box;
 
-    transition: border-color $animation-easing $animation-time;
+    transition: border-color $animation-easing $animation-time,
+      background-color $animation-easing $animation-time;
 
     &:hover {
       border-color: $color-dimgray;
     }
 
     &.selected {
+      background-color: $color-primary;
       border-color: $color-primary;
+
+      span,
+      p {
+        color: $color-white;
+      }
+
+      small {
+        color: rgba($color-white, 0.75);
+      }
     }
 
     span {
@@ -116,6 +127,12 @@ input[name='place'] {
     small {
       font-size: 0.7rem;
       color: $color-dimgray;
+    }
+
+    span,
+    p,
+    small {
+      transition: color $animation-easing $animation-time;
     }
   }
 }
