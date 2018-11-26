@@ -4,32 +4,40 @@
     <div id="wrapper">
         <div id="comments">
             <div class="commentlist">
-                {{#each list}}
-                <div>
-                    <div id="flex">
-                        <img src="https://i.imgur.com/MQcuk3n.jpg" alt="Profile pic" id="profilePic">
-                        <p id="username">{{displayName}}</p>
+                <div id="flex">
+                    <img src="https://i.imgur.com/MQcuk3n.jpg" alt="Profile pic" id="profilePic">
+                    <div class="comment">
+                        <textarea id="commentTextarea" rows="4" cols="50" placeholder="Type your comment here... "></textarea>
                     </div>
-                    <p id="commentText">{{text}}</p>
-                    <span id="time">{{createdAt}}</span>
-                    <br>
-                    <div class="line"></div>
-                    <br>
                 </div>
-                {{/each}}
+                <button id="commentButton" type='submit' value='Submit'>Send</button>
             </div>
-
-            <div id="flex">
-                <img src="https://i.imgur.com/MQcuk3n.jpg" alt="Profile pic" id="profilePic">
-                <div class="comment">
-                    <textarea id="commentTextarea" rows="4" cols="50" placeholder="Type your comment here... "></textarea>
+            <br>
+            <br>
+            <div class="line2"></div>
+            <br>
+            {{#each list}}
+            <div>
+                <div id="flex">
+                    <img src="https://i.imgur.com/MQcuk3n.jpg" alt="Profile pic" id="profilePic">
+                    <p id="username">{{displayName}}</p>
+                    <p class="deleteComment"></p>
                 </div>
+                <p id="commentText">{{text}}</p>
+                <span id="time">{{createdAt}}</span>
+                <br>
+                <div class="line"></div>
+                <br>
             </div>
-            <button type='submit' value='Submit'>Send</button>
+            {{/each}}
         </div>
     </div>
 </content>
 
 {{#section 'style'}}
 <link href="/static/css/commentList.css" rel="stylesheet" />
+{{/section}}
+
+{{#section 'script'}}
+<script src="/static/js/comment.js"></script>
 {{/section}}
