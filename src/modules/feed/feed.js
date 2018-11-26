@@ -27,7 +27,6 @@ const feed = async (trx, { page }) => {
       .filter(y => y.postID == x.postID)
       .map(y => ID.file.encode(y.fileID)),
   }));
-  console.log(posts);
 
   return { status: 'ok', posts };
 };

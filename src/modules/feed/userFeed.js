@@ -1,5 +1,6 @@
 const { request } = require('modules/util');
 const joi = require('joi');
+const ID = require('modules/id');
 
 // prettier-ignore
 const schema = joi.object({
@@ -7,10 +8,24 @@ const schema = joi.object({
   });
 
 const userFeed = async (trx, { username, page }) => {
-  const [posts] = await trx.execute(
-    'SELECT * FROM post, user WHERE user.username = ? AND post.userID = user.userID AND user.userID = post.userID ORDER BY post.createdAt DESC LIMIT ?, ?;',
+  const [result] = await trx.execute(
+    'SELECT p.postID, p.text, username, p.createdAt FROM post as p, user WHERE user.username = ? AND p.userID = user.userID AND user.userID = p.userID ORDER BY p.createdAt DESC LIMIT ?, ?;',
     [username, Number(page) * 10, 10]
   );
+
+  const [image] = await trx.query(
+    'SELECT pf.fileID, pf.postID FROM postFile as pf WHERE pf.postID IN (?)',
+    [result.map(x => x.postID)]
+  );
+
+  // Convert numerical id to a hash id
+  const posts = result.map(x => ({
+    ...x,
+    postID: ID.post.encode(Number(x.postID)),
+    media: image
+      .filter(y => y.postID == x.postID)
+      .map(y => ID.file.encode(y.fileID)),
+  }));
 
   return { status: 'ok', posts };
 };

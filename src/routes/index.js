@@ -11,9 +11,9 @@ module.exports = [
   userRoutes,
   commentRoutes,
   followersRoutes,
-  postRoutes,
   reactRoutes,
   fileRoutes,
   flagRoutes,
+  postRoutes,
   feedRoutes,
 ];
