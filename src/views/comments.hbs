@@ -3,7 +3,7 @@
 <content>
     <div id="wrapper">
         <div id="comments">
-            <div class="commentlist">
+            <div>
                 <div id="flex">
                     <img src="https://i.imgur.com/MQcuk3n.jpg" alt="Profile pic" id="profilePic">
                     <div class="comment">
@@ -16,20 +16,8 @@
             <br>
             <div class="line2"></div>
             <br>
-            {{#each list}}
-            <div>
-                <div id="flex">
-                    <img src="https://i.imgur.com/MQcuk3n.jpg" alt="Profile pic" id="profilePic">
-                    <p id="username">{{displayName}}</p>
-                    <p class="deleteComment"></p>
-                </div>
-                <p id="commentText">{{text}}</p>
-                <span id="time">{{createdAt}}</span>
-                <br>
-                <div class="line"></div>
-                <br>
+            <div id="commentList">
             </div>
-            {{/each}}
         </div>
     </div>
 </content>

@@ -15,9 +15,10 @@
   margin-bottom: 10px;
 }
 
-.deleteComment {
+#deleteComment {
   display: flex;
   margin-left: auto;
+  color: $color-primary;
 }
 
 #commentText {
