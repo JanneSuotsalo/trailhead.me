@@ -13,6 +13,11 @@ const userFeed = async (trx, { username, page }) => {
     [username, Number(page) * 10, 10]
   );
 
+  const [[profile]] = await trx.query(
+    'SELECT user.displayName, userFile.fileID FROM user, userFile WHERE user.username = ?;',
+    [username]
+  );
+
   const [image] = await trx.query(
     'SELECT pf.fileID, pf.postID FROM postFile as pf WHERE pf.postID IN (?)',
     [result.map(x => x.postID)]
@@ -27,7 +32,9 @@ const userFeed = async (trx, { username, page }) => {
       .map(y => ID.file.encode(y.fileID)),
   }));
 
-  return { status: 'ok', posts };
+  console.log(image);
+
+  return { status: 'ok', posts, profile };
 };
 
 // Express POST middleware
@@ -47,6 +54,9 @@ const get = request(async (trx, req, res) => {
   res.render('profile', {
     user: req.session.isPopulated ? req.session.user : null,
     posts: status.posts,
+    username: req.params.username,
+    fullName: status.profile.displayName,
+    profilePicture: ID.file.encode(status.profile.fileID),
   });
   return;
 });

@@ -2,6 +2,13 @@
 
 <content>
     <div id="wrapper">
+        <div id="profile">
+            <div class="image" style="background-image: url(/file/{{profilePicture}}/m)"></div>
+            <div id="displayName">{{fullName}}</div>
+            <div id="username">@{{username}}</div>
+            <div id="bio">Hello this is my bio</a></div>
+        </div>
+
         <div class="feed">
             {{#each posts}}
             <div class="post">
@@ -17,6 +24,7 @@
             </div>
             {{/each}}
         </div>
+        <div id="profile" style="visibility:hidden"></div>
     </div>
 
 
