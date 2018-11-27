@@ -257,12 +257,14 @@ nav {
   box-sizing: border-box;
 
   .logo {
+    position: relative;
     width: 160px;
     height: 100%;
     background-repeat: no-repeat;
     background-image: url('/static/img/logo.svg');
     background-position: center;
     background-size: 100%;
+    z-index: 2;
   }
 
   .search {
@@ -270,6 +272,7 @@ nav {
     top: 0;
     left: 0;
     width: 100%;
+    z-index: 1;
 
     input {
       margin: 20px auto 0 auto;
@@ -281,6 +284,9 @@ nav {
   }
 
   .profile {
+    position: relative;
+    z-index: 2;
+
     .image {
       width: 32px;
       height: 32px;
@@ -302,29 +308,29 @@ nav {
   flex-basis: 300px;
   align-items: center;
   border-radius: 3px;
-}
 
-.post {
-  display: flex;
-  flex-flow: column;
-  @include shadow;
-  padding: 0px 0 16px 0;
-  align-items: center;
-  background-color: $color-white;
-  margin-bottom: 8px;
-  border-radius: 4px;
-  overflow: hidden;
-}
+  .post {
+    display: flex;
+    flex-flow: column;
+    @include shadow;
+    padding: 0px 0 16px 0;
+    align-items: center;
+    background-color: $color-white;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
 
-#postLink {
-  text-decoration: none;
-  color: inherit;
-  padding: 0 16px;
-}
+  #postLink {
+    text-decoration: none;
+    color: inherit;
+    padding: 0 16px;
+  }
 
-#image {
-  width: 300px;
-  height: 300px;
-  background-size: cover;
-  background-position: center;
+  #image {
+    width: 300px;
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+  }
 }

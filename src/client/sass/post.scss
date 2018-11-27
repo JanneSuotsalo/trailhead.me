@@ -1,5 +1,157 @@
 @import 'util';
 
+.post.full {
+  margin-bottom: 32px;
+  padding: 0;
+  width: 450px;
+  overflow: hidden;
+
+  .gallery {
+    position: relative;
+    width: 100%;
+
+    &:hover {
+      .control {
+        opacity: 1;
+      }
+    }
+
+    .control {
+      position: absolute;
+      top: 50%;
+      left: 16px;
+      width: 32px;
+      height: 32px;
+      text-align: center;
+      line-height: 32px;
+      border-radius: 50%;
+      background-color: rgba($color-white, 0.75);
+      color: $color-dark;
+      opacity: 0.25;
+      cursor: pointer;
+      z-index: 1;
+
+      transform: translateY(-50%);
+
+      @include shadow;
+
+      transition: opacity $animation-easing $animation-time;
+
+      &.right {
+        left: auto;
+        right: 16px;
+      }
+    }
+
+    .list {
+      display: flex;
+      flex-wrap: nowrap;
+      margin-left: 0%;
+
+      transition: margin $animation-easing $animation-time * 2;
+    }
+
+    .media {
+      position: relative;
+      flex-shrink: 0;
+      width: 450px;
+      text-align: center;
+
+      .image {
+        position: relative;
+        padding-top: 100%;
+        width: 100%;
+        background-size: 100% auto;
+        background-position: center;
+      }
+
+      .view {
+        position: absolute;
+        padding: 0 10px 0 (8px + 4px + 16px);
+        bottom: 16px;
+        left: 50%;
+        margin: auto;
+        height: 32px;
+        font-family: $font-family-body;
+        font-size: 0.8rem;
+        line-height: 32px;
+        border-radius: 32px;
+        background-color: rgba($color-black, 0.75);
+        color: $color-white;
+
+        transform: translateX(-50%);
+
+        > span {
+          position: absolute;
+          left: 8px;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+
+  .location {
+    display: flex;
+    align-items: center;
+    height: 100px;
+    background-color: $color-primary;
+
+    .icon {
+      position: relative;
+      width: 64px - 8px;
+      height: 100%;
+      text-align: right;
+      line-height: 100px;
+
+      > span {
+        font-size: 32px;
+        color: $color-white;
+      }
+    }
+
+    .info {
+      flex: 1;
+      margin: 0 0 0 16px;
+      padding: 0;
+      font-family: $font-family-body;
+
+      p {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: $color-white;
+      }
+
+      small {
+        font-size: 0.7rem;
+        color: rgba($color-white, 0.75);
+      }
+    }
+  }
+
+  .info {
+    padding: 32px;
+    font-family: $font-family-body;
+
+    p {
+      margin: 0;
+      color: $color-black;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+
+      a {
+        font-weight: bold;
+        color: $color-primary;
+      }
+    }
+
+    .time {
+      margin: 16px 0 0 0;
+      font-size: 0.7rem;
+      color: $color-dimgray;
+    }
+  }
+}
+
 .modal.editPost {
   margin-bottom: 32px;
   width: 450px;
