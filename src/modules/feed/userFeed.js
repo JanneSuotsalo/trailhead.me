@@ -14,7 +14,7 @@ const userFeed = async (trx, { username, page }) => {
   );
 
   const [[profile]] = await trx.query(
-    'SELECT user.displayName, userFile.fileID FROM user, userFile WHERE user.username = ?;',
+    'SELECT user.displayName, userFile.fileID FROM user LEFT JOIN userFile ON user.username = ? AND userFile.userID = user.userID;',
     [username]
   );
 
@@ -31,8 +31,6 @@ const userFeed = async (trx, { username, page }) => {
       .filter(y => y.postID == x.postID)
       .map(y => ID.file.encode(y.fileID)),
   }));
-
-  console.log(image);
 
   return { status: 'ok', posts, profile };
 };
