@@ -8,6 +8,7 @@ const http = require('http');
 const app = express();
 
 const db = require('modules/db');
+const locationFileTask = require('modules/location/locationFileTask');
 
 require('dotenv').config();
 
@@ -93,6 +94,9 @@ const init = async () => {
     routes.forEach(route => {
       route(app);
     });
+
+    // Start background tasks
+    locationFileTask();
 
     // Start the server
     if (process.env.NODE_ENV === 'development') {

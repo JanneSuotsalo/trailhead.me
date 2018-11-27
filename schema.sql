@@ -275,3 +275,18 @@ CREATE TABLE `userFile`
   FOREIGN KEY (`userID`) REFERENCES `user` (`userID`)
     ON DELETE CASCADE
 );
+
+CREATE TABLE `locationFile`
+(
+  `locationID` INT NOT NULL,
+  `fileID` INT NOT NULL,
+  `updatedAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    ON UPDATE CURRENT_TIMESTAMP,
+  `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+  CONSTRAINT `locationFile_file_fileID_fk`
+  FOREIGN KEY (`fileID`) REFERENCES `file` (`fileID`),
+  CONSTRAINT `locationFile_location_locationID_fk`
+  FOREIGN KEY (`locationID`) REFERENCES `location` (`locationID`)
+    ON DELETE CASCADE
+);

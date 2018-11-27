@@ -98,6 +98,48 @@ const serve = request(async (trx, req, res) => {
   }
 });
 
+const process = async (trx, file) => {
+  let fileTypeID = null;
+  if (imageMimeTypes.includes(file.mimetype)) fileTypeID = fileTypeIDs.IMAGE;
+  if (videoMimeTypes.includes(file.mimetype)) fileTypeID = fileTypeIDs.VIDEO;
+
+  // TODO: Extract EXIF data before stripping it
+
+  if (fileTypeID === fileTypeIDs.IMAGE) {
+    // Strip EXIF data & rotate .jpg according to its EXIF
+    const transform = sharp().rotate();
+    const input = fs.createReadStream(file.path);
+    const output = fs.createWriteStream(
+      path.join(root, '/upload/', file.filename)
+    );
+
+    await pipeline(input, transform, output);
+
+    // Remove the temporary file
+    fs.unlinkSync(file.path);
+  } else {
+    // Move file
+    fs.renameSync(file.path, path.join(root, '/upload/', file.filename));
+  }
+
+  await trx.execute(
+    `INSERT INTO file (fileTypeID, fileStateID, filename, mimeType, path) VALUES (?, ?, ?, ?, ?);`,
+    [
+      fileTypeID,
+      fileStateIDs.TEMPORARY,
+      file.originalname,
+      file.mimetype,
+      file.filename,
+    ]
+  );
+
+  const [[insert]] = await trx.query(
+    `SELECT LAST_INSERT_ID() as id FROM file;`
+  );
+
+  return insert.id;
+};
+
 const recieve = request(async (trx, req, res) => {
   const list = req.files;
 
@@ -112,45 +154,8 @@ const recieve = request(async (trx, req, res) => {
 
   // Save info about each file into DB
   for (const file of list) {
-    let fileTypeID = null;
-    if (imageMimeTypes.includes(file.mimetype)) fileTypeID = fileTypeIDs.IMAGE;
-    if (videoMimeTypes.includes(file.mimetype)) fileTypeID = fileTypeIDs.VIDEO;
-
-    // TODO: Extract EXIF data before stripping it
-
-    if (fileTypeID === fileTypeIDs.IMAGE) {
-      // Strip EXIF data & rotate .jpg according to its EXIF
-      const transform = sharp().rotate();
-      const input = fs.createReadStream(file.path);
-      const output = fs.createWriteStream(
-        path.join(root, '/upload/', file.filename)
-      );
-
-      await pipeline(input, transform, output);
-
-      // Remove the temporary file
-      fs.unlinkSync(file.path);
-    } else {
-      // Move file
-      fs.renameSync(file.path, path.join(root, '/upload/', file.filename));
-    }
-
-    await trx.execute(
-      `INSERT INTO file (fileTypeID, fileStateID, filename, mimeType, path) VALUES (?, ?, ?, ?, ?);`,
-      [
-        fileTypeID,
-        fileStateIDs.TEMPORARY,
-        file.originalname,
-        file.mimetype,
-        file.filename,
-      ]
-    );
-
-    const [[insert]] = await trx.query(
-      `SELECT LAST_INSERT_ID() as id FROM file;`
-    );
-
-    fileIDs.push(ID.file.encode(insert.id));
+    const fileID = await process(trx, file);
+    fileIDs.push(ID.file.encode(fileID));
   }
 
   return { status: 'ok', fileIDs };
@@ -160,6 +165,7 @@ module.exports = {
   serve,
   recieve,
   filter,
+  process,
 };
 
 /*

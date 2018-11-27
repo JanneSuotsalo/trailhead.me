@@ -8,7 +8,7 @@
   left.style.display = 'none';
   right.style.display = 'none';
 
-  if (media.length) {
+  if (media.length > 1) {
     right.style.display = 'block';
   }
 

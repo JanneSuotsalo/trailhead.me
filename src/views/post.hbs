@@ -17,13 +17,14 @@
         {{/each}}
       </div>
     </div>
-    <div class="location">
+    <div class="location" {{#if post.location.fileID}} style="background-image: url(/file/{{post.location.fileID}})"
+      {{/if}}>
       <div class="icon">
-        <span class="mdi mdi-fullscreen"></span>
+        <span class="mdi mdi-{{post.location.icon}}"></span>
       </div>
       <div class="info">
-        <p>Kerava</p>
-        <small>04220, Finland</small>
+        <p>{{post.location.name}}</p>
+        <small>{{post.location.address}}</small>
       </div>
     </div>
     <div class="info">

@@ -15,20 +15,67 @@ const loadPost = async (trx, { post }) => {
 
   // Load the post
   const [[result]] = await trx.execute(
-    'SELECT p.postID, p.text, username, p.createdAt FROM post as p, user WHERE p.postID = ? AND user.userID = p.userID',
+    `SELECT
+      postID,
+      locationID,
+      text,
+      post.createdAt,
+      JSON_OBJECT(
+        'username', username,
+        'displayName', displayName
+      ) as user
+    FROM post, user
+    WHERE postID = ? AND user.userID = post.userID`,
     [postID]
   );
 
-  const [image] = await trx.query(
-    'SELECT pf.fileID, pf.postID FROM postFile as pf WHERE pf.postID = ?',
+  if (!result) {
+    return {
+      status: 'not found',
+      error: 'Post does not exist',
+    };
+  }
+
+  // Load post location
+  const [[location]] = await trx.execute(
+    `SELECT
+      l.locationID,
+      l.locationTypeID,
+      l.name,
+      l.address,
+      lf.fileID
+    FROM location l
+    LEFT JOIN locationFile lf ON lf.locationID = l.locationID
+    WHERE l.locationID = ?`,
+    [result.locationID]
+  );
+
+  // Load all post media
+  const [media] = await trx.query(
+    'SELECT fileID FROM postFile WHERE postID = ?',
     [postID]
   );
 
-  // Convert numerical id to a hash id
+  // Set the location icon
+  let icon = 'map-marker';
+  if (location.locationTypeID === locationTypeIDs.PARK) icon = 'nature-people';
+  if (location.locationTypeID === locationTypeIDs.PEAK)
+    icon = 'image-filter-hdr';
+  if (location.locationTypeID === locationTypeIDs.ATTRACTION) icon = 'star';
+  if (location.locationTypeID === locationTypeIDs.INFORMATION)
+    icon = 'information';
+
+  // Combine into one post object
   const data = {
     ...result,
-    postID: ID.post.encode(Number(result.postID)),
-    media: image.map(y => ID.file.encode(y.fileID)),
+    postID: ID.post.encode(Number(result.postID)), // Convert numerical id to a hash id
+    user: JSON.parse(result.user),
+    media: media.map(x => ID.file.encode(x.fileID)),
+    location: {
+      ...location,
+      icon,
+      fileID: location.fileID ? ID.file.encode(location.fileID) : null,
+    },
   };
 
   return { status: 'ok', post: data };
