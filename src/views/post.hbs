@@ -1,7 +1,42 @@
+{{> navigation}}
+
 <content>
-  {{#each post.media}}
-  <a href="/file/{{this}}">
-    <div id="image" style="background-image: url(/file/{{this}}/m);"></div>
-  </a>
-  {{/each}}
+  <div class="modal post full">
+    <div class="gallery">
+      <div class="control right"><span class="mdi mdi-arrow-right"></span></div>
+      <div class="control left"><span class="mdi mdi-arrow-left"></span></div>
+
+      <div class="list">
+        {{#each post.media}}
+        <div class="media">
+          <div class="image" style="background-image: url(/file/{{this}}/m);"></div>
+          <a href="/file/{{this}}">
+            <div class="view"><span class="mdi mdi-fullscreen"></span>View full image</div>
+          </a>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+    <div class="location">
+      <div class="icon">
+        <span class="mdi mdi-fullscreen"></span>
+      </div>
+      <div class="info">
+        <p>Kerava</p>
+        <small>04220, Finland</small>
+      </div>
+    </div>
+    <div class="info">
+      <p>{{post.text}}</p>
+      <p class="time">{{post.createdAt}}</p>
+    </div>
+  </div>
 </content>
+
+{{#section 'style'}}
+<link href="/static/css/post.css" rel="stylesheet" />
+{{/section}}
+
+{{#section 'script'}}
+<script src="/static/js/post.js"></script>
+{{/section}}
