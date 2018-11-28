@@ -11,7 +11,19 @@ const schema = joi.object({
 const feed = async (trx, { page }) => {
   //Feed for anonymous users, ordered by date
   const [result] = await trx.execute(
-    'SELECT p.postID, p.locationID, p.text, username, p.createdAt FROM post as p, user WHERE user.userID = p.userID ORDER BY createdAt DESC LIMIT ?, ?',
+    `SELECT
+      p.postID,
+      p.locationID,
+      p.text,
+      p.createdAt,
+      JSON_OBJECT(
+        'username', username,
+        'displayName', displayName
+      ) as user
+    FROM post as p, user
+    WHERE user.userID = p.userID
+    ORDER BY createdAt
+    DESC LIMIT ?, ?`,
     [Number(page) * 10, 10],
     'SELECT f.filename, f.path FROM file as f, postFile as pf WHERE pf.fileID = f.fileID;'
   );
@@ -58,6 +70,7 @@ const feed = async (trx, { page }) => {
       ...x,
       postID: ID.post.encode(Number(x.postID)),
       media,
+      user: JSON.parse(x.user),
       location: location
         ? {
             ...location,

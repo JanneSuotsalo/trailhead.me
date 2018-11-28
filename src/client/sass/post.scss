@@ -1,6 +1,6 @@
 @import 'util';
 
-.post.full {
+.post {
   margin-bottom: 32px;
   padding: 0;
   width: 450px;
@@ -43,18 +43,35 @@
       }
     }
 
+    .container {
+      position: relative;
+      padding-top: 100%;
+      width: 100%;
+    }
+
     .list {
+      position: absolute;
       display: flex;
       flex-wrap: nowrap;
+      top: 0;
+      left: 0%;
       margin-left: 0%;
+      width: 100%;
+      height: 100%;
 
-      transition: margin $animation-easing $animation-time * 2;
+      transition: left $animation-easing $animation-time * 2;
+    }
+
+    .container {
+      position: relative;
+      flex-shrink: 0;
+      width: 100%;
     }
 
     .media {
       position: relative;
       flex-shrink: 0;
-      width: 450px;
+      width: 100%;
       text-align: center;
 
       .image {
@@ -151,8 +168,10 @@
   }
 
   .info {
+    display: block;
     padding: 32px;
     font-family: $font-family-body;
+    text-decoration: none;
 
     p {
       margin: 0;
@@ -308,5 +327,12 @@ input[name='place'] {
     small {
       transition: color $animation-easing $animation-time;
     }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .modal.post,
+  .modal.editPost {
+    width: 100%;
   }
 }

@@ -1,4 +1,4 @@
-const createPost = post => {
+const createPost = (post, link = false) => {
   const modal = document.createElement('div');
   modal.classList.add('modal', 'post', 'full');
 
@@ -9,6 +9,7 @@ const createPost = post => {
       <div class="control right"><span class="mdi mdi-arrow-right"></span></div>
       <div class="control left"><span class="mdi mdi-arrow-left"></span></div>
 
+      <div class="container">
       <div class="list">
         ${post.media.map(media => `
         <div class="media">
@@ -18,6 +19,7 @@ const createPost = post => {
           </a>
         </div>
         `).join('')}
+      </div>
       </div>
     </div>
     ${post.location ? `
@@ -33,8 +35,9 @@ const createPost = post => {
     `: ''}
   `;
 
-  const info = document.createElement('div');
+  const info = document.createElement('a');
   info.classList.add('info');
+  if (link) info.setAttribute('href', `/${post.user.username}/${post.postID}`);
 
   // Format and include the post text content
   const content = document.createElement('p');
@@ -58,7 +61,7 @@ const createPost = post => {
   // Handle the madia controls
   const right = modal.querySelector('.gallery > .right');
   const left = modal.querySelector('.gallery > .left');
-  const list = modal.querySelector('.gallery > .list');
+  const list = modal.querySelector('.gallery > .container > .list');
   let position = 0;
 
   left.style.display = 'none';
@@ -73,7 +76,7 @@ const createPost = post => {
       0,
       Math.min(post.media.length - 1, position + direction)
     );
-    list.style.marginLeft = `${-position * 100}%`;
+    list.style.left = `${-position * 100}%`;
 
     left.style.display = position > 0 ? 'block' : 'none';
     right.style.display = position < post.media.length - 1 ? 'block' : 'none';

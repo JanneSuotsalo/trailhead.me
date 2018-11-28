@@ -18,19 +18,22 @@ const userFeed = async (trx, { username, page }) => {
     [username]
   );
 
-  const [image] = await trx.query(
-    'SELECT pf.fileID, pf.postID FROM postFile as pf WHERE pf.postID IN (?)',
-    [result.map(x => x.postID)]
-  );
+  let posts = null;
+  if (result && result.length) {
+    const [image] = await trx.query(
+      'SELECT pf.fileID, pf.postID FROM postFile as pf WHERE pf.postID IN (?)',
+      [result.map(x => x.postID)]
+    );
 
-  // Convert numerical id to a hash id
-  const posts = result.map(x => ({
-    ...x,
-    postID: ID.post.encode(Number(x.postID)),
-    media: image
-      .filter(y => y.postID == x.postID)
-      .map(y => ID.file.encode(y.fileID)),
-  }));
+    // Convert numerical id to a hash id
+    posts = result.map(x => ({
+      ...x,
+      postID: ID.post.encode(Number(x.postID)),
+      media: image
+        .filter(y => y.postID == x.postID)
+        .map(y => ID.file.encode(y.fileID)),
+    }));
+  }
 
   return { status: 'ok', posts, profile };
 };

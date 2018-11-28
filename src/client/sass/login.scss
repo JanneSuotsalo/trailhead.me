@@ -24,3 +24,13 @@
     }
   }
 }
+
+@media screen and (max-width: 600px) {
+  .page.full.login {
+    background-color: $color-white;
+
+    > div.background {
+      display: none;
+    }
+  }
+}

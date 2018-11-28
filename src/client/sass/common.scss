@@ -182,6 +182,7 @@ label {
       margin: 15vh 0 32px 0;
       width: 100%;
       height: 40px;
+      min-height: 40px;
       background-repeat: no-repeat;
       background-image: url('/static/img/logo_white.svg');
       background-position: center;
@@ -193,10 +194,11 @@ label {
 .modal {
   margin: 32px auto 0 auto;
   padding: 32px;
-  width: 300px;
+  width: 400px;
   border-radius: 4px;
   background-color: $color-white;
 
+  box-sizing: border-box;
   @include shadow;
 
   %glyph {
@@ -369,5 +371,30 @@ nav {
   }
   #bio {
     margin: 16px 0;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  html,
+  body {
+    background-color: $color-white;
+  }
+
+  .page.full {
+    display: block;
+    height: auto;
+
+    .logo {
+      margin-top: 32px;
+      background-image: url('/static/img/logo.svg');
+    }
+  }
+
+  .modal {
+    padding-right: 42px;
+    padding-left: 42px;
+    width: 100%;
+    border-radius: 0;
+    box-shadow: none;
   }
 }
