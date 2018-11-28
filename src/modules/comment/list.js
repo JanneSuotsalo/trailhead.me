@@ -29,7 +29,6 @@ const commentList = async (trx, { post }) => {
   const [result] = await trx.execute(
     `SELECT 
     comment.commentID,
-    comment.userID,
     comment.postID,
     comment.text,
     comment.updatedAt,
@@ -49,6 +48,7 @@ const commentList = async (trx, { post }) => {
   const list = result.map(x => ({
     ...x,
     commentID: ID.comment.encode(Number(x.commentID)),
+    postID: ID.post.encode(Number(x.postID)),
   }));
 
   return { status: 'ok', list };

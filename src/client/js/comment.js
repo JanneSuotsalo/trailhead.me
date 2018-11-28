@@ -1,8 +1,8 @@
 'use strict';
 
-const button = document.getElementById('commentButton');
-const textArea = document.getElementById('commentTextarea');
-let commentList = document.getElementById('commentList');
+const button = document.querySelector('.commentButton');
+const textArea = document.querySelector('.commentTextarea');
+let commentList = document.querySelector('.commentList');
 let comment = '';
 
 // Fetch the the list of comments and creates the html as a function
@@ -33,22 +33,22 @@ const listOfComments = () => {
         let divLine = document.createElement('div');
         let divComment = document.createElement('div');
 
-        div.setAttribute('id', 'flex');
+        div.setAttribute('class', 'flex');
 
         img.setAttribute('src', 'https://i.imgur.com/MQcuk3n.jpg');
         img.setAttribute('alt', 'Profile pic');
-        img.setAttribute('id', 'profilePic');
+        img.setAttribute('class', 'profilePic');
 
-        p.setAttribute('id', 'username');
+        p.setAttribute('class', 'username');
         p.innerText = element.displayName;
 
-        pDelete.setAttribute('id', 'deleteComment');
+        pDelete.setAttribute('class', 'deleteComment');
         span.setAttribute('class', 'mdi mdi-close-circle-outline');
 
-        pText.setAttribute('id', 'commentText');
+        pText.setAttribute('class', 'commentText');
         pText.innerText = element.text;
 
-        spanTime.setAttribute('id', 'time');
+        spanTime.setAttribute('class', 'time');
         spanTime.innerText = element.createdAt;
 
         divLine.setAttribute('class', 'line');
