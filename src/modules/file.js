@@ -65,6 +65,7 @@ const serve = request(async (trx, req, res) => {
 
   // Create a read stream
   const output = stream('upload/' + file.path);
+  if (!output) return res.sendStatus(404);
 
   let transform = null;
 

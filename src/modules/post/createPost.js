@@ -62,12 +62,18 @@ module.exports = request(async (trx, req, res) => {
   }
 
   // Create tags for post tags if necessary
-  const tags = req.body.text.match(/\B(\#[a-zA-Z]{1,16}\b)(?!;)/gm);
-  for (const tag of tags) {
+  const tagsRaw = req.body.text.match(/\B(\#[a-zA-Z]{1,16}\b)(?!;)/gm) || [];
+  const tags = [];
+  for (const tag of tagsRaw) {
+    if (tags.includes(tag)) continue;
+
     await trx.query('INSERT IGNORE INTO tag (text) VALUES (?)', [
       tag.replace('#', ''),
     ]);
+    tags.push(tag);
   }
+
+  console.log('tagsRaw', tagsRaw, tags);
 
   const post = {
     userID: req.session.userID,
