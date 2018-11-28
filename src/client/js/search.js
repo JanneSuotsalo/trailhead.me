@@ -55,7 +55,7 @@
         container = locationList;
 
         onClick = event => {
-          window.location.replace(`/search/${item.locationID}#location`);
+          window.location.replace(`/search/location/${item.locationID}`);
         };
 
         break;
@@ -65,7 +65,7 @@
         container = tagList;
 
         onClick = event => {
-          window.location.replace(`/search/${item.text}#tag`);
+          window.location.replace(`/search/tag/${item.text}`);
         };
 
         break;
@@ -122,5 +122,12 @@
   input.addEventListener('input', () => {
     if (timeoutRef) clearTimeout(timeoutRef);
     timeoutRef = setTimeout(querySearch, 500);
+  });
+
+  input.addEventListener('keydown', event => {
+    console.log(event.key, input.value, input.value.trim().length);
+    if (event.key === 'Enter' && input.value.trim().length > 0) {
+      window.location.replace(`/search/${encodeURIComponent(input.value)}`);
+    }
   });
 })();
