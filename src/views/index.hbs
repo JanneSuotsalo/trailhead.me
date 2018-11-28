@@ -1,24 +1,21 @@
 {{> navigation}}
 
 <content>
-  <div id="wrapper">
-    <div class="feed">
-      {{#each posts}}
-      <div class="post">
-        {{#each media}}
-        <a href="/file/{{this}}">
-          <div id="image" style="background-image: url(/file/{{this}}/m);"></div>
-        </a>
-        {{/each}}
-        <a href="/{{username}}/{{postID}}" id="postLink">
-          <p>{{text}}</p>
-          <span>{{createdAt}}</span>
-        </a>
-      </div>
-      {{/each}}
-    </div>
-  </div>
-
-
 
 </content>
+
+{{#section 'style'}}
+<link href="/static/css/post.css" rel="stylesheet" />
+{{/section}}
+
+{{#section 'script'}}
+<script src="https://momentjs.com/downloads/moment.min.js"></script>
+<script src="/static/js/post.js"></script>
+
+<!-- Give the feed as JSON data to make first page load faster -->
+<script>
+  const preloadFeed = {{{ json posts }}};
+  window.preloadFeed = preloadFeed;
+</script>
+<script src="/static/js/feed.js"></script>
+{{/section}}
