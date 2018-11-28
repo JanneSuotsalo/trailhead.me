@@ -374,6 +374,91 @@ nav {
   }
 }
 
+.search .dialog {
+  position: absolute;
+  display: none;
+  top: 70px;
+  left: 50%;
+  width: 400px;
+  background-color: $color-white;
+  border-radius: 4px;
+  overflow: hidden;
+
+  transform: translateX(-50%);
+
+  @include shadow;
+
+  > div.border {
+    .tag,
+    .location {
+      &:first-child {
+        border-top: 2px solid $color-gray;
+      }
+    }
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    height: 64px;
+    cursor: pointer;
+
+    transition: background-color $animation-easing $animation-time;
+
+    &:hover {
+      background-color: $color-gray;
+    }
+
+    &.tag {
+      padding-left: 22px;
+
+      .icon {
+        display: none;
+      }
+
+      .info p {
+        font-weight: bold;
+        color: $color-primary;
+      }
+    }
+
+    .icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 64px;
+      height: 64px;
+
+      .mdi {
+        font-size: 24px;
+        color: $color-primary;
+      }
+
+      .image {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: $color-gray;
+      }
+    }
+
+    .info {
+      font-family: $font-family-body;
+
+      p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: $color-black;
+      }
+
+      small {
+        font-size: 0.7rem;
+        color: $color-dimgray;
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 600px) {
   html,
   body {

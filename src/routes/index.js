@@ -6,12 +6,14 @@ const reactRoutes = require('./reactRoutes');
 const postRoutes = require('./postRoutes');
 const fileRoutes = require('./fileRoutes');
 const flagRoutes = require('./flagRoutes');
+const searchRoutes = require('./searchRoutes');
 
 module.exports = [
   userRoutes,
   commentRoutes,
   followersRoutes,
   reactRoutes,
+  searchRoutes,
   fileRoutes,
   flagRoutes,
   postRoutes,

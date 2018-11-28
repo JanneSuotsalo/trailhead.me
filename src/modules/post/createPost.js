@@ -61,6 +61,14 @@ module.exports = request(async (trx, req, res) => {
     locationID = locationInsert.id;
   }
 
+  // Create tags for post tags if necessary
+  const tags = req.body.text.match(/\B(\#[a-zA-Z]{1,16}\b)(?!;)/gm);
+  for (const tag of tags) {
+    await trx.query('INSERT IGNORE INTO tag (text) VALUES (?)', [
+      tag.replace('#', ''),
+    ]);
+  }
+
   const post = {
     userID: req.session.userID,
     locationID,
@@ -96,6 +104,14 @@ module.exports = request(async (trx, req, res) => {
       fileStateIDs.PUBLIC,
       postFile.fileID,
     ]);
+  }
+
+  // Add tags to this post
+  for (const tag of tags) {
+    await trx.query(
+      'INSERT INTO postTag (postID, tagID) VALUES (?, (SELECT tagID FROM tag WHERE text = ?))',
+      [insert.id, tag.replace('#', '')]
+    );
   }
 
   return { status: 'ok', postID: ID.post.encode(insert.id) };
