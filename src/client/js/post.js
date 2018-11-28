@@ -42,7 +42,7 @@ const createPost = (post, link = false) => {
   // Format and include the post text content
   const content = document.createElement('p');
   content.textContent = post.text;
-  content.innerHTML = content.textContent.replace(
+  content.innerHTML = content.innerHTML.replace(
     /\B(\#[a-zA-Z]{1,16}\b)(?!;)/gm,
     x => `<a>${x}</a>`
   );

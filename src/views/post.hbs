@@ -12,6 +12,7 @@
 <script src="https://momentjs.com/downloads/moment.min.js"></script>
 <script src="/static/js/post.js"></script>
 <script>
-  document.querySelector('content').appendChild(createPost({{{ json post }}}));
+  const preloadPostData = JSON.parse(atob('{{{ base64 post }}}'));
+  document.querySelector('content').appendChild(createPost(preloadPostData));
 </script>
 {{/section}}

@@ -84,7 +84,8 @@ CREATE TABLE `post`
 );
 
 ALTER TABLE `post`
-  ADD PRIMARY KEY (`postID`);
+  ADD PRIMARY KEY (`postID`),
+  CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 
 
 CREATE TABLE `postFile`

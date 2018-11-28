@@ -45,7 +45,20 @@ app.engine(
         return null;
       },
       json: function(context) {
-        return JSON.stringify(context, null, 3);
+        return JSON.stringify(context);
+      },
+      // Used to transfer preloaded data to client in templates
+      base64: function(context) {
+        // Stringify object
+        let output = JSON.stringify(context);
+        // Encode unicode characters
+        output = output.replace(
+          /[\u007F-\uFFFF]/g,
+          char => `\\u${('0000' + char.charCodeAt(0).toString(16)).substr(-4)}`
+        );
+        // Convert to base64
+        output = Buffer.from(output).toString('base64');
+        return output;
       },
     },
   })

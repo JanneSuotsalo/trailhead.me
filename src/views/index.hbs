@@ -15,7 +15,7 @@
 
 <!-- Give the feed as JSON data to make first page load faster -->
 <script>
-  const preloadFeed = {{{ json posts }}};
+  const preloadFeed = JSON.parse(atob('{{{ base64 posts }}}'));
   window.preloadFeed = preloadFeed;
 </script>
 <script src="/static/js/feed.js"></script>
