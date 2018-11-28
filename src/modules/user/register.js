@@ -19,6 +19,7 @@ module.exports = request(async (trx, req, res) => {
   const user = {
     email: req.body.email,
     username: req.body.username,
+    displayName: req.body.username,
     password: pw.hash(req.body.password),
   };
 
