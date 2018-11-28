@@ -1,10 +1,14 @@
 const Hashids = require('hashids');
-const post = new Hashids(process.env.POST_ID_KEY, 4);
-const file = new Hashids(process.env.FILE_ID_KEY, 4);
-const comment = new Hashids(process.env.COMMENT_ID_KEY, 4);
+
+const hash = process.env.HASH_KEY;
+const post = new Hashids(`${hash}-post`, 4);
+const file = new Hashids(`${hash}-file`, 4);
+const comment = new Hashids(`${hash}-comment`, 4);
+const location = new Hashids(`${hash}-location`, 4);
 
 module.exports = {
   post,
   file,
   comment,
+  location,
 };
