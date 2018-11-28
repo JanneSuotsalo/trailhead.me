@@ -35,8 +35,7 @@ const listOfComments = () => {
 
         div.setAttribute('class', 'flex');
 
-        img.setAttribute('src', 'https://i.imgur.com/MQcuk3n.jpg');
-        img.setAttribute('alt', 'Profile pic');
+        img.setAttribute('src', '/file/fileID');
         img.setAttribute('class', 'profilePic');
 
         p.setAttribute('class', 'username');
