@@ -1,13 +1,13 @@
 @import 'util';
 
-#profilePic {
+.profilePic {
   border-radius: 50%;
   width: 32px;
   height: 32px;
   margin: 10px 0 0 0;
 }
 
-#username {
+.username {
   color: $color-primary;
   font-family: $font-family-body;
   font-weight: bold;
@@ -15,7 +15,7 @@
   margin-bottom: 10px;
 }
 
-#deleteComment {
+.deleteComment {
   display: flex;
   margin-left: auto;
   color: $color-primary;
@@ -23,12 +23,12 @@
   margin-bottom: 0;
 }
 
-#deleteComment :hover {
+.deleteComment :hover {
   color: $color-secondary;
   cursor: pointer;
 }
 
-#commentText {
+.commentText {
   color: $color-black;
   font-family: $font-family-body;
   margin-top: 1px;
@@ -37,7 +37,7 @@
   word-wrap: break-word;
 }
 
-#time {
+.time {
   color: $color-dimgray;
   font-family: $font-family-body;
   font-size: 13px;
@@ -57,7 +57,7 @@
   float: right;
 }
 
-#flex {
+.flex {
   display: flex;
   flex-wrap: nowrap;
 }
@@ -68,7 +68,14 @@
   width: 100%;
 }
 
-#commentTextarea {
+.commentTextarea {
   margin-bottom: 10px;
   resize: none;
+}
+
+.wrapperComment {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  margin: 1px;
 }
