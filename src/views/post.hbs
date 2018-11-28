@@ -1,37 +1,7 @@
 {{> navigation}}
 
 <content>
-  <div class="modal post full">
-    <div class="gallery">
-      <div class="control right"><span class="mdi mdi-arrow-right"></span></div>
-      <div class="control left"><span class="mdi mdi-arrow-left"></span></div>
 
-      <div class="list">
-        {{#each post.media}}
-        <div class="media">
-          <div class="image" style="background-image: url(/file/{{this}}/m);"></div>
-          <a href="/file/{{this}}">
-            <div class="view"><span class="mdi mdi-fullscreen"></span>View full image</div>
-          </a>
-        </div>
-        {{/each}}
-      </div>
-    </div>
-    <div class="location" {{#if post.location.fileID}} style="background-image: url(/file/{{post.location.fileID}})"
-      {{/if}}>
-      <div class="icon">
-        <span class="mdi mdi-{{post.location.icon}}"></span>
-      </div>
-      <div class="info">
-        <p>{{post.location.name}}</p>
-        <small>{{post.location.address}}</small>
-      </div>
-    </div>
-    <div class="info">
-      <p>{{post.text}}</p>
-      <p class="time">{{post.createdAt}}</p>
-    </div>
-  </div>
 </content>
 
 {{#section 'style'}}
@@ -39,5 +9,9 @@
 {{/section}}
 
 {{#section 'script'}}
+<script src="https://momentjs.com/downloads/moment.min.js"></script>
 <script src="/static/js/post.js"></script>
+<script>
+  document.querySelector('content').appendChild(createPost({{{ json post }}}));
+</script>
 {{/section}}
