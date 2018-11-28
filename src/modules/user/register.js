@@ -52,7 +52,7 @@ module.exports = request(async (trx, req, res) => {
   // Create the new user
   await trx.execute(
     `INSERT INTO user (email, username, displayName, password) VALUES (?, ?, ?, ?);`,
-    [user.email, user.username, displayName, user.password]
+    [user.email, user.username, user.displayName, user.password]
   );
 
   return { status: 'ok' };
