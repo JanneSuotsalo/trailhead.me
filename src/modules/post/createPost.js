@@ -73,8 +73,6 @@ module.exports = request(async (trx, req, res) => {
     tags.push(tag);
   }
 
-  console.log('tagsRaw', tagsRaw, tags);
-
   const post = {
     userID: req.session.userID,
     locationID,

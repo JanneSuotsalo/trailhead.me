@@ -221,7 +221,8 @@ window.postDataCheck = () => {
     window.postData.text = textarea.value;
     window.postDataCheck();
 
-    highlight.innerHTML = textarea.value
+    highlight.textContent = textarea.value;
+    highlight.innerHTML = highlight.innerHTML
       .replace(/\n$/g, '\n\n')
       .replace(/\B(\#[a-zA-Z]{1,16}\b)(?!;)/gm, x => `<span>${x}</span>`);
   };
