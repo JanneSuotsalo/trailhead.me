@@ -2,8 +2,9 @@ const { request } = require('modules/util');
 const ID = require('modules/id');
 const { locationTypeIDs, fileStateIDs } = require('modules/constants');
 const fs = require('fs');
+const emoji = require('modules/postReact/emoji');
 
-const loadPost = async (trx, { post }) => {
+const loadPost = async (trx, { post, userID }) => {
   // Convert hash id onto a numerical one
   const postID = ID.post.decode(post)[0];
   if (!postID) {
@@ -34,6 +35,31 @@ const loadPost = async (trx, { post }) => {
       status: 'not found',
       error: 'Post does not exist',
     };
+  }
+
+  // Load post reacts
+  const [reacts] = await trx.execute(
+    `SELECT
+      reactID,
+      COUNT(reactID) as amount
+    FROM postReact
+    WHERE postID = ?
+    GROUP BY reactID
+    ORDER BY amount
+    LIMIT 5`,
+    [postID]
+  );
+
+  // Load user react
+  let userReact = null;
+  if (userID && userID) {
+    const [[react]] = await trx.execute(
+      `SELECT reactID
+      FROM postReact
+      WHERE postID = ? AND userID = ?`,
+      [postID, userID]
+    );
+    if (react) userReact = emoji.key[react.reactID];
   }
 
   // Load post location
@@ -71,11 +97,13 @@ const loadPost = async (trx, { post }) => {
     postID: ID.post.encode(Number(result.postID)), // Convert numerical id to a hash id
     user: JSON.parse(result.user),
     media: media.map(x => ID.file.encode(x.fileID)),
+    reacts: reacts.map(x => ({ text: emoji.key[x.reactID], amount: x.amount })),
     location: {
       ...location,
       icon,
       fileID: location.fileID ? ID.file.encode(location.fileID) : null,
     },
+    userReact,
   };
 
   return { status: 'ok', post: data };
@@ -83,7 +111,7 @@ const loadPost = async (trx, { post }) => {
 
 // Express GET middleware
 const get = request(async (trx, req, res) => {
-  const status = await loadPost(trx, req.params);
+  const status = await loadPost(trx, { ...req.params, ...req.session });
 
   res.render('post', {
     post: status.post,

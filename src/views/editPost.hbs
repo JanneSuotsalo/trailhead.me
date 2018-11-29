@@ -5,22 +5,7 @@
     <h2>Create a new post</h2>
 
     <label>Media</label>
-    <label class="input file">
-      <input type="file" accept=".png,.jpg,.jpeg,.webm,.mp4" multiple />
-      <div class="help">
-        <span class="mdi mdi-file-download"></span>
-        <p>.png .jpg .jpeg .mp4 .webm</p>
-      </div>
-    </label>
-
-    <div class="gallery">
-      <div class="empty"></div>
-
-      <span class="message">
-        <span class="mdi mdi-information-outline"></span>
-        Upload something to get started!<br />You can upload up to 8 items.
-      </span>
-    </div>
+    <div id="upload"></div>
 
     <label for="text">Text</label>
     <div class="textarea">
@@ -63,6 +48,7 @@
   window.mapKey = '{{{mapKey}}}';
 </script>
 
+<script src="/static/js/uploader.js"></script>
 <script src="/static/js/editPost.js"></script>
 <script src="/static/js/map.js"></script>
 {{/section}}

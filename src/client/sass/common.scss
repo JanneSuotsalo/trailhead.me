@@ -374,19 +374,22 @@ nav {
   }
 }
 
-.search .dialog {
+.dialog {
   position: absolute;
-  display: none;
-  top: 70px;
-  left: 50%;
-  width: 400px;
   background-color: $color-white;
   border-radius: 4px;
   overflow: hidden;
 
-  transform: translateX(-50%);
-
   @include shadow;
+}
+
+.search .dialog {
+  display: none;
+  top: 70px;
+  left: 50%;
+  width: 400px;
+
+  transform: translateX(-50%);
 
   > div.border {
     .tag,

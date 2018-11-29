@@ -1,6 +1,7 @@
 @import 'util';
 
 .post {
+  position: relative;
   margin-bottom: 32px;
   padding: 0;
   width: 450px;
@@ -167,6 +168,94 @@
     }
   }
 
+  .react {
+    position: absolute;
+    display: flex;
+    right: 32px;
+    bottom: 32px;
+    height: 24px;
+
+    .mine {
+      padding: 1px 4px;
+      width: 24px;
+      height: 24px;
+      line-height: 26px;
+      border-radius: 50%;
+      background-color: $color-primary;
+      user-select: none;
+      cursor: pointer;
+
+      box-sizing: border-box;
+
+      transition: transform $animation-easing $animation-time;
+
+      &:hover {
+        transform: translateY(-1px);
+      }
+    }
+
+    .list {
+      position: relative;
+      padding-right: 8px;
+      line-height: 28px;
+      letter-spacing: -10px;
+      user-select: none;
+
+      transition: padding-right$animation-easing $animation-time,
+        letter-spacing $animation-easing $animation-time;
+
+      &:hover {
+        padding-right: 0px;
+        letter-spacing: -2px;
+      }
+
+      > .amount {
+        position: absolute;
+        margin-top: -2px;
+        left: 0;
+        text-align: right;
+        font-family: $font-family-body;
+        font-size: 0.7rem;
+        letter-spacing: normal;
+        color: $color-dark;
+
+        > span {
+          position: absolute;
+          padding: 0 6px 0 0;
+          right: 0;
+        }
+      }
+    }
+
+    .add {
+      position: relative;
+      padding: 0 9px 0 (4px + 16px + 2px);
+      height: 24px;
+      border-radius: 24px;
+      font-size: 0.7rem;
+      font-family: $font-family-body;
+      line-height: 24px;
+      color: $color-dark;
+      user-select: none;
+      cursor: pointer;
+      background-color: $color-gray;
+
+      transition: transform $animation-easing $animation-time,
+        box-shadow $animation-easing $animation-time,
+        background-color $animation-easing $animation-time;
+
+      &:hover {
+        transform: translateY(-1px);
+      }
+
+      .mdi {
+        position: absolute;
+        left: 4px;
+        font-size: 1rem;
+      }
+    }
+  }
+
   .info {
     display: block;
     padding: 32px;
@@ -189,6 +278,39 @@
       margin: 16px 0 0 0;
       font-size: 0.7rem;
       color: $color-dimgray;
+    }
+  }
+}
+
+.add-react {
+  display: none;
+  margin: 8px 0 0 0;
+  z-index: 10;
+
+  transform: translateX(-50%);
+
+  > div {
+    padding: 0 7px;
+  }
+
+  > div:not(:last-child) {
+    border-right: 2px solid $color-gray;
+  }
+
+  > div > span {
+    display: inline-block;
+    padding: 3px 4px;
+    width: 24px;
+    height: 32px;
+    user-select: none;
+    cursor: pointer;
+
+    box-sizing: border-box;
+
+    transition: transform $animation-easing $animation-time;
+
+    &:hover {
+      transform: scale(1.2);
     }
   }
 }
