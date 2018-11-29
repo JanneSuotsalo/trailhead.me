@@ -45,6 +45,7 @@ CREATE TABLE `user`
   `email` VARCHAR(254) NOT NULL,
   `username` VARCHAR(32) NOT NULL,
   `displayName` VARCHAR(32) NOT NULL,
+  `bio` TEXT,
   `password` CHAR(60) NOT NULL,
   `updatedAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
     ON UPDATE CURRENT_TIMESTAMP,
@@ -59,7 +60,8 @@ CREATE TABLE `user`
 );
 
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`userID`);
+  ADD PRIMARY KEY (`userID`),
+  CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 
 
 CREATE TABLE `post`
