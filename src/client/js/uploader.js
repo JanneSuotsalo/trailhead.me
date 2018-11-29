@@ -5,12 +5,15 @@ const Uploader = (
     supportedFiles = ['.png', '.jpg', '.jpeg', '.mp4', '.webm'],
     emptyMessage = 'Upload something to get started!<br />You can upload up to 8 items.',
     maxFiles = 8,
+    allowReorder = false,
+    allowRemove = true,
 
-    onUpload = files => {},
+    onUpload = file => {},
     onError = error => {},
+    onUpdate = files => {},
   }
 ) => {
-  const uploadedFiles = [];
+  let uploadedFiles = [];
 
   if (!parent) {
     return console.error('Parent element must be specified!');
@@ -49,6 +52,8 @@ const Uploader = (
     onError(text);
   };
 
+  let draggedElement = null;
+
   const upload = files => {
     if (errorElement) errorElement.style.display = 'none';
     zone.classList.remove('drag');
@@ -79,8 +84,77 @@ const Uploader = (
 
       const element = document.createElement('div');
       element.style.backgroundImage = `url(/file/${file})`;
-      gallery.appendChild(element);
 
+      if (allowRemove) {
+        const remove = document.createElement('span');
+        remove.classList.add('remove', 'mdi', 'mdi-close-circle-outline');
+        element.classList.add('remove');
+
+        remove.addEventListener('click', () => {
+          uploadedFiles = uploadedFiles.filter(
+            x => x !== element.getAttribute('value')
+          );
+          element.remove();
+          onUpdate(uploadedFiles);
+        });
+
+        element.appendChild(remove);
+      }
+
+      if (allowReorder) {
+        const handle = document.createElement('span');
+        handle.classList.add('handle', 'mdi', 'mdi-reorder-horizontal');
+        element.appendChild(handle);
+        element.classList.add('reorder');
+
+        element.addEventListener('dragstart', event => {
+          // event.preventDefault();
+          draggedElement = element;
+          event.dataTransfer.effectAllowed = 'move';
+          console.log('start');
+        });
+
+        element.addEventListener('dragover', event => {
+          event.preventDefault();
+          event.dataTransfer.dropEffect = 'move';
+          element.classList.add('drop');
+          return false;
+        });
+
+        element.addEventListener('dragleave', event => {
+          event.preventDefault();
+          element.classList.remove('drop');
+          return false;
+        });
+
+        const stopDrag = event => {
+          event.preventDefault();
+          event.stopPropagation();
+          elements.forEach(x => x.classList.remove('drop'));
+          if (draggedElement === element) return;
+
+          // Update visual order
+          const children = Array.from(element.parentNode.children);
+          if (children.indexOf(element) < children.indexOf(draggedElement)) {
+            gallery.insertBefore(draggedElement, element);
+          } else {
+            gallery.insertBefore(draggedElement, element.nextSibling);
+          }
+
+          // Update logic order
+          uploadedFiles = Array.from(element.parentNode.children)
+            .filter(x => x.hasAttribute('value'))
+            .map(x => x.getAttribute('value'));
+
+          // Call update
+          onUpdate(uploadedFiles);
+        };
+
+        element.addEventListener('drop', stopDrag);
+        element.addEventListener('dragend', stopDrag);
+      }
+
+      gallery.appendChild(element);
       elements.push(element);
     }
 
@@ -100,12 +174,16 @@ const Uploader = (
         } else {
           for (const file in status.fileIDs) {
             const element = elements[file];
+            element.setAttribute('draggable', true);
+            element.setAttribute('value', status.fileIDs[file]);
+            element.classList.add('done');
             element.style.backgroundImage = `url(/file/${
               status.fileIDs[file]
             })`;
             element.style.backgroundSize = '100%';
             uploadedFiles.push(status.fileIDs[file]);
             onUpload(status.fileIDs[file]);
+            onUpdate(uploadedFiles);
           }
         }
       })

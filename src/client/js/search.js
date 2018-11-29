@@ -44,7 +44,7 @@
         container = userList;
 
         onClick = event => {
-          window.location.replace(`/${item.username}`);
+          window.location.href = `/${item.username}`;
         };
 
         break;
@@ -55,7 +55,7 @@
         container = locationList;
 
         onClick = event => {
-          window.location.replace(`/search/location/${item.locationID}`);
+          window.location.href = `/search/location/${item.locationID}`;
         };
 
         break;
@@ -65,7 +65,7 @@
         container = tagList;
 
         onClick = event => {
-          window.location.replace(`/search/tag/${item.text}`);
+          window.location.href = `/search/tag/${item.text}`;
         };
 
         break;
@@ -127,7 +127,7 @@
   input.addEventListener('keydown', event => {
     console.log(event.key, input.value, input.value.trim().length);
     if (event.key === 'Enter' && input.value.trim().length > 0) {
-      window.location.replace(`/search/${encodeURIComponent(input.value)}`);
+      window.location.href = `/search/${encodeURIComponent(input.value)}`;
     }
   });
 })();

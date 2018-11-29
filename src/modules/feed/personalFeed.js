@@ -32,7 +32,6 @@ const get = request(async (trx, req, res) => {
   const status = await feed(trx, { ...(req.session || {}), page: 0 });
 
   res.render('profile', {
-    user: req.session ? req.session.user : null,
     posts: status.posts,
   });
   return;

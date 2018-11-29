@@ -281,7 +281,7 @@ nav {
     input {
       margin: 20px auto 0 auto;
       flex: 1;
-      padding-left: 16px;
+      padding-left: 12px;
       width: 450px;
       border-radius: 4px;
       border-color: $color-gray;
@@ -312,6 +312,7 @@ nav {
       height: 32px;
       background-size: 100%;
       border-radius: 50%;
+      background-color: $color-gray;
     }
   }
 }

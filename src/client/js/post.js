@@ -18,6 +18,8 @@ const createPost = (post, link = false) => {
   const modal = document.createElement('div');
   modal.classList.add('modal', 'post', 'full');
 
+  let currentMediaID = post.media[0];
+
   // Construct the basic post layout
   // prettier-ignore
   modal.innerHTML = `
@@ -25,14 +27,13 @@ const createPost = (post, link = false) => {
       <div class="control right"><span class="mdi mdi-arrow-right"></span></div>
       <div class="control left"><span class="mdi mdi-arrow-left"></span></div>
 
+      <div class="view"><span class="mdi mdi-fullscreen"></span>View full image</div>
+
       <div class="container">
       <div class="list">
         ${post.media.map(media => `
         <div class="media">
-          <div class="image" style="background-image: url(/file/${media}/m);"></div>
-          <a href="/file/${media}">
-            <div class="view"><span class="mdi mdi-fullscreen"></span>View full image</div>
-          </a>
+          <div class="image" style="background-image: url(/file/${media}/l);"></div>
         </div>
         `).join('')}
       </div>
@@ -99,6 +100,8 @@ const createPost = (post, link = false) => {
 
     left.style.display = position > 0 ? 'block' : 'none';
     right.style.display = position < post.media.length - 1 ? 'block' : 'none';
+
+    currentMediaID = post.media[position];
   };
 
   right.addEventListener('click', () => {
@@ -107,6 +110,10 @@ const createPost = (post, link = false) => {
 
   left.addEventListener('click', () => {
     moveGalleryPosition(-1);
+  });
+
+  modal.querySelector('.view').addEventListener('click', () => {
+    window.location.href = `/file/${currentMediaID}`;
   });
 
   const emoji = [

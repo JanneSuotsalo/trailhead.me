@@ -1,7 +1,6 @@
 window.postData = {
   fileIDs: [],
   text: '',
-  location: true,
 };
 
 window.postDataCheck = () => {
@@ -45,19 +44,7 @@ const saveSettings = () => {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      ...window.postData,
-      location: {
-        locationTypeID: window.postData.location.typeID,
-        uuid: window.postData.location.identifier,
-        name: window.postData.location.name,
-        address: window.postData.location.subname,
-        /*coordinates: {
-          lat: window.postData.location.lat,
-          lon: window.postData.location.lon,
-        },*/
-      },
-    }),
+    body: JSON.stringify(window.postData),
   })
     .then(data => data.json())
     .then(json => {

@@ -12,7 +12,8 @@
     width: 100%;
 
     &:hover {
-      .control {
+      .control,
+      .view {
         opacity: 1;
       }
     }
@@ -28,7 +29,7 @@
       border-radius: 50%;
       background-color: rgba($color-white, 0.75);
       color: $color-dark;
-      opacity: 0.25;
+      opacity: 0.5;
       cursor: pointer;
       z-index: 1;
 
@@ -41,6 +42,35 @@
       &.right {
         left: auto;
         right: 16px;
+      }
+    }
+
+    .view {
+      position: absolute;
+      padding: 0 10px 0 (8px + 4px + 16px);
+      bottom: 16px;
+      left: 50%;
+      margin: auto;
+      height: 32px;
+      font-family: $font-family-body;
+      font-size: 0.8rem;
+      line-height: 32px;
+      border-radius: 32px;
+      background-color: rgba($color-black, 0.75);
+      color: $color-white;
+      opacity: 0;
+      z-index: 1;
+      user-select: none;
+      cursor: pointer;
+
+      transform: translateX(-50%);
+
+      transition: opacity $animation-easing $animation-time * 2;
+
+      > span {
+        position: absolute;
+        left: 8px;
+        font-size: 16px;
       }
     }
 
@@ -82,29 +112,6 @@
         background-size: 100% auto;
         background-position: center;
         background-repeat: no-repeat;
-      }
-
-      .view {
-        position: absolute;
-        padding: 0 10px 0 (8px + 4px + 16px);
-        bottom: 16px;
-        left: 50%;
-        margin: auto;
-        height: 32px;
-        font-family: $font-family-body;
-        font-size: 0.8rem;
-        line-height: 32px;
-        border-radius: 32px;
-        background-color: rgba($color-black, 0.75);
-        color: $color-white;
-
-        transform: translateX(-50%);
-
-        > span {
-          position: absolute;
-          left: 8px;
-          font-size: 16px;
-        }
       }
     }
   }
@@ -325,6 +332,7 @@
 }
 
 .modal.editPost {
+  position: relative;
   margin-bottom: 32px;
   width: 450px;
 
@@ -347,6 +355,7 @@
     }
 
     > div {
+      position: relative;
       margin-right: 2%;
       margin-bottom: 2%;
       padding-top: 23%;
@@ -357,6 +366,89 @@
       background-position: center;
       background-repeat: no-repeat;
       background-image: url('/static/img/loader.gif');
+      overflow: hidden;
+      opacity: 1;
+
+      transition: opacity $animation-easing $animation-time;
+
+      &.drop {
+        opacity: 0.5;
+      }
+
+      &:hover {
+        .mdi.handle,
+        .mdi.remove {
+          opacity: 1;
+        }
+      }
+
+      &.done {
+        &:after {
+          content: '';
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 1;
+        }
+
+        &.remove:after {
+          background-image: linear-gradient(
+            225deg,
+            rgba(0, 0, 0, 0.5) 0%,
+            rgba(0, 0, 0, 0.4) 20%,
+            rgba(0, 0, 0, 0) 52%
+          );
+        }
+
+        &.reorder:after {
+          background-image: linear-gradient(
+            135deg,
+            rgba(0, 0, 0, 0.5) 0%,
+            rgba(0, 0, 0, 0.4) 20%,
+            rgba(0, 0, 0, 0) 52%
+          );
+        }
+
+        &.reorder.remove:after {
+          background-image: linear-gradient(
+              135deg,
+              rgba(0, 0, 0, 0.5) 0%,
+              rgba(0, 0, 0, 0.4) 20%,
+              rgba(0, 0, 0, 0) 52%
+            ),
+            linear-gradient(
+              225deg,
+              rgba(0, 0, 0, 0.5) 0%,
+              rgba(0, 0, 0, 0.4) 20%,
+              rgba(0, 0, 0, 0) 52%
+            );
+        }
+      }
+
+      .mdi {
+        position: absolute;
+        font-size: 1.1rem;
+        color: $color-white;
+        z-index: 2;
+
+        transition: opacity $animation-easing $animation-time;
+
+        &.handle {
+          top: 4px;
+          left: 4px;
+          opacity: 0.5;
+        }
+
+        &.remove {
+          top: 4px;
+          right: 4px;
+          opacity: 0;
+          cursor: pointer;
+        }
+      }
     }
   }
 

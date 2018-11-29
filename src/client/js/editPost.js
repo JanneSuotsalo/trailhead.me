@@ -50,10 +50,10 @@ window.postDataCheck = () => {
   const upload = document.getElementById('upload');
 
   Uploader(upload, {
+    allowReorder: true,
     onError: showError,
-    onUpload: file => {
-      console.log('Upload file', file);
-      window.postData.fileIDs.push(file);
+    onUpdate: fileIDs => {
+      window.postData.fileIDs = [...fileIDs];
       window.postDataCheck();
     },
   });

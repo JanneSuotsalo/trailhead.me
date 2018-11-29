@@ -35,7 +35,8 @@ CREATE TABLE `location`
 );
 
 ALTER TABLE `location`
-  ADD PRIMARY KEY (`locationID`);
+  ADD PRIMARY KEY (`locationID`),
+  CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 
 
 CREATE TABLE `user`

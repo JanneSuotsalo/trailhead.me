@@ -153,7 +153,6 @@ const get = request(async (trx, req, res) => {
 
   if (req.session.username == req.params.username) {
     res.render('profile', {
-      user: req.session ? req.session.user : null,
       posts: status.posts,
       username: req.params.username,
       fullName: status.profile.displayName,
@@ -162,7 +161,6 @@ const get = request(async (trx, req, res) => {
     });
   } else {
     res.render('user', {
-      user: req.session ? req.session.user : null,
       posts: status.posts,
       username: req.params.username,
       fullName: status.profile.displayName,

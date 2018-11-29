@@ -8,14 +8,18 @@
 
     {{#if user}}
     <div class="profile">
-      <div class="image" style="background-image: url(/file/{{user.image}}/xs)"></div>
+      <a href="/{{user.username}}">
+        <div class="image" style="background-image: url(/file/{{user.image}}/xs)"></div>
+      </a>
     </div>
     {{/if}}
   </div>
 
   {{#if user}}
   <div class="profile">
-    <div class="image" style="background-image: url(/file/{{user.image}}/xs)"></div>
+    <a href="/{{user.username}}">
+      <div class="image" style="background-image: url(/file/{{user.image}}/xs)"></div>
+    </a>
   </div>
   {{/if}}
 </nav>
