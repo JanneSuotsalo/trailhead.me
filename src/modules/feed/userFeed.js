@@ -57,6 +57,10 @@ const userFeed = async (trx, { username, page }) => {
     'SELECT f.filename, f.path FROM file as f, postFile as pf WHERE pf.fileID = f.fileID;'
   );
 
+  if (!result || !result.length) {
+    return { status: 'not found', error: 'User not found' };
+  }
+
   const [[profile]] = await trx.query(
     `SELECT 
         user.displayName, 
@@ -141,6 +145,7 @@ const post = request(async (trx, req, res) => {
 // Express GET middleware
 const get = request(async (trx, req, res) => {
   const status = await userFeed(trx, { ...req.params, page: 0 });
+  if (status.status !== 'ok') return res.sendStatus(404);
 
   if (status.profile.fileID == null) {
     status.profile.fileID = Number(6);
@@ -148,7 +153,7 @@ const get = request(async (trx, req, res) => {
 
   if (req.session.username == req.params.username) {
     res.render('profile', {
-      user: req.session.isPopulated ? req.session.user : null,
+      user: req.session ? req.session.user : null,
       posts: status.posts,
       username: req.params.username,
       fullName: status.profile.displayName,
@@ -157,7 +162,7 @@ const get = request(async (trx, req, res) => {
     });
   } else {
     res.render('user', {
-      user: req.session.isPopulated ? req.session.user : null,
+      user: req.session ? req.session.user : null,
       posts: status.posts,
       username: req.params.username,
       fullName: status.profile.displayName,

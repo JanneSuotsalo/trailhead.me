@@ -46,5 +46,8 @@ module.exports = request(async (trx, req, res) => {
     );
   }
 
+  req.session.image = profilePicture[0].fileID;
+  await req.session.save();
+
   return { status: 'ok' };
 });

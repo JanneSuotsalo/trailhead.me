@@ -23,14 +23,6 @@ module.exports = request(async (trx, req, res) => {
     };
   }
 
-  // Check that the user is not trying to follow itself
-  if (user.userID === req.session.userID) {
-    return {
-      status: 'forbidden',
-      error: 'Can not follow itself...',
-    };
-  }
-
   // Check that the user is not already following the other user
   const [[follower]] = await trx.execute(
     'SELECT COUNT(*) as "exists" FROM follower WHERE followerID = ? AND userID = ?;',

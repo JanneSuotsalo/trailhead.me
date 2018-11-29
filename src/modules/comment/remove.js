@@ -19,14 +19,6 @@ module.exports = request(async (trx, req, res) => {
     };
   }
 
-  // Check if user is logged in
-  if (!req.session.isPopulated) {
-    return {
-      status: 'forbidden',
-      error: 'Invalid session, please login again...',
-    };
-  }
-
   // Find the comment that the user is trying to edit
   const [[comment]] = await trx.execute(
     `SELECT userID, commentID FROM comment WHERE commentID = ? and postID = ?`,

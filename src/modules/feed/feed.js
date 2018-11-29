@@ -134,12 +134,12 @@ const post = request(async (trx, req, res) => {
     return { status: 'validation error', error: valid.error };
   }
 
-  return await feed(trx, { ...req.body, ...req.session });
+  return await feed(trx, { ...req.body, ...(req.session || {}) });
 });
 
 // Express GET middleware
 const get = request(async (trx, req, res) => {
-  const status = await feed(trx, { ...req.session, page: 0 });
+  const status = await feed(trx, { ...(req.session || {}), page: 0 });
 
   res.render('index', {
     posts: status.posts,

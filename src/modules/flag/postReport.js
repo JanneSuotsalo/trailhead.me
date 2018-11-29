@@ -62,7 +62,11 @@ const post = request(async (trx, req, res) => {
   if (valid.error) {
     return { status: 'validation error', error: valid.error };
   }
-  return await postReport(trx, { ...req.params, ...req.session, ...req.body });
+  return await postReport(trx, {
+    ...req.params,
+    ...(req.session || {}),
+    ...req.body,
+  });
 });
 
 // Express GET middleware

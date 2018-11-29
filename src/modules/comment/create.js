@@ -23,14 +23,6 @@ module.exports = request(async (trx, req, res) => {
     };
   }
 
-  // Check if user is logged in
-  if (!req.session.isPopulated) {
-    return {
-      status: 'forbidden',
-      error: 'Invalid session, please login again...',
-    };
-  }
-
   // Find the post
   const [[post]] = await trx.execute(
     `SELECT postID FROM post WHERE postID = ?`,

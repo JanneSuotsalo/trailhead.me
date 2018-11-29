@@ -1,14 +1,6 @@
 const { request } = require('modules/util');
 
 module.exports = request(async (trx, req, res) => {
-  // Check if user is logged in
-  if (!req.session.isPopulated) {
-    return {
-      status: 'forbidden',
-      error: 'Invalid session, please login again...',
-    };
-  }
-
   // Find the userID of the user, that the other user is trying to unfollow
   const [[user]] = await trx.execute(
     `SELECT userID FROM user WHERE username = ?`,
@@ -30,6 +22,7 @@ module.exports = request(async (trx, req, res) => {
       error: 'Can not unfollow itself...',
     };
   }
+
   // Check if the user is already following the other user
   const [[follower]] = await trx.execute(
     'SELECT COUNT(*) as "exists" FROM follower WHERE followerID = ? AND userID = ?;',

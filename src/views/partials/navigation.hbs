@@ -2,14 +2,20 @@
   <a href="/" class="logo"></a>
 
   <div class="search">
-    <input type="text" name="search" placeholder="🔎 Search for posts, collections & users" />
+    <input type="text" name="search" placeholder="🔎 Search for #tags, @users & more" />
 
-    <div class="dialog">
+    <div class="dialog"></div>
 
+    {{#if user}}
+    <div class="profile">
+      <div class="image" style="background-image: url(/file/{{user.image}}/xs)"></div>
     </div>
+    {{/if}}
   </div>
 
+  {{#if user}}
   <div class="profile">
-    <div class="image" style="background-image: url(https://api.adorable.io/avatars/48/abott@adorable.png)"></div>
+    <div class="image" style="background-image: url(/file/{{user.image}}/xs)"></div>
   </div>
+  {{/if}}
 </nav>

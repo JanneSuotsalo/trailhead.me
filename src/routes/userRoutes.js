@@ -7,7 +7,7 @@ module.exports = app => {
   app.post('/login', login);
   app.post('/editUser', edit);
   app.post('/logout', (req, res) => {
-    req.session = null;
+    if (req.session) req.session.destroy();
     return res.send({ status: 'ok' });
   });
 
@@ -15,7 +15,7 @@ module.exports = app => {
   app.get('/register', (req, res) => res.render('register'));
   app.get('/editUser', (req, res) => res.render('editUser'));
   app.get('/logout', (req, res) => {
-    req.session = null;
+    if (req.session) req.session.destroy();
     return res.redirect('/');
   });
 };

@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const cookieSession = require('cookie-session');
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session);
 const handlebars = require('express-handlebars');
 const fs = require('fs');
 const https = require('https');
@@ -70,21 +71,6 @@ app.set('views', __dirname + '/src/views');
 // Set Handlebars as the default view engine
 app.set('view engine', 'hbs');
 
-// TODO: Should be replaced with a Redis session storage in the future when time is on our side
-app.use(
-  cookieSession({
-    name: 'session',
-    keys: [process.env.COOKIE_KEY],
-    maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
-  })
-);
-
-// Set session data to be used with the view engine
-app.use((req, res, next) => {
-  res.locals.user = req.session.isPopulated ? req.session : null;
-  return next();
-});
-
 // Serve static files from "./dist"
 app.use('/static', express.static('dist'));
 
@@ -104,6 +90,39 @@ const init = async () => {
   try {
     // Connect to the database
     await db.connect();
+
+    // Setup session management
+    const sessionStore = new MySQLStore(
+      {
+        clearExpired: true,
+        expiration: 365 * 24 * 60 * 60 * 1000, // 1 year
+        schema: {
+          tableName: 'session',
+          columnNames: {
+            session_id: 'sessionID',
+            expires: 'expiresAt',
+            data: 'data',
+          },
+        },
+      },
+      await db.connection()
+    );
+
+    app.use(
+      session({
+        key: 'sid',
+        secret: process.env.COOKIE_KEY,
+        store: sessionStore,
+        resave: false,
+        saveUninitialized: false,
+      })
+    );
+
+    // Set session data to be used with the view engine
+    app.use((req, res, next) => {
+      res.locals.user = req.session;
+      return next();
+    });
 
     // Load & apply all routes
     const routes = require('routes');

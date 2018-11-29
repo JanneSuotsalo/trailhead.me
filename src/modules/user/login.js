@@ -1,6 +1,7 @@
 const joi = require('joi');
 const pw = require('./password');
 const { request } = require('modules/util');
+const ID = require('modules/id');
 
 // prettier-ignore
 const schema = joi.object({
@@ -17,7 +18,16 @@ module.exports = request(async (trx, req, res) => {
 
   // Find the user that is trying to log in
   const [[user]] = await trx.execute(
-    `SELECT userID, email, username, password FROM user WHERE email = ?`,
+    `SELECT
+      userID,
+      email,
+      username,
+      displayName,
+      password,
+      fileID as image
+    FROM user
+    LEFT JOIN userFile USING(userID)
+    WHERE email = ?`,
     [req.body.email]
   );
 
@@ -33,7 +43,12 @@ module.exports = request(async (trx, req, res) => {
   }
 
   // Set the session
-  req.session = user;
+  req.session.userID = user.userID;
+  req.session.email = user.email;
+  req.session.username = user.username;
+  req.session.displayName = user.displayName;
+  req.session.image = ID.file.encode(user.image);
+  await req.session.save();
 
   return { status: 'ok' };
 });

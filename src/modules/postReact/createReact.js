@@ -25,7 +25,7 @@ module.exports = request(async (trx, req, res) => {
   }
 
   // Check if user is logged in
-  if (!req.session.isPopulated) {
+  if (!req.session) {
     return {
       status: 'forbidden',
       error: 'Invalid session, please login again...',

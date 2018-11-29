@@ -73,7 +73,7 @@ const request = action => (req, res, next) =>
  * An Express helper to make sure the user is authenticated
  */
 const authenticated = (req, res, next) => {
-  if (req.session.isPopulated) return next();
+  if (req.session && req.session.userID) return next();
 
   if (req.method === 'GET') {
     return res.redirect('/login');

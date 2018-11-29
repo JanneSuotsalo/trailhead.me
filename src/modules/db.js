@@ -21,5 +21,8 @@ module.exports = {
   connection: async () => {
     return await db.getConnection();
   },
+  get pool() {
+    return db.connection;
+  },
   connect,
 };

@@ -23,7 +23,9 @@
   {{#if user}}
   <script>
     window.user = {
-      username: '{{user.username}}'
+      username: '{{user.username}}',
+      displayName: '{{user.displayName}}',
+      image: '{{user.image}}',
     };
   </script>
   <script src="/static/js/search.js"></script>

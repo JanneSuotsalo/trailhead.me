@@ -29,10 +29,10 @@ const post = request(async (trx, req, res) => {
 
 // Express GET middleware
 const get = request(async (trx, req, res) => {
-  const status = await feed(trx, { ...req.session, page: 0 });
+  const status = await feed(trx, { ...(req.session || {}), page: 0 });
 
   res.render('profile', {
-    user: req.session.isPopulated ? req.session.user : null,
+    user: req.session ? req.session.user : null,
     posts: status.posts,
   });
   return;

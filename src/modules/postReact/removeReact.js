@@ -2,14 +2,6 @@ const { request } = require('modules/util');
 const ID = require('modules/id');
 
 module.exports = request(async (trx, req, res) => {
-  // Check if user is logged in
-  if (!req.session.isPopulated) {
-    return {
-      status: 'forbidden',
-      error: 'Invalid session, please login again...',
-    };
-  }
-
   // Convert hash id onto a numerical one
   const postID = ID.post.decode(req.params.post)[0];
   if (!postID) {

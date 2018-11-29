@@ -111,7 +111,7 @@ const loadPost = async (trx, { post, userID }) => {
 
 // Express GET middleware
 const get = request(async (trx, req, res) => {
-  const status = await loadPost(trx, { ...req.params, ...req.session });
+  const status = await loadPost(trx, { ...req.params, ...(req.session || {}) });
 
   res.render('post', {
     post: status.post,
