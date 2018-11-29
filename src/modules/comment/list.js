@@ -29,15 +29,16 @@ const commentList = async (trx, { post }) => {
   const [result] = await trx.execute(
     `SELECT 
     comment.commentID,
-    comment.postID,
+    comment.postID, 
     comment.text,
     comment.updatedAt,
     comment.createdAt,
     user.displayName,
-    user.userName
+    user.userName,
+    userFile.fileID
     FROM 
     comment,
-    user
+    user LEFT JOIN userFile ON userFile.userID = user.userID
     WHERE 
     comment.postID = ? AND user.userID = comment.userID
     ORDER BY comment.createdAt DESC;`,
@@ -49,6 +50,7 @@ const commentList = async (trx, { post }) => {
     ...x,
     commentID: ID.comment.encode(Number(x.commentID)),
     postID: ID.post.encode(Number(x.postID)),
+    fileID: ID.file.encode(Number(x.fileID)),
   }));
 
   return { status: 'ok', list };

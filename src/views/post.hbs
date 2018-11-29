@@ -1,11 +1,13 @@
 {{> navigation}}
 
 <content>
-
+</content>
+<content class='commentContent'>
 </content>
 
 {{#section 'style'}}
 <link href="/static/css/post.css" rel="stylesheet" />
+<link href="/static/css/commentList.css" rel="stylesheet" />
 {{/section}}
 
 {{#section 'script'}}
@@ -15,4 +17,5 @@
   const preloadPostData = JSON.parse(atob('{{{ base64 post }}}'));
   document.querySelector('content').appendChild(createPost(preloadPostData));
 </script>
+<script src="/static/js/comment.js"></script>
 {{/section}}
