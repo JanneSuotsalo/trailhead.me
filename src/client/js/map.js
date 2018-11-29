@@ -94,7 +94,8 @@
             city ||
             town ||
             state ||
-            county;
+            county ||
+            country;
 
           // Remove duplicate entries
           const identifier = `${name},${location},${country}`;

@@ -48,7 +48,7 @@ const feed = async (trx, { query, filter, page }) => {
         (pt.postID = p.postID AND t.tagID = pt.tagID AND t.text LIKE ?) OR
         (l.name LIKE ? OR l.address LIKE ?)
       `;
-      queryItems = [tagQuery, userQuery, locationQuery, locationQuery];
+      queryItems = [userQuery, tagQuery, locationQuery, locationQuery];
       break;
   }
 
