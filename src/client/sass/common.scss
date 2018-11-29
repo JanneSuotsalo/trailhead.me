@@ -34,7 +34,8 @@ input {
 
   box-sizing: border-box;
 
-  transition: border $animation-easing $animation-time;
+  transition: border $animation-easing $animation-time,
+    background-color $animation-easing $animation-time;
 
   &:focus {
     border-color: $color-primary;

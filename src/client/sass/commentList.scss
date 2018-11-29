@@ -13,6 +13,11 @@
   font-weight: bold;
   margin-left: 10px;
   margin-bottom: 10px;
+  text-decoration: none;
+}
+
+.username:hover {
+  color: $color-secondary;
 }
 
 .deleteComment {
@@ -23,7 +28,7 @@
   margin-bottom: 0;
 }
 
-.deleteComment :hover {
+.deleteComment:hover {
   color: $color-secondary;
   cursor: pointer;
 }
@@ -71,6 +76,12 @@
 .commentTextarea {
   margin-bottom: 10px;
   resize: none;
+  background-color: $color-gray;
+  border-color: $color-dimgray;
+}
+
+.commentTextarea:focus {
+  background-color: $color-white;
 }
 
 .wrapperComment {
@@ -78,4 +89,8 @@
   flex-flow: row;
   justify-content: center;
   margin: 1px;
+}
+
+#comments {
+  width: 450px;
 }
