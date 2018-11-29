@@ -108,7 +108,8 @@ const feed = async (trx, { page, userID }) => {
       postID: ID.post.encode(Number(x.postID)),
       media,
       user: JSON.parse(x.user),
-      userReact: (userReacts.find(y => y.postID === x.postID) || {}).text,
+      userReact: ((userReacts || []).find(y => y.postID === x.postID) || {})
+        .text,
       reacts: (reacts[x.postID] || []).map(y => ({
         text: emoji.key[y.reactID],
         amount: y.amount,

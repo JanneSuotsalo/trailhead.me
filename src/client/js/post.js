@@ -59,10 +59,12 @@ const createPost = (post, link = false) => {
   // Format and include the post text content
   const content = document.createElement('p');
   content.textContent = post.text;
-  content.innerHTML = content.innerHTML.replace(
+  let htmlContent = content.innerHTML.replace(
     /\B(\#[a-zA-Z]{1,16}\b)(?!;)/gm,
     x => `<a>${x}</a>`
   );
+  htmlContent = twemoji.parse(htmlContent);
+  content.innerHTML = htmlContent;
 
   // Format and include the post time
   const time = document.createElement('p');
@@ -117,7 +119,12 @@ const createPost = (post, link = false) => {
   const reactDialog = document.createElement('div');
   reactDialog.classList.add('dialog', 'add-react');
   reactDialog.innerHTML = emoji
-    .map(x => `<div>${x.map(y => `<span>${y}</span>`).join('')}</div>`)
+    .map(
+      x =>
+        `<div>${x
+          .map(y => `<span value="${y}">${twemoji.parse(y)}</span>`)
+          .join('')}</div>`
+    )
     .join('');
   document.querySelector('content').appendChild(reactDialog);
 
@@ -131,7 +138,7 @@ const createPost = (post, link = false) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          emoji: element.innerHTML,
+          emoji: element.getAttribute('value'),
         }),
       })
         .then(data => data.json())
@@ -159,7 +166,7 @@ const createPost = (post, link = false) => {
 
   const myReact = document.createElement('div');
   myReact.classList.add('mine');
-  myReact.innerHTML = userReact;
+  myReact.innerHTML = twemoji.parse(userReact || '');
 
   myReact.addEventListener('click', () => {
     fetch(`/${post.user.username}/${post.postID}/react`, {
@@ -180,12 +187,17 @@ const createPost = (post, link = false) => {
   reactContainer.appendChild(myReact);
 
   const updateReactStatus = () => {
-    if (!userReact) {
-      reactContainer.querySelector('.add').style.display = 'block';
-      reactContainer.querySelector('.mine').style.display = 'none';
+    if (window.user) {
+      if (!userReact) {
+        reactContainer.querySelector('.add').style.display = 'block';
+        reactContainer.querySelector('.mine').style.display = 'none';
+      } else {
+        reactContainer.querySelector('.add').style.display = 'none';
+        reactContainer.querySelector('.mine').style.display = 'block';
+      }
     } else {
+      reactContainer.querySelector('.mine').style.display = 'none';
       reactContainer.querySelector('.add').style.display = 'none';
-      reactContainer.querySelector('.mine').style.display = 'block';
     }
 
     const reactAmount = (post.reacts || []).reduce((l, x) => l + x.amount, 0);
@@ -193,7 +205,7 @@ const createPost = (post, link = false) => {
       reactContainer.querySelector('.list').style.display = 'block';
       reactContainer.querySelector('.list').innerHTML = `
         <span class="amount"><span>${reactAmount}</span></span>
-        ${(post.reacts || []).map(x => x.text).join('')}
+        ${(post.reacts || []).map(x => twemoji.parse(x.text)).join('')}
       `;
     } else {
       reactContainer.querySelector('.list').style.display = 'none';
