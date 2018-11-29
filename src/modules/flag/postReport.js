@@ -9,15 +9,9 @@ const schema = joi.object({
     reasonTypeID: joi.number().integer().min(1).required(),
   });
 
-module.exports = request(async (trx, req, res) => {
-  // Validate the incoming request with Joi
-  const valid = joi.validate(req.body, schema);
-  if (valid.error) {
-    return { status: 'validation error', error: valid.error };
-  }
-
+const postReport = async (trx, { text, reasonTypeID, post, userID }) => {
   // Convert hash id onto a numerical one
-  const postID = ID.post.decode(req.params.post)[0];
+  const postID = ID.post.decode(post)[0];
   if (!postID) {
     return {
       status: 'not found',
@@ -25,22 +19,14 @@ module.exports = request(async (trx, req, res) => {
     };
   }
 
-  // Check if user is logged in
-  if (!req.session.isPopulated) {
-    return {
-      status: 'forbidden',
-      error: 'Invalid session, please login again...',
-    };
-  }
-
   // Find the post
-  const [[post]] = await trx.execute(
+  const [[postExists]] = await trx.execute(
     `SELECT postID FROM post WHERE postID = ?`,
     [postID]
   );
 
   // Check if the post exists
-  if (!post) {
+  if (!postExists) {
     return {
       status: 'forbidden',
       error: 'Post does not exist',
@@ -50,7 +36,7 @@ module.exports = request(async (trx, req, res) => {
   // Check if the user has already flagged the post
   const [[flag]] = await trx.execute(
     'SELECT COUNT(*) as "exists" FROM flag WHERE userID = ? AND postID = ?;',
-    [req.session.userID, postID]
+    [userID, postID]
   );
 
   if (flag.exists) {
@@ -63,14 +49,28 @@ module.exports = request(async (trx, req, res) => {
   // Create a flag
   await trx.execute(
     'INSERT INTO flag (userID, postID, reasonTypeID, reasonStateID, text) VALUES (?,?,?,?,?);',
-    [
-      req.session.userID,
-      postID,
-      req.body.reasonTypeID,
-      flagStateIDs.PENDING,
-      req.body.text,
-    ]
+    [userID, postID, reasonTypeID, flagStateIDs.PENDING, text]
   );
 
   return { status: 'ok' };
+};
+
+// Express POST middleware
+const post = request(async (trx, req, res) => {
+  // Validate the incoming request with Joi
+  const valid = joi.validate(req.body, schema);
+  if (valid.error) {
+    return { status: 'validation error', error: valid.error };
+  }
+  return await postReport(trx, { ...req.params, ...req.session, ...req.body });
 });
+
+// Express GET middleware
+const get = request(async (trx, req, res) => {
+  res.render('flag', {});
+});
+
+module.exports = {
+  post,
+  get,
+};
