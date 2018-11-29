@@ -1,32 +1,34 @@
 {{> navigation}}
 
-<link href="/static/css/profile.css" rel="stylesheet" />
-
-<content>
-    <div id="wrapper">
-        <div id="profile">
+<div id="wrapper">
+    <div id="profile">
+        <div id="row">
+            <div id="purkka" style="visibility:hidden"></div>
             <div class="image" style="background-image: url(/file/{{profilePicture}}/m)"></div>
-            <div id="displayName">{{fullName}}</div>
-            <div id="username">@{{username}}</div>
-            <div id="bio">Hello this is my bio</a></div>
         </div>
-
-        <div class="feed">
-            {{#each posts}}
-            <div class="post">
-                {{#each media}}
-                <a href="/file/{{this}}">
-                    <div id="image" style="background-image: url(/file/{{this}}/m);"></div>
-                </a>
-                {{/each}}
-                <a href="/{{username}}/{{postID}}" id="postLink">
-                    <p>{{text}}</p>
-                    <span>{{createdAt}}</span>
-                </a>
-            </div>
-            {{/each}}
-        </div>
-        <div id="profile" style="visibility:hidden"></div>
+        <div id="displayName">{{fullName}}</div>
+        <div id="username">@{{username}}</div>
+        <div id="bio">Hello this is my bio</a></div>
     </div>
 
-</content>
+    <content></content>
+    <div id="empty"></div>
+</div>
+
+{{#section 'style'}}
+<link href="/static/css/post.css" rel="stylesheet" />
+<link href="/static/css/feed.css" rel="stylesheet" />
+<link href="static/css/profile.css" rel="stylesheet" />
+{{/section}}
+
+{{#section 'script'}}
+<script src="https://momentjs.com/downloads/moment.min.js"></script>
+<script src="/static/js/post.js"></script>
+
+<!-- Give the feed as JSON data to make first page load faster -->
+<script>
+    const preloadFeed = JSON.parse(atob('{{{ base64 posts }}}'));
+    window.preloadFeed = preloadFeed;
+</script>
+<script src="/static/js/feed.js"></script>
+{{/section}}
