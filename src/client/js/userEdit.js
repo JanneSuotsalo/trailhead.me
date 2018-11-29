@@ -5,11 +5,9 @@ window.postData = {
 };
 
 window.postDataCheck = () => {
-  console.log(!!window.postData.fileIDs.length, !!window.postData.text);
-
   const submit = document.querySelector('[type="submit"]');
 
-  if (window.postData.fileIDs.length /*&& window.postData.text*/) {
+  if (window.postData.fileIDs.length) {
     submit.removeAttribute('disabled');
   } else {
     submit.setAttribute('disabled', true);
@@ -32,6 +30,7 @@ Uploader(upload, {
 
 const submit = document.querySelector('[type="submit"]');
 const error = document.querySelector('[id="error"]');
+const textarea = document.querySelector('[name="text"]');
 
 if (window.postData.fileIDs.length && window.postData.text) {
   submit.removeAttribute('disabled');
@@ -40,7 +39,6 @@ if (window.postData.fileIDs.length && window.postData.text) {
 }
 
 const saveSettings = () => {
-  console.log('savePost');
   fetch('/editUser', {
     method: 'POST',
     headers: {
@@ -82,3 +80,21 @@ const saveSettings = () => {
 };
 
 submit.addEventListener('click', saveSettings);
+
+const highlight = document.querySelector('.textarea .highlight');
+const highlightUpdate = () => {
+  window.postData.text = textarea.value;
+  window.postDataCheck();
+
+  highlight.textContent = textarea.value;
+  highlight.innerHTML = highlight.innerHTML
+    .replace(/\n$/g, '\n\n')
+    .replace(/\B(\#[a-zA-Z]{1,16}\b)(?!;)/gm, x => `<span>${x}</span>`);
+};
+const highlightScroll = () => {
+  console.log('scroll');
+  highlight.scrollTop = textarea.scrollTop;
+};
+
+textarea.addEventListener('input', highlightUpdate);
+textarea.addEventListener('scroll', highlightScroll);

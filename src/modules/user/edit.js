@@ -31,5 +31,20 @@ module.exports = request(async (trx, req, res) => {
     ]);
   }
 
+  if (req.body.text != '') {
+    //Update the users bio
+    await trx.execute(
+      `
+    UPDATE
+      user
+    SET
+      bio = ?
+    WHERE
+      userID = ?
+    ;`,
+      [req.body.text, req.session.userID]
+    );
+  }
+
   return { status: 'ok' };
 });

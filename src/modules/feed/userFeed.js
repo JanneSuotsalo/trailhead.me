@@ -60,6 +60,7 @@ const userFeed = async (trx, { username, page }) => {
   const [[profile]] = await trx.query(
     `SELECT 
         user.displayName, 
+        user.bio,
         userFile.fileID 
       FROM 
         user LEFT JOIN userFile 
@@ -152,6 +153,7 @@ const get = request(async (trx, req, res) => {
       username: req.params.username,
       fullName: status.profile.displayName,
       profilePicture: ID.file.encode(status.profile.fileID),
+      bio: status.profile.bio,
     });
   } else {
     res.render('user', {
@@ -160,6 +162,7 @@ const get = request(async (trx, req, res) => {
       username: req.params.username,
       fullName: status.profile.displayName,
       profilePicture: ID.file.encode(status.profile.fileID),
+      bio: status.profile.bio,
     });
   }
 });
