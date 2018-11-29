@@ -1,0 +1,33 @@
+{{> navigation}}
+
+
+<content>
+    <div class="modal editPost">
+        <h2>Settings</h2>
+
+        <label>Profile picture</label>
+        <div id="upload"></div>
+
+        <label for="text">Bio</label>
+        <div class="textarea">
+            <textarea id="text" name="text" cols="3"></textarea>
+            <div class="highlight"></div>
+        </div>
+
+        <div id="error" style="display: none;"></div>
+
+        <div class="sink">
+            <button type="submit">Save</button>
+            <a href="/" class="button secondary">Cancel</a>
+        </div>
+    </div>
+</content>
+
+{{#section 'style'}}
+<link href="/static/css/post.css" rel="stylesheet" />
+{{/section}}
+
+{{#section 'script'}}
+<script src="/static/js/uploader.js"></script>
+<script src="/static/js/userEdit.js"></script>
+{{/section}}

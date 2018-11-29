@@ -14,8 +14,8 @@ const userFeed = async (trx, { username, page }) => {
   );
 
   const [[profile]] = await trx.query(
-    'SELECT user.displayName, userFile.fileID FROM user LEFT JOIN userFile ON user.username = ? AND userFile.userID = user.userID;',
-    [username]
+    'SELECT user.displayName, userFile.fileID FROM user LEFT JOIN userFile ON user.username = ? AND userFile.userID = user.userID WHERE user.username = ?;',
+    [username, username]
   );
 
   let posts = null;
@@ -52,14 +52,27 @@ const post = request(async (trx, req, res) => {
 const get = request(async (trx, req, res) => {
   const status = await userFeed(trx, { ...req.params, page: 0 });
 
-  res.render('profile', {
-    user: req.session.isPopulated ? req.session.user : null,
-    posts: status.posts,
-    username: req.params.username,
-    fullName: status.profile.displayName,
-    profilePicture: ID.file.encode(status.profile.fileID),
-  });
-  return;
+  if (status.profile.fileID == null) {
+    status.profile.fileID = Number(6);
+  }
+
+  if (req.session.username == req.params.username) {
+    res.render('profile', {
+      user: req.session.isPopulated ? req.session.user : null,
+      posts: status.posts,
+      username: req.params.username,
+      fullName: status.profile.displayName,
+      profilePicture: ID.file.encode(status.profile.fileID),
+    });
+  } else {
+    res.render('user', {
+      user: req.session.isPopulated ? req.session.user : null,
+      posts: status.posts,
+      username: req.params.username,
+      fullName: status.profile.displayName,
+      profilePicture: ID.file.encode(status.profile.fileID),
+    });
+  }
 });
 
 module.exports = {

@@ -1,17 +1,11 @@
 {{> navigation}}
 
-<link href="static/css/profile.css" rel="stylesheet" />
+<link href="/static/css/profile.css" rel="stylesheet" />
 
 <content>
     <div id="wrapper">
         <div id="profile">
-            <div id="row">
-                <div id="purkka" style="visibility:hidden"></div>
-                <div class="image" style="background-image: url(/file/{{profilePicture}}/m)"></div>
-                <a href="/editUser">
-                    <div type="button" class="mdi mdi-pencil"></div>
-                </a>
-            </div>
+            <div class="image" style="background-image: url(/file/{{profilePicture}}/m)"></div>
             <div id="displayName">{{fullName}}</div>
             <div id="username">@{{username}}</div>
             <div id="bio">Hello this is my bio</a></div>
@@ -34,7 +28,5 @@
         </div>
         <div id="profile" style="visibility:hidden"></div>
     </div>
-
-
 
 </content>
