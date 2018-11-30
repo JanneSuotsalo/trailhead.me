@@ -1,6 +1,41 @@
+@import 'util';
+
 .wrapperReport {
   display: flex;
   flex-flow: row;
   justify-content: center;
   margin: 1px;
+}
+
+.selector {
+  width: 100%;
+  margin-bottom: 30px;
+  border-radius: 30px;
+  border-width: 2px;
+  border-color: $color-black;
+  margin-bottom: 27px;
+  outline: none;
+}
+
+.selector:focus {
+  border-color: $color-primary;
+}
+
+#report {
+  width: 450px;
+}
+
+textarea {
+  resize: none;
+  margin-bottom: 25px;
+}
+
+.error {
+  margin-top: 0px;
+}
+
+.modal {
+  .sink {
+    padding: 0px;
+  }
 }

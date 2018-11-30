@@ -28,6 +28,7 @@ const button = document.querySelector('.commentButton');
 const textArea = document.querySelector('.commentTextarea');
 let commentList = document.querySelector('.commentList');
 
+// Get the current url
 const currentUrl = window.location.href;
 // Fetch the the list of comments and creates the html as a function
 const listOfComments = () => {
