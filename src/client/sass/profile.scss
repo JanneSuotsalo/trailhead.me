@@ -62,5 +62,11 @@
   }
   #bio {
     margin: 16px 0;
+    color: $color-dark;
+    font-size: 14px;
+    box-shadow: 0 0 1 0 $color-dimgray;
+  }
+  #follow {
+    color: $color-white;
   }
 }

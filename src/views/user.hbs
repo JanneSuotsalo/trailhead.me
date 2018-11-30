@@ -3,7 +3,9 @@
 <div id="wrapper">
     <div id="profile">
         <div id="row">
+            <div id="purkka" style="visibility:hidden"></div>
             <div class="image" style="background-image: url(/file/{{profilePicture}}/m)"></div>
+            <button id="follow"></button>
         </div>
         <div id="displayName">{{fullName}}</div>
         <div id="username">@{{username}}</div>
@@ -12,6 +14,7 @@
 
     <content></content>
     <div id="empty"></div>
+
 </div>
 
 {{#section 'style'}}
@@ -23,11 +26,20 @@
 {{#section 'script'}}
 <script src="https://momentjs.com/downloads/moment.min.js"></script>
 <script src="/static/js/post.js"></script>
+<script src="/static/js/follow.js">
+</script>
+
 
 <!-- Give the feed as JSON data to make first page load faster -->
 <script>
     const preloadFeed = JSON.parse(atob('{{{ base64 posts }}}'));
     window.preloadFeed = preloadFeed;
+
+    if ("{{following}}" > 0) {
+        followButton.className = 'mdi mdi-account-multiple-minus';
+    } else {
+        followButton.className = 'mdi mdi-account-multiple-plus';
+    }
 </script>
 <script src="/static/js/feed.js"></script>
 {{/section}}

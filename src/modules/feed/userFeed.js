@@ -8,7 +8,7 @@ const schema = joi.object({
     page: joi.number().integer().min(0).required()
   });
 
-const userFeed = async (trx, { username, page }) => {
+const userFeed = async (trx, { username, page, userID }) => {
   /*const [result] = await trx.execute(
     'SELECT p.postID, p.text, username, p.createdAt FROM post as p, user WHERE user.username = ? AND p.userID = user.userID AND user.userID = p.userID ORDER BY p.createdAt DESC LIMIT ?, ?;',
     [username, Number(page) * 10, 10]
@@ -61,6 +61,20 @@ const userFeed = async (trx, { username, page }) => {
     return { status: 'not found', error: 'User not found' };
   }
 
+  // Get the profile's userID
+  const [profileID] = await trx.query(
+    `
+    SELECT
+      userID
+    FROM
+      user
+    WHERE
+      username = ?
+    `,
+    [username]
+  );
+
+  // Load profile data
   const [[profile]] = await trx.query(
     `SELECT 
         user.displayName, 
@@ -75,6 +89,22 @@ const userFeed = async (trx, { username, page }) => {
         user.username = ?;`,
     [username, username]
   );
+
+  // Check if the user is following the profile's owner
+  let [[followStatus]] = await trx.query(
+    `
+    SELECT COUNT (*) as "follows"
+    FROM
+      follower as f,
+      user
+    WHERE
+      f.userID = ? AND
+      f.followerID = ?
+    `,
+    [profileID[0].userID, userID]
+  );
+
+  followStatus = followStatus.follows;
 
   // Load post location
   const [locations] = await trx.query(
@@ -129,7 +159,7 @@ const userFeed = async (trx, { username, page }) => {
     };
   });
 
-  return { status: 'ok', posts, profile };
+  return { status: 'ok', posts, profile, followStatus };
 };
 
 // Express POST middleware
@@ -139,14 +169,23 @@ const post = request(async (trx, req, res) => {
     return { status: 'validation error', error: valid.error };
   }
 
-  return await userFeed(trx, { ...req.body, ...req.params });
+  return await userFeed(trx, {
+    ...req.body,
+    ...req.params,
+    userID: req.session.userID,
+  });
 });
 
 // Express GET middleware
 const get = request(async (trx, req, res) => {
-  const status = await userFeed(trx, { ...req.params, page: 0 });
+  const status = await userFeed(trx, {
+    ...req.params,
+    page: 0,
+    userID: req.session.userID,
+  });
   if (status.status !== 'ok') return res.sendStatus(404);
 
+  // Set profile picture as default if the user has not chosen a profile picture
   if (status.profile.fileID == null) {
     status.profile.fileID = Number(6);
   }
@@ -166,6 +205,7 @@ const get = request(async (trx, req, res) => {
       fullName: status.profile.displayName,
       profilePicture: ID.file.encode(status.profile.fileID),
       bio: status.profile.bio,
+      following: status.followStatus,
     });
   }
 });
