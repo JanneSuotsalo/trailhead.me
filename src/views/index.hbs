@@ -1,7 +1,9 @@
 {{> navigation}}
 
 <content>
-
+  <div class="left"></div>
+  <div class="feed"></div>
+  <div class="right"></div>
 </content>
 
 {{#section 'style'}}
@@ -18,5 +20,7 @@
   const preloadFeed = JSON.parse(atob('{{{ base64 posts }}}'));
   window.preloadFeed = preloadFeed;
 </script>
+
 <script src="/static/js/feed.js"></script>
+<script src="/static/js/trending.js"></script>
 {{/section}}

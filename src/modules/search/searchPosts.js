@@ -24,7 +24,7 @@ const feed = async (trx, { query, filter, page }) => {
   switch (filter) {
     case 'tag':
       queryWhere = `
-        (pt.postID = p.postID AND t.tagID = pt.tagID AND t.text LIKE ?)
+        (pt.postID = p.postID AND t.tagID = pt.tagID AND t.text COLLATE latin1_general_ci LIKE ?)
       `;
       queryItems = [tagQuery];
       break;
@@ -38,15 +38,15 @@ const feed = async (trx, { query, filter, page }) => {
       break;
     case 'user':
       queryWhere = `
-        (username LIKE ?)
+        (username COLLATE utf8mb4_general_ci LIKE ?)
       `;
       queryItems = [userQuery];
       break;
     default:
       queryWhere = `
-        (username LIKE ?) OR
-        (pt.postID = p.postID AND t.tagID = pt.tagID AND t.text LIKE ?) OR
-        (l.name LIKE ? OR l.address LIKE ?)
+        (username COLLATE utf8mb4_general_ci LIKE ?) OR
+        (pt.postID = p.postID AND t.tagID = pt.tagID AND t.text COLLATE latin1_general_ci LIKE ?) OR
+        (l.name COLLATE utf8mb4_general_ci LIKE ? OR l.address COLLATE utf8mb4_general_ci LIKE ?)
       `;
       queryItems = [userQuery, tagQuery, locationQuery, locationQuery];
       break;

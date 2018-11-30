@@ -1,5 +1,70 @@
 @import 'util';
 
+content {
+  display: flex;
+  position: relative;
+
+  .left,
+  .right {
+    flex: 1;
+  }
+
+  .feed {
+    position: relative;
+    width: 450px;
+  }
+}
+
+.trending {
+  float: left;
+  position: sticky;
+  margin-top: 64px;
+  top: 64px;
+  left: 64px;
+
+  h1 {
+    margin: 0;
+    color: $color-primary;
+  }
+
+  hr {
+    margin: 12px 0 12px -8px;
+    height: 2px;
+    width: 100px;
+    background-color: rgba($color-primary, 0.5);
+    border-radius: 2px;
+    border: none;
+  }
+
+  .list {
+    padding: 0 0 0 8px;
+  }
+
+  &.search .item {
+    margin: 12px 0 0 0;
+    padding-left: 0;
+    height: 42px;
+
+    &.tag p {
+      color: $color-dark;
+    }
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  content {
+    .left,
+    .right {
+      display: none;
+    }
+
+    .feed {
+      flex: 1;
+      width: auto;
+    }
+  }
+}
+
 @media screen and (max-width: 600px) {
   body {
     background-color: $color-gray;

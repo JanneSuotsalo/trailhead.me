@@ -125,7 +125,6 @@
   });
 
   input.addEventListener('keydown', event => {
-    console.log(event.key, input.value, input.value.trim().length);
     if (event.key === 'Enter' && input.value.trim().length > 0) {
       window.location.href = `/search/${encodeURIComponent(input.value)}`;
     }
