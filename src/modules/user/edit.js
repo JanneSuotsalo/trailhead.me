@@ -22,22 +22,22 @@ module.exports = request(async (trx, req, res) => {
   );
 
   const fileID = Number(ID.file.decode(req.body.fileIDs[0]));
-  if (!fileID) {
-    return { status: 'invalid file', error: 'The uploaded file was invalid' };
-  }
 
-  try {
-    //If the user has a profile picture, update existing database record
-    await trx.execute(
-      'UPDATE userFile SET fileID = REPLACE(fileID, ?, ?) WHERE userID = ?;',
-      [profilePicture[0].fileID, fileID, req.session.userID]
-    );
-  } catch (error) {
-    //If the user doesn't have a profile picture, insert database record
-    await trx.execute('INSERT INTO userFile (userID, fileID) VALUES (?, ?);', [
-      req.session.userID,
-      fileID,
-    ]);
+  if (fileID) {
+    console.log('profile pic queryd');
+    try {
+      //If the user has a profile picture, update existing database record
+      await trx.execute(
+        'UPDATE userFile SET fileID = REPLACE(fileID, ?, ?) WHERE userID = ?;',
+        [profilePicture[0].fileID, fileID, req.session.userID]
+      );
+    } catch (error) {
+      //If the user doesn't have a profile picture, insert database record
+      await trx.execute(
+        'INSERT INTO userFile (userID, fileID) VALUES (?, ?);',
+        [req.session.userID, fileID]
+      );
+    }
   }
 
   if (req.body.text != '') {

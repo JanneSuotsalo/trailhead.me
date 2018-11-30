@@ -6,7 +6,7 @@ window.postData = {
 window.postDataCheck = () => {
   const submit = document.querySelector('[type="submit"]');
 
-  if (window.postData.fileIDs.length) {
+  if (window.postData.fileIDs.length || window.postData.text) {
     submit.removeAttribute('disabled');
   } else {
     submit.setAttribute('disabled', true);
@@ -31,7 +31,7 @@ const submit = document.querySelector('[type="submit"]');
 const error = document.querySelector('[id="error"]');
 const textarea = document.querySelector('[name="text"]');
 
-if (window.postData.fileIDs.length && window.postData.text) {
+if (window.postData.fileIDs.length || window.postData.text) {
   submit.removeAttribute('disabled');
 } else {
   submit.setAttribute('disabled', true);
@@ -66,8 +66,6 @@ const saveSettings = () => {
     });
 };
 
-submit.addEventListener('click', saveSettings);
-
 const highlight = document.querySelector('.textarea .highlight');
 const highlightUpdate = () => {
   window.postData.text = textarea.value;
@@ -83,5 +81,6 @@ const highlightScroll = () => {
   highlight.scrollTop = textarea.scrollTop;
 };
 
+submit.addEventListener('click', saveSettings);
 textarea.addEventListener('input', highlightUpdate);
 textarea.addEventListener('scroll', highlightScroll);
