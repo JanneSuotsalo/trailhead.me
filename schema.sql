@@ -149,6 +149,7 @@ CREATE TABLE `postTag`
 (
   `tagID` INT NOT NULL,
   `postID` INT NOT NULL,
+  `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   CONSTRAINT `postTag_post_postID_fk`
   FOREIGN KEY (`postID`) REFERENCES `post` (`postID`)

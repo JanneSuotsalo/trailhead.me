@@ -1,13 +1,7 @@
 const { request } = require('modules/util');
 
 module.exports = request(async (trx, req, res) => {
-  // Check if user is logged in
-  if (!req.session.isPopulated) {
-    return {
-      status: 'forbidden',
-      error: 'Invalid session, please login again...',
-    };
-  }
+  console.log(req.params.username);
 
   // Find the userID of the user, that the other user is trying to follow
   const [[user]] = await trx.execute(
@@ -30,17 +24,18 @@ module.exports = request(async (trx, req, res) => {
   );
 
   if (follower.exists) {
-    return {
-      status: 'forbidden',
-      error: 'Already following...',
-    };
+    // Remove follower status
+    await trx.execute(
+      `DELETE FROM follower WHERE followerID = ? AND userID = ?;`,
+      [req.session.userID, user.userID]
+    );
+  } else {
+    // Start following
+    await trx.execute(
+      `INSERT INTO follower (followerID, userID) VALUES (?,?);`,
+      [req.session.userID, user.userID]
+    );
   }
-
-  // Start following
-  await trx.execute(`INSERT INTO follower (followerID, userID) VALUES (?,?);`, [
-    req.session.userID,
-    user.userID,
-  ]);
 
   return { status: 'ok' };
 });

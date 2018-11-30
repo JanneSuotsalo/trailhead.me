@@ -1,6 +1,6 @@
 (() => {
   if (window.preloadFeed && window.preloadFeed.length) {
-    const content = document.querySelector('content');
+    const content = document.querySelector('.feed');
     window.preloadFeed.forEach(post => {
       console.log(post);
       const element = createPost(post, true);

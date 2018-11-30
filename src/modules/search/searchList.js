@@ -21,13 +21,32 @@ module.exports = request(async (trx, req, res) => {
 
   // Find users with username and display name
   const [userList] = await trx.query(
-    `SELECT username, displayName, fileID FROM user LEFT JOIN userFile USING(userID) WHERE username LIKE ? OR displayName LIKE ? LIMIT 3;`,
+    `SELECT
+      username,
+      displayName,
+      fileID
+    FROM user
+    LEFT JOIN userFile USING(userID)
+    WHERE
+      username COLLATE utf8mb4_general_ci LIKE ? OR
+      displayName COLLATE utf8mb4_general_ci LIKE ?
+    LIMIT 3;`,
     [query.replace(/@/g, ''), query.replace(/@/g, '')]
   );
 
   // Find locations with name and address
   const [locationList] = await trx.query(
-    `SELECT locationID, locationTypeID, name, address FROM location WHERE name LIKE ? OR address LIKE ? LIMIT 3;`,
+    `SELECT
+      locationID,
+      locationTypeID,
+      name,
+      address
+    FROM location
+    WHERE
+      name COLLATE utf8mb4_general_ci LIKE ? OR
+      address COLLATE utf8mb4_general_ci LIKE ?
+      LIMIT 3;
+    `,
     [query, query]
   );
 
@@ -38,9 +57,9 @@ module.exports = request(async (trx, req, res) => {
       COUNT(pt.tagID) as amount
     FROM tag t
     LEFT JOIN postTag as pt USING(tagID)
-    WHERE text LIKE ?
+    WHERE text COLLATE latin1_general_ci LIKE ?
     GROUP BY pt.tagID
-    ORDER BY amount
+    ORDER BY amount DESC
     LIMIT 6;`,
     [query.replace(/#/g, '')]
   );
