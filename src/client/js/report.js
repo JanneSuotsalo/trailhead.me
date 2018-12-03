@@ -18,9 +18,9 @@ content.innerHTML = `
             <option value = "reportReason" > Report reason </option>
       </select>
       <div class="reportBox">
-       <textarea class="reportTextarea" rows="4" cols="50" maxlength="256" placeholder="Type your report reason here... "></textarea>
+       <textarea class="reportTextarea" rows="4" cols="50" maxlength="1000" placeholder="Type your report reason here... "></textarea>
       </div>
-      <div id="error" style="display: none;"></div>
+      <div id="error" style="display: none"></div>
       <div class="sink">
         <button class="reportButton" type='submit' value='Submit'>Send</button>
       </div>
@@ -50,8 +50,10 @@ const selectedValue = () => {
 
 // Send the report
 button.addEventListener('click', evt => {
+  // Check that report reason is selected
   if (selectedValue() !== 0) {
-    if (textArea.value.trim().length !== 0) {
+    // Check if the text box has no text in it
+    if (textArea.value.trim().length > 0) {
       fetch(currentUrl, {
         method: 'post',
         headers: {
@@ -66,16 +68,26 @@ button.addEventListener('click', evt => {
         .then(data => data.json())
         .then(json => {
           console.log(json);
+          // Error msg if the user has already flagged the post
+          if (json.status !== 'ok') {
+            switch (json.status) {
+              case 'forbidden':
+                errorMsg.style.display = 'block';
+                errorMsg.innerText = 'You have already reported the post.';
+            }
+          } else {
+            window.location.href = './';
+          }
         });
       textArea.value = '';
     } else {
       // Give error msg if textbox is empty
       errorMsg.style.display = 'block';
-      errorMsg.innerText = 'Text box can not be empty';
+      errorMsg.innerText = 'Text box can not be empty.';
     }
   } else {
     // Give error msg if no report reason is selected
     errorMsg.style.display = 'block';
-    errorMsg.innerText = 'Choose a report reason';
+    errorMsg.innerText = 'Choose a report reason.';
   }
 });

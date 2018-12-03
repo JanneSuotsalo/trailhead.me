@@ -3,26 +3,42 @@
 const content = document.querySelector('.commentContent');
 let comment = '';
 
+let divWrapper = document.createElement('div');
+divWrapper.setAttribute('class', 'wrapperComment');
+let divComments = document.createElement('div');
+divComments.setAttribute('id', 'comments');
+content.appendChild(divWrapper);
+divWrapper.appendChild(divComments);
+const currentPath = window.location.pathname;
+
 // Create the commentBox and basic html for the comment list
-content.innerHTML = `<div class="wrapperComment">
-        <div id="comments">
-            <div>
-                <div class="flex">
-                    <img src="https://i.ytimg.com/vi/EDzLx3hkli0/maxresdefault.jpg" class="profilePic">
-                    <div class="commentBox">
-                        <textarea class="commentTextarea" rows="4" cols="50" maxlength="256" placeholder="Type your comment here... "></textarea>
-                    </div>
-                </div>
-                <button class="commentButton" type='submit' value='Submit'>Send</button>
-            </div>
-            <br>
-            <br>
-            <div class="line2"></div>
-            <br>
-            <div class="commentList">
-            </div>
-        </div>
-    </div>`;
+
+// Create comment box only if the user is logged in
+// prettier-ignore
+if (window.user) {
+  divComments.innerHTML += 
+  `<div>
+   <div class="flex">
+      <img src="https://i.ytimg.com/vi/EDzLx3hkli0/maxresdefault.jpg" class="profilePic">
+      <div class="commentBox">
+      <textarea class="commentTextarea" rows="4" cols="50" maxlength="256" placeholder="Type your comment here... "></textarea>
+      </div>
+   </div>
+   <div id="error" style="display: none"></div>
+      <button class="commentButton" type='submit' value='Submit'>Send</button>
+   </div>`;
+} else {
+  divComments.innerHTML += `<span class="message"><span class="mdi mdi-information-outline"> 
+  <a class="loginLink" href="../login?to=${currentPath}">Login</a> to comment a post 
+  </span>
+  </span>`
+}
+divComments.innerHTML += `<br>
+ <br>
+ <div class="line2"></div>
+ <br>
+ <div class="commentList">
+ </div>`;
 
 const button = document.querySelector('.commentButton');
 const textArea = document.querySelector('.commentTextarea');
@@ -44,7 +60,7 @@ const listOfComments = () => {
     .then(json => {
       // Build the html of comment list
       json.list.forEach(element => {
-        console.log(element);
+        console.log('element', element);
 
         let div = document.createElement('div');
         let img = document.createElement('img');
@@ -97,7 +113,7 @@ const listOfComments = () => {
         commentList.appendChild(divComment);
 
         // Create delete icon if the comment is made by the user
-        if (window.user.username === element.userName) {
+        if (window.user && window.user.username === element.userName) {
           pDelete.appendChild(span);
           div.appendChild(pDelete);
 
@@ -124,21 +140,32 @@ const listOfComments = () => {
 };
 listOfComments();
 
-// Create a new comment
-button.addEventListener('click', evt => {
-  commentList.innerHTML = '';
-  fetch(currentUrl + '/comment', {
-    method: 'post',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ text: textArea.value }),
-  })
-    .then(data => data.json())
-    .then(json => {
-      console.log(json);
-      listOfComments();
-    });
-  textArea.value = '';
-});
+// Check if user is logged in
+if (window.user) {
+  // Create a new comment
+  const errorMsg = document.getElementById('error');
+  button.addEventListener('click', evt => {
+    if (textArea.value.trim().length > 0) {
+      commentList.innerHTML = '';
+      fetch(currentUrl + '/comment', {
+        method: 'post',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: textArea.value }),
+      })
+        .then(data => data.json())
+        .then(json => {
+          console.log(json);
+          listOfComments();
+        });
+      textArea.value = '';
+      errorMsg.style.display = 'none';
+      error.Msg.innerText = '';
+    } else {
+      errorMsg.style.display = 'block';
+      errorMsg.innerText = 'Comment can not be empty.';
+    }
+  });
+}
