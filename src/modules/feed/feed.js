@@ -9,7 +9,13 @@ const schema = joi.object({
   page: joi.number().integer().min(0).required()
 });
 
-const feed = async (trx, { page, userID }) => {
+const feed = async (trx, { page, userID, filter = null }) => {
+  let filterData = [];
+
+  if (filter && filter.username) {
+    filterData = [filter.username];
+  }
+
   //Feed for anonymous users, ordered by date
   const [result] = await trx.execute(
     `SELECT
@@ -30,11 +36,12 @@ const feed = async (trx, { page, userID }) => {
         ? 'LEFT JOIN follower f ON f.followerID = ? AND f.userID = u.userID'
         : ''
     }
-    WHERE u.userID = p.userID
+    WHERE u.userID = p.userID ${
+      filter && filter.username ? 'AND u.username = ?' : ''
+    }
     ORDER BY createdAt
     DESC LIMIT ?, ?`,
-    [...(userID ? [userID] : []), Number(page) * 10, 10],
-    'SELECT f.filename, f.path FROM file as f, postFile as pf WHERE pf.fileID = f.fileID;'
+    [...(userID ? [userID] : []), ...filterData, Number(page) * 10, 10]
   );
 
   // Load post location
@@ -161,6 +168,7 @@ const get = request(async (trx, req, res) => {
 });
 
 module.exports = {
+  feed,
   post,
   get,
 };

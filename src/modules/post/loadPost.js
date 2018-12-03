@@ -17,17 +17,24 @@ const loadPost = async (trx, { post, userID }) => {
   // Load the post
   const [[result]] = await trx.execute(
     `SELECT
-      postID,
-      locationID,
-      text,
-      post.createdAt,
+      p.postID,
+      p.locationID,
+      p.text,
+      p.createdAt,
       JSON_OBJECT(
-        'username', username,
-        'displayName', displayName
+        'username', u.username,
+        'displayName', u.displayName
+        ${userID ? `,'following', f.followerID` : ''}
       ) as user
-    FROM post, user
-    WHERE postID = ? AND user.userID = post.userID`,
-    [postID]
+    FROM post p
+    JOIN user u ON u.userID = p.userID
+    ${
+      userID
+        ? 'LEFT JOIN follower f ON f.followerID = ? AND f.userID = p.userID'
+        : ''
+    }
+    WHERE postID = ?`,
+    [...(userID ? [userID] : []), postID]
   );
 
   if (!result) {
@@ -91,11 +98,17 @@ const loadPost = async (trx, { post, userID }) => {
   if (location.locationTypeID === locationTypeIDs.INFORMATION)
     icon = 'information';
 
+  const user = JSON.parse(result.user);
+
   // Combine into one post object
   const data = {
     ...result,
     postID: ID.post.encode(Number(result.postID)), // Convert numerical id to a hash id
-    user: JSON.parse(result.user),
+    user: {
+      ...user,
+      image: ID.file.encode(user.image),
+      following: !!Number(user.following),
+    },
     media: media.map(x => ID.file.encode(x.fileID)),
     reacts: reacts.map(x => ({ text: emoji.key[x.reactID], amount: x.amount })),
     location: {

@@ -60,7 +60,8 @@ content {
 
 @media screen and (max-width: 1000px) {
   content {
-    .left,
+    flex-direction: column;
+
     .right {
       display: none;
     }
