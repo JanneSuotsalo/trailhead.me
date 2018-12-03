@@ -5,7 +5,7 @@
   };
 
   const menu = document.querySelector('.dialog.user-menu');
-  const icons = document.querySelectorAll('nav .profile');
+  const icons = document.querySelectorAll('nav .profile .image');
   icons.forEach(element => {
     element.addEventListener('click', event => {
       event.stopPropagation();

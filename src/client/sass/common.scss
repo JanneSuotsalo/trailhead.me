@@ -305,11 +305,9 @@ nav {
   }
 
   .profile {
-    display: block;
+    display: flex;
     position: relative;
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
+    align-items: center;
     z-index: 2;
 
     .image {
@@ -318,6 +316,12 @@ nav {
       background-size: 100%;
       border-radius: 50%;
       background-color: $color-gray;
+      border: 2px solid $color-primary;
+      cursor: pointer;
+    }
+
+    button {
+      margin-right: 16px;
     }
   }
 
@@ -430,6 +434,49 @@ nav {
   }
 }
 
+.dialog.user-menu {
+  display: none;
+  width: 150px;
+  font-family: $font-family-body;
+  font-size: 0.9rem;
+  color: $color-black;
+  z-index: 10;
+
+  transform: translateX(-100%);
+
+  a {
+    text-decoration: none;
+    color: $color-black;
+  }
+
+  .item {
+    padding: 16px;
+    cursor: pointer;
+
+    transition: background-color $animation-easing $animation-time;
+
+    &:hover {
+      background-color: $color-gray;
+    }
+  }
+
+  .create {
+    display: none;
+
+    .mdi {
+      color: $color-primary;
+    }
+  }
+
+  hr {
+    margin: 0;
+    padding: 0;
+    height: 2px;
+    border: none;
+    background-color: $color-gray;
+  }
+}
+
 @media screen and (max-width: 1000px) {
   nav {
     padding: 0;
@@ -469,40 +516,10 @@ nav {
     button {
       display: none;
     }
-  }
-}
 
-.dialog.user-menu {
-  display: none;
-  width: 128px;
-  font-family: $font-family-body;
-  font-size: 0.9rem;
-  color: $color-black;
-  z-index: 10;
-
-  transform: translateX(-100%);
-
-  a {
-    text-decoration: none;
-    color: $color-black;
-  }
-  .item {
-    padding: 16px;
-    cursor: pointer;
-
-    transition: background-color $animation-easing $animation-time;
-
-    &:hover {
-      background-color: $color-gray;
+    .dialog.user-menu .create {
+      display: block;
     }
-  }
-
-  hr {
-    margin: 0;
-    padding: 0;
-    height: 2px;
-    border: none;
-    background-color: $color-gray;
   }
 }
 
