@@ -90,20 +90,23 @@ const createPost = (post, link = false) => {
         <small>${post.location.address}</small>
       </div>
     </div>
-    <a href="/${post.user.username}">
-      <div class="user">
+    <div class="user">
+      <a href="/${post.user.username}">
         <div class="icon">
           <div class="image" style="background-image: url(/file/${post.user.image}/s)"></div>
         </div>
-        <div class="info">
+      </a>
+      <div class="info">
+        <a href="/${post.user.username}">
           <p>${post.user.displayName}</p>
           <small>@${post.user.username}</small>
-        </div>
-        <div class="action">
-          <div class="button-small follow"></div>
-        </div>
+        </a>
       </div>
-    </a>
+      <div class="action">
+        <div class="button-small follow"></div>
+      </div>
+    </div>
+    <hr />
     <div class="react"></div>
     `: ''}
   `;

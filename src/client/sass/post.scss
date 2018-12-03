@@ -213,7 +213,7 @@
   .user {
     display: flex;
     align-items: center;
-    padding: 16px 32px 0 16px;
+    padding: 16px 32px 16px 16px;
 
     .icon {
       display: flex;
@@ -233,9 +233,15 @@
     }
 
     .info {
+      display: flex;
       flex: 1;
       padding: 0;
       font-family: $font-family-body;
+
+      a {
+        display: block;
+        padding: 0 16px 0 0;
+      }
 
       p {
         margin: 0;
@@ -269,6 +275,13 @@
         left: 5px;
       }
     }
+  }
+
+  hr {
+    margin: 0;
+    height: 2px;
+    background-color: $color-gray;
+    border: none;
   }
 
   .react {

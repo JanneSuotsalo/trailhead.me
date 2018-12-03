@@ -34,20 +34,15 @@
 </content>
 
 {{#section 'style'}}
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css" />
-<link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.45.0/mapbox-gl.css' rel='stylesheet' />
 <link href="/static/css/post.css" rel="stylesheet" />
 {{/section}}
 
 {{#section 'script'}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js"></script>
-<script src="https://cdn.klokantech.com/mapbox-gl-js/v0.43.0/mapbox-gl.js"></script>
-<script src="https://cdn.klokantech.com/mapbox-gl-leaflet/latest/leaflet-mapbox-gl.js"></script>
-
 <script>
   window.mapKey = '{{{mapKey}}}';
 </script>
 
+<script src="/static/js/map-bundle.js"></script>
 <script src="/static/js/uploader.js"></script>
 <script src="/static/js/editPost.js"></script>
 <script src="/static/js/map.js"></script>
