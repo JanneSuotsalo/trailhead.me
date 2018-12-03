@@ -8,6 +8,7 @@ const fileRoutes = require('./fileRoutes');
 const flagRoutes = require('./flagRoutes');
 const searchRoutes = require('./searchRoutes');
 const trendingRoutes = require('./trendingRoutes');
+const collectionRoutes = require('./collectionRoutes');
 
 module.exports = [
   userRoutes,
@@ -20,4 +21,5 @@ module.exports = [
   flagRoutes,
   postRoutes,
   feedRoutes,
+  collectionRoutes,
 ];

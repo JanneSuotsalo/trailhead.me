@@ -5,6 +5,7 @@ const ID = require('modules/id');
 // prettier-ignore
 const schema = joi.object({
   fileIDs: joi.array().items(joi.string().min(4).max(128).alphanum()).min(0).max(1),
+  displayName: joi.string().min(1).max(255).allow(''),
   text: joi.string().min(1).max(255).allow(''),
 }).required();
 
@@ -15,12 +16,28 @@ module.exports = request(async (trx, req, res) => {
     return { status: 'validation error', error: valid.error };
   }
 
+  // Update the user's display name
+  if (req.body.displayName != '') {
+    await trx.query(
+      `
+  UPDATE 
+    user 
+  SET 
+    displayName = ?
+  WHERE 
+    userID = ?;
+  `,
+      [req.body.displayName, req.session.userID]
+    );
+  }
+
   //Select already existing profile picture
   const [profilePicture] = await trx.query(
     'SELECT fileID FROM userFile WHERE userID = ?',
     [req.session.userID]
   );
 
+  // Decode profile picture's file ID for db queries
   const fileID = Number(ID.file.decode(req.body.fileIDs[0]));
 
   if (fileID) {

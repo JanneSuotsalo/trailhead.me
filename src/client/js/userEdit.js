@@ -1,12 +1,18 @@
 window.postData = {
   fileIDs: [],
+  displayName: '',
   text: '',
 };
 
+// Check for user input
 window.postDataCheck = () => {
   const submit = document.querySelector('[type="submit"]');
 
-  if (window.postData.fileIDs.length || window.postData.text) {
+  if (
+    window.postData.fileIDs.length ||
+    window.postData.text ||
+    window.postData.displayName
+  ) {
     submit.removeAttribute('disabled');
   } else {
     submit.setAttribute('disabled', true);
@@ -30,8 +36,13 @@ Uploader(upload, {
 const submit = document.querySelector('[type="submit"]');
 const error = document.querySelector('[id="error"]');
 const textarea = document.querySelector('[name="text"]');
+const dName = document.querySelector('[name="displayName"]');
 
-if (window.postData.fileIDs.length || window.postData.text) {
+if (
+  window.postData.fileIDs.length ||
+  window.postData.text ||
+  window.postData.displayName
+) {
   submit.removeAttribute('disabled');
 } else {
   submit.setAttribute('disabled', true);
@@ -69,6 +80,7 @@ const saveSettings = () => {
 const highlight = document.querySelector('.textarea .highlight');
 const highlightUpdate = () => {
   window.postData.text = textarea.value;
+  window.postData.displayName = dName.value;
   window.postDataCheck();
 
   highlight.textContent = textarea.value;
@@ -84,3 +96,5 @@ const highlightScroll = () => {
 submit.addEventListener('click', saveSettings);
 textarea.addEventListener('input', highlightUpdate);
 textarea.addEventListener('scroll', highlightScroll);
+dName.addEventListener('input', highlightUpdate);
+dName.addEventListener('scroll', highlightScroll);
