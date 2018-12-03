@@ -16,10 +16,11 @@ const currentPath = window.location.pathname;
 // Create comment box only if the user is logged in
 // prettier-ignore
 if (window.user) {
+  // Creates the comment box
   divComments.innerHTML += 
   `<div>
    <div class="flex">
-      <img src="https://i.ytimg.com/vi/EDzLx3hkli0/maxresdefault.jpg" class="profilePic">
+      <img src="/file/${window.user.image}/m" class="profilePic">
       <div class="commentBox">
       <textarea class="commentTextarea" rows="4" cols="50" maxlength="256" placeholder="Type your comment here... "></textarea>
       </div>
@@ -77,19 +78,23 @@ const listOfComments = () => {
 
         div.setAttribute('class', 'flex');
 
+        // Profile picture
         img.setAttribute('src', '/file/' + element.fileID + '/m');
         img.setAttribute('class', 'profilePic');
 
+        // Username and link to user's page
         aUsername.setAttribute('class', 'username');
         aUsername.innerText = element.displayName;
         aUsername.setAttribute('href', '../' + element.userName);
 
+        // Comment deletion button
         pDelete.setAttribute('class', 'deleteComment');
         span.setAttribute('class', 'mdi mdi-close-circle-outline');
 
         pText.setAttribute('class', 'commentText');
         pText.innerText = element.text;
 
+        // Time formatting
         spanTime.classList.add('time');
         spanTime.innerText = moment(element.createdAt).fromNow();
         // prettier-ignore
@@ -140,11 +145,13 @@ const listOfComments = () => {
 };
 listOfComments();
 
+const errorMsg = document.getElementById('error');
+
 // Check if user is logged in
 if (window.user) {
   // Create a new comment
-  const errorMsg = document.getElementById('error');
   button.addEventListener('click', evt => {
+    // Checks if the text box is empty
     if (textArea.value.trim().length > 0) {
       commentList.innerHTML = '';
       fetch(currentUrl + '/comment', {

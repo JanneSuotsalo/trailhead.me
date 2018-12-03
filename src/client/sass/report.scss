@@ -12,7 +12,7 @@
   margin-bottom: 30px;
   border-radius: 30px;
   border-width: 2px;
-  border-color: $color-black;
+  border-color: $color-dimgray;
   margin-bottom: 27px;
   outline: none;
 }
@@ -28,6 +28,7 @@
 textarea {
   resize: none;
   margin-bottom: 25px;
+  border-color: $color-dimgray;
 }
 
 .error {

@@ -1,5 +1,6 @@
 'use strict';
 
+// Reason types
 const flagReasonTypeIDs = {
   Copyright: 1,
   Inappropriate: 2,
@@ -23,12 +24,14 @@ content.innerHTML = `
       <div id="error" style="display: none"></div>
       <div class="sink">
         <button class="reportButton" type='submit' value='Submit'>Send</button>
+        <button class="button secondary" type='submit' value='Submit'>Cancel</button>
       </div>
     </div>
   
 </div>`;
 
 const select = document.querySelector('select');
+
 // Create selection bar for flag reasons
 flagReasons.forEach(element => {
   let option = document.createElement('option');
@@ -40,6 +43,7 @@ flagReasons.forEach(element => {
 const button = document.querySelector('.reportButton');
 const textArea = document.querySelector('textarea');
 const errorMsg = document.getElementById('error');
+const cancel = document.querySelectorAll('button')[1];
 const currentUrl = window.location.href;
 
 // Gets the value from the selector
@@ -48,7 +52,7 @@ const selectedValue = () => {
   return Number(selector);
 };
 
-// Send the report
+// Sends the report and redirect back to the post
 button.addEventListener('click', evt => {
   // Check that report reason is selected
   if (selectedValue() !== 0) {
@@ -90,4 +94,9 @@ button.addEventListener('click', evt => {
     errorMsg.style.display = 'block';
     errorMsg.innerText = 'Choose a report reason.';
   }
+});
+
+// Redirect back after pressing cancel
+cancel.addEventListener('click', evt => {
+  window.location.href = './';
 });
