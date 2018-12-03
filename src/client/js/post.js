@@ -99,6 +99,9 @@ const createPost = (post, link = false) => {
           <p>${post.user.displayName}</p>
           <small>@${post.user.username}</small>
         </div>
+        <div class="action">
+          <div class="button-small follow"></div>
+        </div>
       </div>
     </a>
     <div class="react"></div>
@@ -174,7 +177,7 @@ const createPost = (post, link = false) => {
   reactContainer.innerHTML = `<div class="list"></div>`;
 
   const reactButton = document.createElement('div');
-  reactButton.classList.add('add');
+  reactButton.classList.add('button-small', 'add');
   reactButton.innerHTML = '<span class="mdi mdi-plus"></span> React';
 
   reactButton.addEventListener('click', event => {
@@ -243,6 +246,61 @@ const createPost = (post, link = false) => {
   };
 
   updateReactStatus();
+
+  const followButton = modal.querySelector('.action .follow');
+  let isFollowingUser = post.user.following;
+
+  // Update the visuals of the follow button
+  const updateFollowStatus = () => {
+    if (isFollowingUser) {
+      followButton.classList.add('unfollow');
+      followButton.innerHTML =
+        '<span class="mdi mdi-account-multiple-minus"></span> Unfollow';
+    } else {
+      followButton.classList.remove('unfollow');
+      followButton.innerHTML =
+        '<span class="mdi mdi-account-multiple-plus"></span> Follow';
+    }
+  };
+
+  // Call the follow API and fire the "follow" event is successfull
+  followButton.addEventListener('click', event => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    fetch(`/${post.user.username}/follow`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(data => data.json())
+      .then(json => {
+        if (json.status === 'ok') {
+          const event = new CustomEvent('follow', {
+            detail: {
+              username: post.user.username,
+              state: !isFollowingUser,
+            },
+          });
+          document.dispatchEvent(event);
+        }
+      });
+  });
+
+  // Listen for follow event and update UI if necessary
+  document.addEventListener('follow', event => {
+    if (event.detail.username !== post.user.username) return;
+    isFollowingUser = event.detail.state;
+    updateFollowStatus();
+  });
+
+  // Remove the follow button if user is logged out or this post is posted by logged in user
+  if (!window.user || post.user.username === window.user.username)
+    followButton.remove();
+
+  updateFollowStatus();
 
   return modal;
 };

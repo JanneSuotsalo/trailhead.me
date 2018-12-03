@@ -8,7 +8,7 @@ const schema = joi.object({
   page: joi.number().integer().min(0).required()
 });
 
-const feed = async (trx, { query, filter, page }) => {
+const feed = async (trx, { query, filter, page, userID }) => {
   const textQuery = (query || '').trim();
   if (textQuery.replace(/[#@]/g, '').length < 1) {
     return { status: 'ok', posts: [] };
@@ -62,6 +62,7 @@ const feed = async (trx, { query, filter, page }) => {
         'username', u.username,
         'displayName', u.displayName,
         'image', uf.fileID
+        ${userID ? `,'following', f.followerID` : ''}
       ) as user,
       JSON_OBJECT(
         'locationTypeID', l.locationTypeID,
@@ -71,6 +72,11 @@ const feed = async (trx, { query, filter, page }) => {
       ) as location
     FROM post p
     JOIN user u ON u.userID = p.userID
+    ${
+      userID
+        ? 'LEFT JOIN follower f ON f.followerID = ? AND f.userID = u.userID'
+        : ''
+    }
     JOIN location l ON l.locationID = p.locationID
     LEFT JOIN userFile uf ON uf.userID = u.userID
     LEFT JOIN postTag pt ON pt.postID = p.postID
@@ -85,7 +91,7 @@ const feed = async (trx, { query, filter, page }) => {
     GROUP BY p.postID
     ORDER BY p.createdAt
     DESC LIMIT ?, ?`,
-    [...queryItems, Number(page) * 10, 10]
+    [...(userID ? [userID] : []), ...queryItems, Number(page) * 10, 10]
   );
 
   if (!result.length) {
@@ -122,7 +128,11 @@ const feed = async (trx, { query, filter, page }) => {
       ...x,
       postID: ID.post.encode(Number(x.postID)),
       media,
-      user: { ...user, image: ID.file.encode(user.image) },
+      user: {
+        ...user,
+        image: ID.file.encode(user.image),
+        following: !!Number(user.following),
+      },
       location: location
         ? {
             ...location,
@@ -143,12 +153,20 @@ const post = request(async (trx, req, res) => {
     return { status: 'validation error', error: valid.error };
   }
 
-  return await feed(trx, { ...req.params, ...req.body });
+  return await feed(trx, {
+    ...req.params,
+    ...req.body,
+    userID: req.session.userID,
+  });
 });
 
 // Express GET middleware
 const get = request(async (trx, req, res) => {
-  const status = await feed(trx, { ...req.params, page: 0 });
+  const status = await feed(trx, {
+    ...req.params,
+    userID: req.session.userID,
+    page: 0,
+  });
 
   res.render('index', {
     posts: status.posts,

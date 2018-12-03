@@ -21,13 +21,19 @@ const feed = async (trx, { page, userID }) => {
         'username', u.username,
         'displayName', u.displayName,
         'image', uf.fileID
+        ${userID ? `,'following', f.followerID` : ''}
       ) as user
     FROM post p, user u
     LEFT JOIN userFile uf ON uf.userID = u.userID
+    ${
+      userID
+        ? 'LEFT JOIN follower f ON f.followerID = ? AND f.userID = u.userID'
+        : ''
+    }
     WHERE u.userID = p.userID
     ORDER BY createdAt
     DESC LIMIT ?, ?`,
-    [Number(page) * 10, 10],
+    [...(userID ? [userID] : []), Number(page) * 10, 10],
     'SELECT f.filename, f.path FROM file as f, postFile as pf WHERE pf.fileID = f.fileID;'
   );
 
@@ -65,7 +71,7 @@ const feed = async (trx, { page, userID }) => {
 
   // Load user reacts
   let userReacts = null;
-  if (userID && userID) {
+  if (userID) {
     const [uReacts] = await trx.query(
       `SELECT
         postID,
@@ -111,7 +117,11 @@ const feed = async (trx, { page, userID }) => {
       ...x,
       postID: ID.post.encode(Number(x.postID)),
       media,
-      user: { ...userObject, image: ID.file.encode(userObject.image) },
+      user: {
+        ...userObject,
+        image: ID.file.encode(userObject.image),
+        following: !!Number(userObject.following),
+      },
       userReact: ((userReacts || []).find(y => y.postID === x.postID) || {})
         .text,
       reacts: (reacts[x.postID] || []).map(y => ({
