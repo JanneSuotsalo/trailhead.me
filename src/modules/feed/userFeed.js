@@ -104,7 +104,34 @@ const userFeed = async (trx, { username, page, userID }) => {
     [profileID[0].userID, userID]
   );
 
-  followStatus = followStatus.follows;
+  // Get the number of followers and the number of people the user is following
+  let [[following]] = await trx.query(
+    `
+    SELECT COUNT (*) as "count"
+    FROM
+      follower as f
+    WHERE
+      f.followerID = ?;
+    `,
+    [profileID[0].userID]
+  );
+
+  let [[followers]] = await trx.query(
+    `
+    SELECT COUNT (*) as "count"
+    FROM
+      follower as f
+    WHERE
+      f.userID = ?;
+    `,
+    [profileID[0].userID]
+  );
+
+  const follows = {
+    status: followStatus.follows,
+    following: following.count,
+    followers: followers.count,
+  };
 
   // Load post location
   const [locations] = await trx.query(
@@ -159,7 +186,7 @@ const userFeed = async (trx, { username, page, userID }) => {
     };
   });
 
-  return { status: 'ok', posts, profile, followStatus };
+  return { status: 'ok', posts, profile, follows };
 };
 
 // Express POST middleware
@@ -197,6 +224,7 @@ const get = request(async (trx, req, res) => {
       fullName: status.profile.displayName,
       profilePicture: ID.file.encode(status.profile.fileID),
       bio: status.profile.bio,
+      follows: status.follows,
     });
   } else {
     res.render('user', {
@@ -205,7 +233,7 @@ const get = request(async (trx, req, res) => {
       fullName: status.profile.displayName,
       profilePicture: ID.file.encode(status.profile.fileID),
       bio: status.profile.bio,
-      following: status.followStatus,
+      follows: status.follows,
     });
   }
 });
