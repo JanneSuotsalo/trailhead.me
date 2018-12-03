@@ -24,7 +24,6 @@ module.exports = request(async (trx, req, res) => {
   const fileID = Number(ID.file.decode(req.body.fileIDs[0]));
 
   if (fileID) {
-    console.log('profile pic queryd');
     try {
       //If the user has a profile picture, update existing database record
       await trx.execute(
