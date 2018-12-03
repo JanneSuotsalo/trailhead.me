@@ -33,6 +33,15 @@ const postReport = async (trx, { text, reasonTypeID, post, userID }) => {
     };
   }
 
+  // Check if the text is empty
+  console.log(text.trim().length);
+  if (text.trim().length <= 0) {
+    return {
+      status: 'not allowed',
+      error: 'text can not be empty',
+    };
+  }
+
   // Check if the user has already flagged the post
   const [[flag]] = await trx.execute(
     'SELECT COUNT(*) as "exists" FROM flag WHERE userID = ? AND postID = ?;',
@@ -42,7 +51,7 @@ const postReport = async (trx, { text, reasonTypeID, post, userID }) => {
   if (flag.exists) {
     return {
       status: 'forbidden',
-      error: 'You have already flagged the post...',
+      error: 'You have already flagged the post',
     };
   }
 

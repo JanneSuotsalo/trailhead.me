@@ -94,3 +94,37 @@
 #comments {
   width: 450px;
 }
+
+#error {
+  margin: 0 0 24px 0;
+  padding: 8px 12px;
+  text-align: left;
+  font-family: $font-family-body;
+  font-size: 0.7rem;
+  border: 2px solid $color-error;
+  border-radius: 3px;
+  font-weight: bold;
+  color: $color-error;
+
+  box-sizing: border-box;
+}
+
+.message {
+  display: block;
+  padding-top: 30px;
+  width: 100%;
+  text-align: center;
+  line-height: 1rem;
+  font-family: $font-family-body;
+  font-size: 0.7rem;
+  color: $color-dimgray;
+}
+
+.loginLink {
+  text-decoration: none;
+  color: $color-primary;
+}
+
+.loginLink:hover {
+  color: $color-secondary;
+}
