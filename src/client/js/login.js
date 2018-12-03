@@ -40,7 +40,13 @@
               return;
           }
         } else {
-          window.location.replace('/');
+          const url = new URL(window.location.href);
+          const to = url.searchParams.get('to');
+          if (to) {
+            window.location.replace(to);
+          } else {
+            window.location.replace('/');
+          }
         }
       });
   });

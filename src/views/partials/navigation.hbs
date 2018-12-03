@@ -8,18 +8,28 @@
 
     {{#if user}}
     <div class="profile">
-      <a href="/{{user.username}}">
-        <div class="image" style="background-image: url(/file/{{user.image}}/xs)"></div>
-      </a>
+      <div class="image" style="background-image: url(/file/{{user.image}}/xs)"></div>
     </div>
+    {{else}}
+    <a href="/login"><button><span class="mdi mdi-key"></span></button></a>
     {{/if}}
   </div>
 
   {{#if user}}
   <div class="profile">
+    <div class="image" style="background-image: url(/file/{{user.image}}/xs)"></div>
+  </div>
+
+  <div class="dialog user-menu">
     <a href="/{{user.username}}">
-      <div class="image" style="background-image: url(/file/{{user.image}}/xs)"></div>
+      <div class="item">Profile</div>
+    </a>
+    <hr />
+    <a href="/logout">
+      <div class="item">Log Out</div>
     </a>
   </div>
+  {{else}}
+  <a href="/login"><button>Log In</button></a>
   {{/if}}
 </nav>

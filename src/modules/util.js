@@ -76,7 +76,7 @@ const authenticated = (req, res, next) => {
   if (req.session && req.session.userID) return next();
 
   if (req.method === 'GET') {
-    return res.redirect('/login');
+    return res.redirect(`/login?to=${req.url}`);
   } else {
     return res.send({
       status: 'forbidden',

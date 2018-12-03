@@ -298,6 +298,10 @@ nav {
         height: 100%;
       }
     }
+
+    button {
+      display: none;
+    }
   }
 
   .profile {
@@ -305,6 +309,7 @@ nav {
     position: relative;
     width: 32px;
     height: 32px;
+    cursor: pointer;
     z-index: 2;
 
     .image {
@@ -315,7 +320,12 @@ nav {
       background-color: $color-gray;
     }
   }
+
+  button {
+    z-index: 2;
+  }
 }
+
 #wrapper {
   display: flex;
   flex-flow: row;
@@ -482,11 +492,53 @@ nav {
       .profile {
         display: block;
       }
+
+      button {
+        display: block;
+      }
     }
 
     .profile {
       display: none;
     }
+
+    button {
+      display: none;
+    }
+  }
+}
+
+.dialog.user-menu {
+  display: none;
+  width: 128px;
+  font-family: $font-family-body;
+  font-size: 0.9rem;
+  color: $color-black;
+  z-index: 10;
+
+  transform: translateX(-100%);
+
+  a {
+    text-decoration: none;
+    color: $color-black;
+  }
+  .item {
+    padding: 16px;
+    cursor: pointer;
+
+    transition: background-color $animation-easing $animation-time;
+
+    &:hover {
+      background-color: $color-gray;
+    }
+  }
+
+  hr {
+    margin: 0;
+    padding: 0;
+    height: 2px;
+    border: none;
+    background-color: $color-gray;
   }
 }
 

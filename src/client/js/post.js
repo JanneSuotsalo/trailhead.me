@@ -1,20 +1,61 @@
-const globalPosition = element => {
-  let top = 0;
-  let left = 0;
+const emoji = [
+  ['👍', '❤️', '😂'],
+  ['🤔', '😨'],
+  ['😥', '😡'],
+  ['🍀', '🏆', '🔥', '💩'],
+];
 
-  do {
-    top += element.offsetTop || 0;
-    left += element.offsetLeft || 0;
-    element = element.offsetParent;
-  } while (element);
-
-  return {
-    top: top,
-    left: left,
-  };
+let reactDialog = null;
+let reactDialogData = {
+  postID: null,
+  username: null,
+  onReact: () => {},
 };
 
+(() => {
+  reactDialog = document.createElement('div');
+  reactDialog.classList.add('dialog', 'add-react');
+  reactDialog.innerHTML = emoji
+    .map(
+      x =>
+        `<div>${x
+          .map(y => `<span value="${y}">${twemoji.parse(y)}</span>`)
+          .join('')}</div>`
+    )
+    .join('');
+
+  reactDialog.querySelectorAll('span').forEach(element =>
+    element.addEventListener('click', () => {
+      fetch(`/${reactDialogData.username}/${reactDialogData.postID}/react`, {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          emoji: element.getAttribute('value'),
+        }),
+      })
+        .then(data => data.json())
+        .then(json => {
+          reactDialogData.onReact(element.innerHTML);
+        });
+    })
+  );
+
+  document.addEventListener('click', event => {
+    reactDialog.style.display = 'none';
+  });
+
+  document.querySelector('content').appendChild(reactDialog);
+})();
+
 const createPost = (post, link = false) => {
+  const fixedPosition = element => {
+    const rect = element.getBoundingClientRect();
+    return { top: rect.top + window.scrollY, left: rect.left };
+  };
+
   const modal = document.createElement('div');
   modal.classList.add('modal', 'post', 'full');
 
@@ -116,46 +157,7 @@ const createPost = (post, link = false) => {
     window.location.href = `/file/${currentMediaID}`;
   });
 
-  const emoji = [
-    ['👍', '❤️', '😂'],
-    ['🤔', '😨'],
-    ['😥', '😡'],
-    ['🍀', '🏆', '🔥', '💩'],
-  ];
-
-  const reactDialog = document.createElement('div');
-  reactDialog.classList.add('dialog', 'add-react');
-  reactDialog.innerHTML = emoji
-    .map(
-      x =>
-        `<div>${x
-          .map(y => `<span value="${y}">${twemoji.parse(y)}</span>`)
-          .join('')}</div>`
-    )
-    .join('');
-  document.querySelector('content').appendChild(reactDialog);
-
   let userReact = post.userReact;
-  reactDialog.querySelectorAll('span').forEach(element =>
-    element.addEventListener('click', () => {
-      fetch(`/${post.user.username}/${post.postID}/react`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          emoji: element.getAttribute('value'),
-        }),
-      })
-        .then(data => data.json())
-        .then(json => {
-          userReact = element.innerHTML;
-          myReact.innerHTML = userReact;
-          updateReactStatus();
-        });
-    })
-  );
 
   const reactContainer = modal.querySelector('.react');
   reactContainer.innerHTML = `<div class="list"></div>`;
@@ -164,9 +166,19 @@ const createPost = (post, link = false) => {
   reactButton.classList.add('add');
   reactButton.innerHTML = '<span class="mdi mdi-plus"></span> React';
 
-  reactButton.addEventListener('click', () => {
-    const rect = globalPosition(reactButton);
-    reactDialog.style.top = rect.top + 24 + 'px';
+  reactButton.addEventListener('click', event => {
+    event.stopPropagation();
+
+    reactDialogData.postID = post.postID;
+    reactDialogData.username = post.user.username;
+    reactDialogData.onReact = value => {
+      userReact = value;
+      myReact.innerHTML = userReact;
+      updateReactStatus();
+    };
+
+    const rect = fixedPosition(reactButton);
+    reactDialog.style.top = rect.top - 64 + 8 + 'px';
     reactDialog.style.left = rect.left + reactButton.offsetWidth / 2 + 'px';
     reactDialog.style.display = 'flex';
   });
@@ -220,11 +232,6 @@ const createPost = (post, link = false) => {
   };
 
   updateReactStatus();
-
-  document.addEventListener('click', event => {
-    if (reactButton && event.target === reactButton) return;
-    reactDialog.style.display = 'none';
-  });
 
   return modal;
 };
