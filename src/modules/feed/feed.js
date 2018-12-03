@@ -18,11 +18,13 @@ const feed = async (trx, { page, userID }) => {
       p.text,
       p.createdAt,
       JSON_OBJECT(
-        'username', username,
-        'displayName', displayName
+        'username', u.username,
+        'displayName', u.displayName,
+        'image', uf.fileID
       ) as user
-    FROM post as p, user
-    WHERE user.userID = p.userID
+    FROM post p, user u
+    LEFT JOIN userFile uf ON uf.userID = u.userID
+    WHERE u.userID = p.userID
     ORDER BY createdAt
     DESC LIMIT ?, ?`,
     [Number(page) * 10, 10],
@@ -103,11 +105,13 @@ const feed = async (trx, { page, userID }) => {
         icon = 'information';
     }
 
+    const userObject = JSON.parse(x.user);
+
     return {
       ...x,
       postID: ID.post.encode(Number(x.postID)),
       media,
-      user: JSON.parse(x.user),
+      user: { ...userObject, image: ID.file.encode(userObject.image) },
       userReact: ((userReacts || []).find(y => y.postID === x.postID) || {})
         .text,
       reacts: (reacts[x.postID] || []).map(y => ({

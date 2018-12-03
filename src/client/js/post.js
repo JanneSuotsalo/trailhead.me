@@ -90,6 +90,17 @@ const createPost = (post, link = false) => {
         <small>${post.location.address}</small>
       </div>
     </div>
+    <a href="/${post.user.username}">
+      <div class="user">
+        <div class="icon">
+          <div class="image" style="background-image: url(/file/${post.user.image}/s)"></div>
+        </div>
+        <div class="info">
+          <p>${post.user.displayName}</p>
+          <small>@${post.user.username}</small>
+        </div>
+      </div>
+    </a>
     <div class="react"></div>
     `: ''}
   `;

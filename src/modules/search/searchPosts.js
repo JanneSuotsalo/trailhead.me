@@ -60,7 +60,8 @@ const feed = async (trx, { query, filter, page }) => {
       p.createdAt,
       JSON_OBJECT(
         'username', u.username,
-        'displayName', u.displayName
+        'displayName', u.displayName,
+        'image', uf.fileID
       ) as user,
       JSON_OBJECT(
         'locationTypeID', l.locationTypeID,
@@ -71,6 +72,7 @@ const feed = async (trx, { query, filter, page }) => {
     FROM post p
     JOIN user u ON u.userID = p.userID
     JOIN location l ON l.locationID = p.locationID
+    LEFT JOIN userFile uf ON uf.userID = u.userID
     LEFT JOIN postTag pt ON pt.postID = p.postID
     LEFT JOIN tag t ON t.tagID = pt.tagID
     LEFT JOIN locationFile lf ON lf.locationID = p.locationID
@@ -114,11 +116,13 @@ const feed = async (trx, { query, filter, page }) => {
         icon = 'information';
     }
 
+    const user = JSON.parse(x.user);
+
     return {
       ...x,
       postID: ID.post.encode(Number(x.postID)),
       media,
-      user: JSON.parse(x.user),
+      user: { ...user, image: ID.file.encode(user.image) },
       location: location
         ? {
             ...location,
