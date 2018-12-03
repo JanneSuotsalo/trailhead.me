@@ -175,6 +175,102 @@
     }
   }
 
+  a {
+    text-decoration: none;
+  }
+
+  .button-small {
+    position: relative;
+    padding: 0 9px 0 (4px + 16px + 1px);
+    height: 24px;
+    border-radius: 24px;
+    font-size: 0.7rem;
+    font-family: $font-family-body;
+    line-height: 21px;
+    color: $color-dark;
+    border: 2px solid $color-gray;
+    user-select: none;
+    cursor: pointer;
+
+    box-sizing: border-box;
+
+    transition: transform $animation-easing $animation-time,
+      border-color $animation-easing $animation-time,
+      background-color $animation-easing $animation-time;
+
+    &:hover {
+      transform: translateY(-1px);
+      border-color: $color-primary;
+    }
+
+    .mdi {
+      position: absolute;
+      left: 3px;
+      font-size: 1rem;
+    }
+  }
+
+  .user {
+    display: flex;
+    align-items: center;
+    padding: 16px 32px 0 16px;
+
+    .icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 64px;
+      height: 64px;
+
+      .image {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background-color: $color-gray;
+        background-repeat: no-repeat;
+        background-size: cover;
+      }
+    }
+
+    .info {
+      flex: 1;
+      padding: 0;
+      font-family: $font-family-body;
+
+      p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: $color-black;
+      }
+
+      small {
+        font-size: 0.7rem;
+        color: $color-dimgray;
+      }
+    }
+
+    .follow {
+      padding: 0 9px 0 (8px + 16px + 1px);
+      background-color: $color-primary;
+      border-color: $color-primary;
+      color: $color-white;
+
+      &.unfollow {
+        background-color: transparent;
+        border-color: $color-gray;
+        color: $color-dark;
+
+        &:hover {
+          border-color: $color-primary;
+        }
+      }
+
+      .mdi {
+        left: 5px;
+      }
+    }
+  }
+
   .react {
     position: absolute;
     display: flex;
@@ -241,33 +337,11 @@
     }
 
     .add {
-      position: relative;
-      padding: 0 9px 0 (4px + 16px + 1px);
-      height: 24px;
-      border-radius: 24px;
-      font-size: 0.7rem;
-      font-family: $font-family-body;
       line-height: 21px;
       color: $color-dark;
-      border: 2px solid $color-dimgray;
-      user-select: none;
-      cursor: pointer;
-
-      box-sizing: border-box;
-
-      transition: transform $animation-easing $animation-time,
-        border-color $animation-easing $animation-time,
-        background-color $animation-easing $animation-time;
 
       &:hover {
-        transform: translateY(-1px);
         border-color: $color-primary;
-      }
-
-      .mdi {
-        position: absolute;
-        left: 3px;
-        font-size: 1rem;
       }
     }
   }

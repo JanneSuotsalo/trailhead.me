@@ -10,6 +10,20 @@
         <div id="displayName">{{fullName}}</div>
         <div id="username">@{{username}}</div>
         <div id="bio">{{bio}}</a></div>
+        <div id="followContainer">
+            <div id="following">
+                Following
+                <div class="followCount">
+                    {{follows.following}}
+                </div>
+            </div>
+            <div id="followers">
+                Followers
+                <div class="followCount">
+                    {{follows.followers}}
+                </div>
+            </div>
+        </div>
     </div>
 
     <content></content>
@@ -35,7 +49,7 @@
     const preloadFeed = JSON.parse(atob('{{{ base64 posts }}}'));
     window.preloadFeed = preloadFeed;
 
-    if ("{{following}}" > 0) {
+    if ("{{follows.status}}" > 0) {
         followButton.className = 'mdi mdi-account-multiple-minus';
     } else {
         followButton.className = 'mdi mdi-account-multiple-plus';
