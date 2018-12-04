@@ -5,19 +5,21 @@
   };
 
   const menu = document.querySelector('.dialog.user-menu');
-  const icons = document.querySelectorAll('nav .profile .image');
-  icons.forEach(element => {
-    element.addEventListener('click', event => {
-      event.stopPropagation();
+  if (menu) {
+    const icons = document.querySelectorAll('nav .profile .image');
+    icons.forEach(element => {
+      element.addEventListener('click', event => {
+        event.stopPropagation();
 
-      const position = fixedPosition(element);
-      menu.style.top = position.top + 32 + 8 + 'px';
-      menu.style.left = position.left + 'px';
-      menu.style.display = 'block';
+        const position = fixedPosition(element);
+        menu.style.top = position.top + 32 + 8 + 'px';
+        menu.style.left = position.left + 'px';
+        menu.style.display = 'block';
+      });
     });
-  });
+  }
 
   document.addEventListener('click', () => {
-    menu.style.display = 'none';
+    if (menu) menu.style.display = 'none';
   });
 })();
