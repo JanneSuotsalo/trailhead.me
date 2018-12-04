@@ -1,7 +1,7 @@
 const { request } = require('modules/util');
 const joi = require('joi');
 const ID = require('modules/id');
-const { feed } = require('./feed');
+const { feed } = require('modules/feed/feed');
 const { locationTypeIDs } = require('modules/constants');
 
 // prettier-ignore
@@ -21,7 +21,7 @@ const userFeed = async (trx, { username, page, userID }) => {
       u.username,
       u.bio,
       uf.fileID
-      ${userID ? `, f.followerID as following` : ''}
+      ${userID ? `,'following', f.followerID` : ''}
     FROM user u
     LEFT JOIN userFile uf ON uf.userID = u.userID
     ${
@@ -38,16 +38,17 @@ const userFeed = async (trx, { username, page, userID }) => {
   // Get the users collections
   const [collections] = await trx.query(
     `
-        SELECT
-          collectionID,
-          name
-        FROM
-          collection
-        WHERE
-          userID = ?;
-        `,
+    SELECT
+      collectionID,
+      name
+    FROM
+      collection
+    WHERE
+      userID = ?;
+    `,
     [userID]
   );
+  console.log(collections);
 
   // Get the number of followers and the number of people the user is following
   let [[following]] = await trx.query(
