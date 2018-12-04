@@ -46,7 +46,11 @@ const textArea = document.querySelector('.commentTextarea');
 let commentList = document.querySelector('.commentList');
 
 // Get the current url
-const currentUrl = window.location.href;
+let currentUrl = '' + window.location.href;
+if (currentUrl.endsWith('/')) {
+  currentUrl = currentUrl.slice(0, -1);
+}
+
 // Fetch the the list of comments and creates the html as a function
 const listOfComments = () => {
   fetch(currentUrl + '/comment/list', {
