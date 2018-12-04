@@ -59,7 +59,7 @@ const createPost = (post, link = false) => {
   const modal = document.createElement('div');
   modal.classList.add('modal', 'post', 'full');
 
-  let currentMediaID = post.media[0];
+  let currentMedia = post.media[0];
 
   // Construct the basic post layout
   // prettier-ignore
@@ -71,13 +71,16 @@ const createPost = (post, link = false) => {
       <div class="view"><span class="mdi mdi-fullscreen"></span>View full image</div>
 
       <div class="container">
-      <div class="list">
-        ${post.media.map(media => `
-        <div class="media">
-          <div class="image" style="background-image: url(/file/${media}/l);"></div>
+        <div class="list">
+          ${post.media.map(media => `
+          <div class="media">
+            ${media.type === 'image' ? `<div class="image" style="background-image: url(/file/${media.fileID}/l);"></div>` : ''}
+            ${media.type === 'video' ? `<div class="video"><video controls>
+              <source src="/file/${media.fileID}" type="${media.mimeType}">
+            </video></div>` : ''}
+          </div>
+          `).join('')}
         </div>
-        `).join('')}
-      </div>
       </div>
     </div>
     ${post.location ? `
@@ -149,6 +152,15 @@ const createPost = (post, link = false) => {
     right.style.display = 'block';
   }
 
+  const handleViewFullButton = () => {
+    const view = modal.querySelector('.view');
+    if (post.media.length && post.media[position].type === 'video') {
+      view.style.display = 'none';
+    } else {
+      view.style.display = 'block';
+    }
+  };
+
   const moveGalleryPosition = direction => {
     position = Math.max(
       0,
@@ -159,8 +171,12 @@ const createPost = (post, link = false) => {
     left.style.display = position > 0 ? 'block' : 'none';
     right.style.display = position < post.media.length - 1 ? 'block' : 'none';
 
-    currentMediaID = post.media[position];
+    currentMedia = post.media[position];
+
+    handleViewFullButton();
   };
+
+  handleViewFullButton();
 
   right.addEventListener('click', () => {
     moveGalleryPosition(1);
@@ -171,7 +187,7 @@ const createPost = (post, link = false) => {
   });
 
   modal.querySelector('.view').addEventListener('click', () => {
-    window.location.href = `/file/${currentMediaID}`;
+    window.location.href = `/file/${currentMedia.fileID}`;
   });
 
   let userReact = post.userReact;

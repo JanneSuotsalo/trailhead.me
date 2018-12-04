@@ -1,7 +1,7 @@
 const { request } = require('modules/util');
 const joi = require('joi');
 const ID = require('modules/id');
-const { locationTypeIDs } = require('modules/constants');
+const { locationTypeIDs, fileTypeIDs } = require('modules/constants');
 const emoji = require('modules/postReact/emoji');
 
 // prettier-ignore
@@ -44,9 +44,16 @@ const feed = async (trx, { page, userID, filter = null }) => {
     [...(userID ? [userID] : []), ...filterData, Number(page) * 10, 10]
   );
 
+  if (result.length <= 0) {
+    return { status: 'ok', posts: [] };
+  }
+
   // Load post location
-  const [locations] = await trx.query(
-    `SELECT
+  let locations = [];
+  const locationIDs = result.map(x => x.locationID);
+  if (locationIDs.length > 0) {
+    const [locationList] = await trx.query(
+      `SELECT
       l.locationID,
       l.locationTypeID,
       l.name,
@@ -55,8 +62,11 @@ const feed = async (trx, { page, userID, filter = null }) => {
     FROM location l
     LEFT JOIN locationFile lf ON lf.locationID = l.locationID
     WHERE l.locationID IN (?)`,
-    [result.map(x => x.locationID)]
-  );
+      [locationIDs]
+    );
+
+    locations = locationList;
+  }
 
   // Load post reacts
   const reacts = {};
@@ -95,7 +105,7 @@ const feed = async (trx, { page, userID, filter = null }) => {
   }
 
   const [image] = await trx.query(
-    'SELECT pf.fileID, pf.postID FROM postFile as pf WHERE pf.postID IN (?)',
+    'SELECT pf.fileID, pf.postID, f.fileTypeID, f.mimeType FROM postFile pf, file f WHERE pf.postID IN (?) AND f.fileID = pf.fileID',
     [result.map(x => x.postID)]
   );
 
@@ -104,7 +114,12 @@ const feed = async (trx, { page, userID, filter = null }) => {
     const location = locations.find(y => x.locationID === y.locationID);
     const media = image
       .filter(y => y.postID == x.postID)
-      .map(y => ID.file.encode(y.fileID));
+      .map(y => {
+        let type = null;
+        if (y.fileTypeID === fileTypeIDs.IMAGE) type = 'image';
+        if (y.fileTypeID === fileTypeIDs.VIDEO) type = 'video';
+        return { fileID: ID.file.encode(y.fileID), type, mimeType: y.mimeType };
+      });
 
     // Set the location icon
     let icon = 'map-marker';

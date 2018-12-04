@@ -113,6 +113,21 @@
         background-position: center;
         background-repeat: no-repeat;
       }
+
+      .video {
+        position: relative;
+        padding-top: 100%;
+        width: 100%;
+        background-color: black;
+
+        video {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+      }
     }
   }
 
@@ -506,6 +521,15 @@
           opacity: 0;
           cursor: pointer;
         }
+      }
+
+      video {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: black;
       }
     }
   }

@@ -1,6 +1,6 @@
 const { request } = require('modules/util');
 const ID = require('modules/id');
-const { locationTypeIDs, fileStateIDs } = require('modules/constants');
+const { locationTypeIDs, fileTypeIDs } = require('modules/constants');
 const fs = require('fs');
 const emoji = require('modules/postReact/emoji');
 
@@ -23,11 +23,13 @@ const loadPost = async (trx, { post, userID }) => {
       p.createdAt,
       JSON_OBJECT(
         'username', u.username,
-        'displayName', u.displayName
+        'displayName', u.displayName,
+        'image', uf.fileID
         ${userID ? `,'following', f.followerID` : ''}
       ) as user
     FROM post p
     JOIN user u ON u.userID = p.userID
+    LEFT JOIN userFile uf ON uf.userID = u.userID
     ${
       userID
         ? 'LEFT JOIN follower f ON f.followerID = ? AND f.userID = p.userID'
@@ -85,7 +87,7 @@ const loadPost = async (trx, { post, userID }) => {
 
   // Load all post media
   const [media] = await trx.query(
-    'SELECT fileID FROM postFile WHERE postID = ?',
+    'SELECT pf.fileID, pf.postID, f.fileTypeID, f.mimeType FROM postFile pf, file f WHERE pf.postID = ? AND f.fileID = pf.fileID',
     [postID]
   );
 
@@ -109,7 +111,12 @@ const loadPost = async (trx, { post, userID }) => {
       image: ID.file.encode(user.image),
       following: !!Number(user.following),
     },
-    media: media.map(x => ID.file.encode(x.fileID)),
+    media: media.map(x => {
+      let type = null;
+      if (x.fileTypeID === fileTypeIDs.IMAGE) type = 'image';
+      if (x.fileTypeID === fileTypeIDs.VIDEO) type = 'video';
+      return { fileID: ID.file.encode(x.fileID), type, mimeType: x.mimeType };
+    }),
     reacts: reacts.map(x => ({ text: emoji.key[x.reactID], amount: x.amount })),
     location: {
       ...location,

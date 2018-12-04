@@ -79,11 +79,20 @@ const Uploader = (
 
     const elements = [];
     const data = new FormData();
+
+    console.log('files', files);
+
     for (const file of files) {
       data.append('list', file);
 
       const element = document.createElement('div');
-      element.style.backgroundImage = `url(/file/${file})`;
+      element.style.backgroundImage = `url(/file/${file.name})`;
+
+      if (file.type.split('/')[0] === 'video') {
+        const video = document.createElement('video');
+        video.setAttribute('src', URL.createObjectURL(file));
+        element.appendChild(video);
+      }
 
       if (allowRemove) {
         const remove = document.createElement('span');

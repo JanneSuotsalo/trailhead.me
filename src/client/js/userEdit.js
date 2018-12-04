@@ -23,9 +23,9 @@ const upload = document.getElementById('upload');
 
 Uploader(upload, {
   //onError: showError,
-  onUpload: file => {
-    console.log('Upload file', file);
-    window.postData.fileIDs.push(file);
+  onUpdate: fileIDs => {
+    console.log('Upload files', fileIDs);
+    window.postData.fileIDs = [...fileIDs];
     window.postDataCheck();
   },
   supportedFiles: ['.png', '.jpg', '.jpeg'],
