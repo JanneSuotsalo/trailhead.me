@@ -43,7 +43,7 @@ flagReasons.forEach(element => {
 const button = document.querySelector('.reportButton');
 const textArea = document.querySelector('textarea');
 const errorMsg = document.getElementById('error');
-const cancel = document.querySelectorAll('button')[1];
+const cancel = document.getElementsByClassName('button secondary')[0];
 const currentUrl = window.location.href;
 
 // Gets the value from the selector

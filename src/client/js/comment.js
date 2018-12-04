@@ -168,8 +168,8 @@ if (window.user) {
           listOfComments();
         });
       textArea.value = '';
+      errorMsg.innerText = '';
       errorMsg.style.display = 'none';
-      error.Msg.innerText = '';
     } else {
       errorMsg.style.display = 'block';
       errorMsg.innerText = 'Comment can not be empty.';
