@@ -90,6 +90,7 @@ const createPost = (post, link = false) => {
         <small>${post.location.address}</small>
       </div>
     </div>
+    `: ''}
     <div class="user">
       <a href="/${post.user.username}">
         <div class="icon">
@@ -108,7 +109,6 @@ const createPost = (post, link = false) => {
     </div>
     <hr />
     <div class="react"></div>
-    `: ''}
   `;
 
   const info = document.createElement('a');

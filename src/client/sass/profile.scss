@@ -54,20 +54,42 @@
     position: absolute;
     top: 32px;
     right: 32px;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 24px;
     height: 24px;
-    border-radius: 50%;
-    border: 2px solid $color-gray;
+  }
 
-    box-sizing: border-box;
+  .follow.button-small {
+    position: relative;
+    margin: 16px 0 0 0;
+    padding: 0 9px 0 (8px + 16px + 1px);
+    width: auto;
+    background-color: $color-primary;
+    border-color: $color-primary;
+    border-radius: 24px;
+    color: $color-white;
 
-    transition: border-color $animation-easing $animation-time;
+    &.unfollow {
+      background-color: transparent;
+      border-color: $color-gray;
+      color: $color-dark;
 
-    &:hover {
-      border-color: $color-primary;
+      .mdi {
+        color: $color-dark;
+      }
+
+      &:hover {
+        border-color: $color-primary;
+      }
+    }
+
+    .mdi {
+      position: absolute;
+      left: 5px;
+      color: $color-white;
     }
   }
 
@@ -92,9 +114,7 @@
     font-size: 14px;
     box-shadow: 0 0 1 0 $color-dimgray;
   }
-  #follow {
-    color: $color-white;
-  }
+
   #followContainer {
     width: 100%;
     display: flex;

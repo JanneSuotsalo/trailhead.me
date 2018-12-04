@@ -21,7 +21,7 @@ const userFeed = async (trx, { username, page, userID }) => {
       u.username,
       u.bio,
       uf.fileID
-      ${userID ? `,'following', f.followerID` : ''}
+      ${userID ? `, f.followerID as following` : ''}
     FROM user u
     LEFT JOIN userFile uf ON uf.userID = u.userID
     ${
