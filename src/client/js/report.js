@@ -80,7 +80,7 @@ button.addEventListener('click', evt => {
                 errorMsg.innerText = 'You have already reported the post.';
             }
           } else {
-            window.location.href = '.';
+            window.location.href = './';
           }
         });
       textArea.value = '';
@@ -98,5 +98,5 @@ button.addEventListener('click', evt => {
 
 // Redirect back after pressing cancel
 cancel.addEventListener('click', evt => {
-  window.location.href = '.';
+  window.location.href = './';
 });
