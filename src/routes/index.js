@@ -20,6 +20,6 @@ module.exports = [
   fileRoutes,
   flagRoutes,
   postRoutes,
-  feedRoutes,
   collectionRoutes,
+  feedRoutes,
 ];

@@ -30,6 +30,31 @@
           </div>
         </div>
       </div>
+      <div id="collections">
+        <label for="collectionDialog">Collections</div>
+      <dialog id="collectionDialog">
+        <form method="dialog">
+          <label for="collectionName">Collection name:</label>
+          <input id="collectionName" name="collectionName" type="text"></input>
+          <label for="description">Description:</label>
+          <input id="description" name="description" type="text"></input>
+          <div id="error"></div>
+          <menu>
+            <button id="cancelButton" value="Cancel">Cancel</button>
+            <button id="saveButton" value="Save">Save</button>
+          </menu>
+        </form>
+      </dialog>
+
+      <button id="addCollection">Add a collection</button>
+
+      {{#each profile.collections}}
+      <div id="collection">
+        <a href="{{profile.username}}/collection/{{name}}">
+          <div class="name">{{name}}</div>
+        </a>
+      </div>
+      {{/each}}
     </div>
   </div>
   <div class="feed"></div>
@@ -62,4 +87,5 @@
 <script src="/static/js/post.js"></script>
 <script src="/static/js/feed.js"></script>
 <script src="/static/js/follow.js"></script>
+<script src="/static/js/collection.js"></script>
 {{/section}}
