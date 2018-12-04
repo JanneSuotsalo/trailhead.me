@@ -113,7 +113,7 @@ const feed = async (trx, { query, filter, page, userID }) => {
   );
 
   if (!result.length) {
-    return { status: 'ok', posts: [] };
+    return { status: 'ok', posts: [], search: searchVisualData };
   }
 
   const [image] = await trx.query(
