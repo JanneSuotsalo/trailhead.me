@@ -1,7 +1,7 @@
 const { request } = require('modules/util');
 const joi = require('joi');
 const ID = require('modules/id');
-const { locationTypeIDs } = require('modules/constants');
+const { locationTypeIDs, fileTypeIDs } = require('modules/constants');
 
 // prettier-ignore
 const schema = joi.object({
@@ -99,7 +99,7 @@ const feed = async (trx, { query, filter, page, userID }) => {
   }
 
   const [image] = await trx.query(
-    'SELECT pf.fileID, pf.postID FROM postFile as pf WHERE pf.postID IN (?)',
+    'SELECT pf.fileID, pf.postID, f.fileTypeID, f.mimeType FROM postFile pf, file f WHERE pf.postID IN (?) AND f.fileID = pf.fileID',
     [result.map(x => x.postID)]
   );
 
@@ -108,7 +108,12 @@ const feed = async (trx, { query, filter, page, userID }) => {
     const location = JSON.parse(x.location);
     const media = image
       .filter(y => y.postID == x.postID)
-      .map(y => ID.file.encode(y.fileID));
+      .map(x => {
+        let type = null;
+        if (x.fileTypeID === fileTypeIDs.IMAGE) type = 'image';
+        if (x.fileTypeID === fileTypeIDs.VIDEO) type = 'video';
+        return { fileID: ID.file.encode(x.fileID), type, mimeType: x.mimeType };
+      });
 
     // Set the location icon
     let icon = 'map-marker';
