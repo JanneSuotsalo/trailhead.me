@@ -4,13 +4,17 @@
   <div class="left">
     <div id="profile">
       <div id="row">
-        <div class="image" style="background-image: url(/file/{{profile.profilePicture}}/m)"></div>
-        <a class="edit" href="/editUser" style="display: none;">
+        <div class="image" {{#if profile.profilePicture}} style="background-image: url(/file/{{profile.profilePicture}}/m)"
+          {{/if}}></div>
+        <a class="edit button-small" href="/editUser" style="display: none;">
           <div type="button" class="mdi mdi-pencil"></div>
         </a>
       </div>
       <div id="displayName">{{profile.displayName}}</div>
       <div id="username">@{{profile.username}}</div>
+
+      <div class="follow button-small"></div>
+
       <div id="bio">{{profile.bio}}</a></div>
       <div id="followContainer">
         <div id="following">
@@ -44,6 +48,9 @@
   const preloadFeed = JSON.parse(atob('{{{ base64 posts }}}'));
   window.preloadFeed = preloadFeed;
 
+  const preloadProfile = JSON.parse(atob('{{{ base64 profile }}}'));
+  window.preloadProfile = preloadProfile;
+
   (() => {
     const editButton = document.querySelector('#profile .edit');
     if (editButton && window.user && window.user.username === '{{profile.username}}') {
@@ -54,4 +61,5 @@
 
 <script src="/static/js/post.js"></script>
 <script src="/static/js/feed.js"></script>
+<script src="/static/js/follow.js"></script>
 {{/section}}

@@ -179,37 +179,6 @@
     text-decoration: none;
   }
 
-  .button-small {
-    position: relative;
-    padding: 0 9px 0 (4px + 16px + 1px);
-    height: 24px;
-    border-radius: 24px;
-    font-size: 0.7rem;
-    font-family: $font-family-body;
-    line-height: 21px;
-    color: $color-dark;
-    border: 2px solid $color-gray;
-    user-select: none;
-    cursor: pointer;
-
-    box-sizing: border-box;
-
-    transition: transform $animation-easing $animation-time,
-      border-color $animation-easing $animation-time,
-      background-color $animation-easing $animation-time;
-
-    &:hover {
-      transform: translateY(-1px);
-      border-color: $color-primary;
-    }
-
-    .mdi {
-      position: absolute;
-      left: 3px;
-      font-size: 1rem;
-    }
-  }
-
   .user {
     display: flex;
     align-items: center;
@@ -228,7 +197,9 @@
         border-radius: 50%;
         background-color: $color-gray;
         background-repeat: no-repeat;
+        background-position: center;
         background-size: cover;
+        background-image: url('/static/img/unknown.png');
       }
     }
 
