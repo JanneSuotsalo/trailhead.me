@@ -154,7 +154,7 @@ const createPost = (post, link = false) => {
 
   const handleViewFullButton = () => {
     const view = modal.querySelector('.view');
-    if (post.media[position].type === 'video') {
+    if (post.media.length && post.media[position].type === 'video') {
       view.style.display = 'none';
     } else {
       view.style.display = 'block';

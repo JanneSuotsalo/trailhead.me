@@ -44,9 +44,16 @@ const feed = async (trx, { page, userID, filter = null }) => {
     [...(userID ? [userID] : []), ...filterData, Number(page) * 10, 10]
   );
 
+  if (result.length <= 0) {
+    return { status: 'ok', posts: [] };
+  }
+
   // Load post location
-  const [locations] = await trx.query(
-    `SELECT
+  let locations = [];
+  const locationIDs = result.map(x => x.locationID);
+  if (locationIDs.length > 0) {
+    const [locationList] = await trx.query(
+      `SELECT
       l.locationID,
       l.locationTypeID,
       l.name,
@@ -55,8 +62,11 @@ const feed = async (trx, { page, userID, filter = null }) => {
     FROM location l
     LEFT JOIN locationFile lf ON lf.locationID = l.locationID
     WHERE l.locationID IN (?)`,
-    [result.map(x => x.locationID)]
-  );
+      [locationIDs]
+    );
+
+    locations = locationList;
+  }
 
   // Load post reacts
   const reacts = {};
