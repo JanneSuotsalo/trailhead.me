@@ -75,7 +75,11 @@ module.exports = request(async (trx, req, res) => {
 
   // Combine results and order them
   const list = [
-    ...userList.map(x => ({ ...x, type: 'user' })),
+    ...userList.map(x => ({
+      ...x,
+      fileID: ID.file.encode(x.fileID),
+      type: 'user',
+    })),
     ...locationList.map(x => ({
       ...x,
       locationID: ID.location.encode(x.locationID),

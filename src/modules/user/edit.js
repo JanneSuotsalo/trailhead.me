@@ -71,7 +71,9 @@ module.exports = request(async (trx, req, res) => {
     );
   }
 
-  req.session.image = req.body.fileIDs[0];
+  if (fileID) req.session.image = req.body.fileIDs[0];
+  if (req.body.displayName != '')
+    req.session.displayName = req.body.displayName;
   await req.session.save();
 
   return { status: 'ok' };

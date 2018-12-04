@@ -197,7 +197,9 @@
         border-radius: 50%;
         background-color: $color-gray;
         background-repeat: no-repeat;
+        background-position: center;
         background-size: cover;
+        background-image: url('/static/img/unknown.png');
       }
     }
 

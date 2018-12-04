@@ -313,10 +313,13 @@ nav {
     .image {
       width: 32px;
       height: 32px;
-      background-size: 100%;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
       border-radius: 50%;
       background-color: $color-gray;
       border: 2px solid $color-primary;
+      background-image: url('/static/img/unknown.png');
       cursor: pointer;
     }
 
@@ -414,6 +417,9 @@ nav {
         height: 32px;
         border-radius: 50%;
         background-color: $color-gray;
+        background-position: center;
+        background-size: cover;
+        background-image: url('/static/img/unknown.png');
       }
     }
 

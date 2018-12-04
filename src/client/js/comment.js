@@ -20,7 +20,7 @@ if (window.user) {
   divComments.innerHTML += 
   `<div>
    <div class="flex">
-      <img src="/file/${window.user.image}/m" class="profilePic">
+      <div ${window.user.image ? `style="background-image: url(/file/${window.user.image}/m)"`: ''} class="profilePic"></div>
       <div class="commentBox">
       <textarea class="commentTextarea" rows="4" cols="50" maxlength="256" placeholder="Type your comment here... "></textarea>
       </div>
@@ -64,7 +64,7 @@ const listOfComments = () => {
         console.log('element', element);
 
         let div = document.createElement('div');
-        let img = document.createElement('img');
+        let img = document.createElement('div');
         let aUsername = document.createElement('a');
         let p = document.createElement('p');
         let pDelete = document.createElement('p');
@@ -79,7 +79,9 @@ const listOfComments = () => {
         div.setAttribute('class', 'flex');
 
         // Profile picture
-        img.setAttribute('src', '/file/' + element.fileID + '/m');
+        if (element.fileID) {
+          img.style.backgroundImage = 'url(/file/' + element.fileID + '/m)';
+        }
         img.setAttribute('class', 'profilePic');
 
         // Username and link to user's page

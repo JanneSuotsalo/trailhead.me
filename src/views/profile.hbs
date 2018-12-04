@@ -4,7 +4,8 @@
   <div class="left">
     <div id="profile">
       <div id="row">
-        <div class="image" style="background-image: url(/file/{{profile.profilePicture}}/m)"></div>
+        <div class="image" {{#if profile.profilePicture}} style="background-image: url(/file/{{profile.profilePicture}}/m)"
+          {{/if}}></div>
         <a class="edit button-small" href="/editUser" style="display: none;">
           <div type="button" class="mdi mdi-pencil"></div>
         </a>

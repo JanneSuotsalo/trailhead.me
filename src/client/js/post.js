@@ -94,7 +94,7 @@ const createPost = (post, link = false) => {
     <div class="user">
       <a href="/${post.user.username}">
         <div class="icon">
-          <div class="image" style="background-image: url(/file/${post.user.image}/s)"></div>
+          <div class="image" ${post.user.image ? `style="background-image: url(/file/${post.user.image}/s)"`: ''}></div>
         </div>
       </a>
       <div class="info">

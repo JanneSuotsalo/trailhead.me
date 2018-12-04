@@ -38,9 +38,11 @@
       case 'user':
         title = item.displayName;
         print = `@${item.username}`;
-        icon = `<div class="image" style="background-image: url(/file/${
+        icon = `<div class="image" ${
           item.fileID
-        })"></div>`;
+            ? `style="background-image: url(/file/${item.fileID})"`
+            : ''
+        }></div>`;
         container = userList;
 
         onClick = event => {
