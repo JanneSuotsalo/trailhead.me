@@ -34,7 +34,6 @@ const postReport = async (trx, { text, reasonTypeID, post, userID }) => {
   }
 
   // Check if the text is empty
-  console.log(text.trim().length);
   if (text.trim().length <= 0) {
     return {
       status: 'not allowed',
