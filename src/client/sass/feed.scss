@@ -58,6 +58,22 @@ content {
   }
 }
 
+.feed .search-visual {
+  margin: (32px + 16px) 0;
+
+  h1 {
+    margin: 0;
+    color: $color-primary;
+  }
+
+  p {
+    margin: 16px 0 0 0;
+    font-family: $font-family-body;
+    font-size: 0.7rem;
+    color: $color-dark;
+  }
+}
+
 @media screen and (max-width: 1000px) {
   content {
     flex-direction: column;

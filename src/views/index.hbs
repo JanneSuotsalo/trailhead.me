@@ -18,6 +18,13 @@
   window.preloadFeed = preloadFeed;
 </script>
 
+{{#if search}}
+<script>
+  const preloadSearch = JSON.parse(atob('{{{ base64 search }}}'));
+  window.preloadSearch = preloadSearch;
+</script>
+{{/if}}
+
 <script src="/static/js/post.js"></script>
 <script src="/static/js/feed.js"></script>
 <script src="/static/js/trending.js"></script>

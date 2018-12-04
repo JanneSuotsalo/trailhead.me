@@ -42,8 +42,9 @@ const createLoadMore = (container, url) => {
 };
 
 (() => {
+  const content = document.querySelector('.feed');
+
   if (window.preloadFeed && window.preloadFeed.length) {
-    const content = document.querySelector('.feed');
     window.preloadFeed.forEach(post => {
       const element = createPost(post, true);
       content.appendChild(element);
@@ -52,5 +53,18 @@ const createLoadMore = (container, url) => {
     if (window.preloadFeed.length >= 10) {
       createLoadMore(content, '/');
     }
+  }
+
+  if (window.preloadSearch) {
+    const searchVisual = document.createElement('div');
+    searchVisual.classList.add('search-visual');
+    searchVisual.innerHTML = `
+      <h1></h1>
+      <p>${window.preloadSearch.text}</p>
+    `;
+
+    searchVisual.querySelector('h1').innerText = window.preloadSearch.header;
+
+    content.insertBefore(searchVisual, content.firstChild);
   }
 })();

@@ -21,12 +21,18 @@ const feed = async (trx, { query, filter, page, userID }) => {
   let queryWhere = '';
   let queryItems = [];
 
+  let searchVisualData = {};
+
   switch (filter) {
     case 'tag':
       queryWhere = `
         (pt.postID = p.postID AND t.tagID = pt.tagID AND t.text COLLATE latin1_general_ci LIKE ?)
       `;
       queryItems = [tagQuery];
+      searchVisualData = {
+        header: `#${textQuery.replace('#', '')}`,
+        text: 'Searching posts with a <b>tag</b>',
+      };
       break;
     case 'location':
       const locationID = ID.location.decode(textQuery)[0];
@@ -35,12 +41,20 @@ const feed = async (trx, { query, filter, page, userID }) => {
         (l.locationID = ?)
       `;
       queryItems = [locationID];
+      searchVisualData = {
+        header: null,
+        text: 'Searching posts from a <b>location</b>',
+      };
       break;
     case 'user':
       queryWhere = `
         (username COLLATE utf8mb4_general_ci LIKE ?)
       `;
       queryItems = [userQuery];
+      searchVisualData = {
+        header: `@${textQuery.replace('@', '')}`,
+        text: 'Searching posts by a <b>user</b>',
+      };
       break;
     default:
       queryWhere = `
@@ -49,6 +63,10 @@ const feed = async (trx, { query, filter, page, userID }) => {
         (l.name COLLATE utf8mb4_general_ci LIKE ? OR l.address COLLATE utf8mb4_general_ci LIKE ?)
       `;
       queryItems = [userQuery, tagQuery, locationQuery, locationQuery];
+      searchVisualData = {
+        header: textQuery,
+        text: 'Searching for users, tags & locations',
+      };
       break;
   }
 
@@ -103,6 +121,11 @@ const feed = async (trx, { query, filter, page, userID }) => {
     [result.map(x => x.postID)]
   );
 
+  // Add visual name location search
+  if (filter === 'location') {
+    searchVisualData.header = JSON.parse(result[0].location).name;
+  }
+
   // Convert numerical id to a hash id
   const posts = result.map(x => {
     const location = JSON.parse(x.location);
@@ -148,7 +171,7 @@ const feed = async (trx, { query, filter, page, userID }) => {
     };
   });
 
-  return { status: 'ok', posts };
+  return { status: 'ok', posts, search: searchVisualData };
 };
 
 // Express POST middleware
@@ -175,6 +198,7 @@ const get = request(async (trx, req, res) => {
 
   res.render('index', {
     posts: status.posts,
+    search: status.search,
   });
 });
 
