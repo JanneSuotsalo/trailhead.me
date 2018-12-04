@@ -617,3 +617,28 @@ input[name='place'] {
     width: 100%;
   }
 }
+
+.toolbar {
+  display: flex;
+  justify-content: center;
+  flex-flow: row;
+  margin-bottom: 32px;
+
+  .tools {
+    display: flex;
+    width: 450px;
+    justify-content: flex-end;
+
+    a {
+      text-decoration: none;
+    }
+
+    .button-small {
+      border-color: $color-dimgray;
+    }
+
+    .button-small:hover {
+      border-color: $color-primary;
+    }
+  }
+}

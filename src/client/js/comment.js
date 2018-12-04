@@ -1,8 +1,7 @@
 'use strict';
 
+// Create base html elements for comment section
 const content = document.querySelector('.commentContent');
-let comment = '';
-
 let divWrapper = document.createElement('div');
 divWrapper.setAttribute('class', 'wrapperComment');
 let divComments = document.createElement('div');
