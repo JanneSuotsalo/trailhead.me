@@ -17,28 +17,33 @@ const currentPath = window.location.pathname;
 if (window.user) {
   // Creates the comment box
   divComments.innerHTML += 
-  `<div>
-   <div class="flex">
-      <div ${window.user.image ? `style="background-image: url(/file/${window.user.image}/m)"`: ''} class="profilePic"></div>
-      <div class="commentBox">
-      <textarea class="commentTextarea" rows="4" cols="50" maxlength="256" placeholder="Type your comment here... "></textarea>
+   `<div>
+    <div class="flex">
+      <div ${window.user.image ? `style="background-image: url(/file/${window.user.image}/m)"`: ''} class="profilePic">
       </div>
-   </div>
-   <div id="error" style="display: none"></div>
+      <div class="commentBox">
+        <textarea class="commentTextarea" rows="4" cols="50" maxlength="256" placeholder="Type your comment here... "></textarea>
+      </div>
+    </div>
+    <div id="error" style="display: none"></div>
       <button class="commentButton" type='submit' value='Submit'>Send</button>
-   </div>`;
+  </div>`;
 } else {
-  divComments.innerHTML += `<span class="message"><span class="mdi mdi-information-outline"> 
-  <a class="loginLink" href="../login?to=${currentPath}">Login</a> to comment a post 
-  </span>
-  </span>`
+  divComments.innerHTML += `
+     <span class="message">
+      <span class="mdi mdi-information-outline"> 
+        <a class="loginLink" href="../login?to=${currentPath}">Login</a> to comment a post 
+      </span>
+    </span>`;
 }
-divComments.innerHTML += `<br>
- <br>
- <div class="line2"></div>
- <br>
- <div class="commentList">
- </div>`;
+divComments.innerHTML += `
+<br>
+<br>
+<div class="line2">
+</div>
+<br>
+<div class="commentList">
+</div>`;
 
 const button = document.querySelector('.commentButton');
 const textArea = document.querySelector('.commentTextarea');
