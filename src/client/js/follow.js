@@ -37,10 +37,23 @@
     }
   };
 
+  let followers = document.getElementsByClassName('followCount')[1];
+  let followCount;
+  followCount = Number(followers.innerText);
+
   // Listen for follow event and update UI if necessary
   document.addEventListener('follow', event => {
     if (event.detail.username !== window.preloadProfile.username) return;
     isFollowing = event.detail.state;
+    // Updates following count when following/unfollowing
+    if (!isFollowing) {
+      followCount -= 1;
+      followers.innerText = followCount;
+    }
+    if (isFollowing) {
+      followCount += 1;
+      followers.innerText = followCount;
+    }
 
     updateFollowStatus();
   });
