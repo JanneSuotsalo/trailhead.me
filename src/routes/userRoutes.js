@@ -3,7 +3,7 @@ const login = require('modules/user/login');
 const edit = require('modules/user/edit');
 
 module.exports = app => {
-  app.post('/register', register);
+  app.post('/register', register(app));
   app.post('/login', login);
   app.post('/editUser', edit);
   app.post('/logout', (req, res) => {
