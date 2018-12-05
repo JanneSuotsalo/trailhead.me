@@ -42,7 +42,6 @@
   font-family: $font-family-body;
   margin-top: 1px;
   margin-bottom: 5px;
-  width: 420px;
   word-wrap: break-word;
 }
 
@@ -129,4 +128,26 @@
 
 .loginLink:hover {
   color: $color-secondary;
+}
+
+@media screen and (max-width: 600px) {
+  #comments {
+    width: 378px;
+  }
+
+  .commentText {
+    box-sizing: border-box;
+    padding-left: 7px;
+    width: 100%;
+  }
+
+  .time {
+    box-sizing: border-box;
+    padding-left: 7px;
+  }
+
+  .profilePic {
+    box-sizing: border-box;
+    margin-left: 4px;
+  }
 }
