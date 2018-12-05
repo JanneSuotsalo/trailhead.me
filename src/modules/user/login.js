@@ -20,6 +20,7 @@ module.exports = request(async (trx, req, res) => {
   const [[user]] = await trx.execute(
     `SELECT
       userID,
+      userTypeID,
       email,
       username,
       displayName,
@@ -44,7 +45,7 @@ module.exports = request(async (trx, req, res) => {
 
   // Set the session
   req.session.userID = user.userID;
-  req.session.email = user.email;
+  (req.session.userTypeID = user.userTypeID), (req.session.email = user.email);
   req.session.username = user.username;
   req.session.displayName = user.displayName;
   req.session.image = ID.file.encode(user.image);

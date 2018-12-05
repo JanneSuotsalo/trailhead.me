@@ -9,8 +9,10 @@ const flagRoutes = require('./flagRoutes');
 const searchRoutes = require('./searchRoutes');
 const trendingRoutes = require('./trendingRoutes');
 const collectionRoutes = require('./collectionRoutes');
+const adminRoutes = require('./adminRoutes');
 
 module.exports = [
+  adminRoutes,
   userRoutes,
   commentRoutes,
   followersRoutes,

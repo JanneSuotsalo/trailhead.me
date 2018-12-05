@@ -5,10 +5,12 @@ const post = new Hashids(`${hash}-post`, 4);
 const file = new Hashids(`${hash}-file`, 4);
 const comment = new Hashids(`${hash}-comment`, 4);
 const location = new Hashids(`${hash}-location`, 4);
+const flag = new Hashids(`${hash}-flag`, 4);
 
 module.exports = {
   post,
   file,
   comment,
   location,
+  flag,
 };

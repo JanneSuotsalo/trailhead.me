@@ -1,4 +1,5 @@
 const db = require('modules/db');
+const { userTypeIDs } = require('modules/constants');
 
 /**
  * Helper to allow running a function inside a transaction
@@ -85,8 +86,31 @@ const authenticated = (req, res, next) => {
   }
 };
 
+/**
+ * An Express helper to make sure the user is an administrator
+ */
+const administrator = (req, res, next) => {
+  if (
+    req.session &&
+    req.session.userID &&
+    req.session.userTypeID === userTypeIDs.ADMIN
+  ) {
+    return next();
+  }
+
+  if (req.method === 'GET') {
+    return res.redirect(`/`);
+  } else {
+    return res.send({
+      status: 'forbidden',
+      error: 'Invalid session, please login again...',
+    });
+  }
+};
+
 module.exports = {
   request,
   transaction,
   authenticated,
+  administrator,
 };

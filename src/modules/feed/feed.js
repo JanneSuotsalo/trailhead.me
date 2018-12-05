@@ -28,7 +28,8 @@ const feed = async (trx, { page, userID, filter = null }) => {
         'displayName', u.displayName,
         'image', uf.fileID
         ${userID ? `,'following', f.followerID` : ''}
-      ) as user
+      ) as user,
+      (SELECT COUNT(f.flagID) FROM flag f WHERE f.postID = p.postID) as amount
     FROM post p, user u
     LEFT JOIN userFile uf ON uf.userID = u.userID
     ${
@@ -38,6 +39,11 @@ const feed = async (trx, { page, userID, filter = null }) => {
     }
     WHERE u.userID = p.userID ${
       filter && filter.username ? 'AND u.username = ?' : ''
+    }
+    ${
+      filter && filter.admin
+        ? 'AND (SELECT COUNT(f.flagID) FROM flag f WHERE f.postID = p.postID) > 0'
+        : ''
     }
     ORDER BY createdAt
     DESC LIMIT ?, ?`,

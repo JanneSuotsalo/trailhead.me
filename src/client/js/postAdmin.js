@@ -1,27 +1,39 @@
-'use strict';
+(() => {
+  const content = document.querySelector('.feed');
 
-if (window.user) {
-  const content = document.querySelector('content');
-  const div = document.createElement('div');
-  content.appendChild(div);
-  div.setAttribute('class', 'toolbar');
+  if (window.preloadAdminFeed && window.preloadAdminFeed.length) {
+    window.preloadAdminFeed.forEach(post => {
+      const element = createPost(post, true);
+      content.appendChild(element);
+    });
 
-  // Get the current url
-  let currentUrl = '' + window.location.href;
-  if (currentUrl.endsWith('/')) {
-    currentUrl = currentUrl.slice(0, -1);
+    if (window.preloadAdminFeed.length >= 10) {
+      createLoadMore(content, '/admin');
+    }
   }
 
-  // prettier-ignore
-  div.innerHTML += `
-<div class="tools">
-    <a href="${currentUrl}/flag">
-        <div class="button-small"> 
-            <span class="mdi mdi-flag-variant">
-            </span> 
-            Report
-        </div>
-    <a>
-</div>
-`;
-}
+  if (window.user && !window.preloadAdminFeed) {
+    const content = document.querySelector('content');
+    const div = document.createElement('div');
+    content.appendChild(div);
+    div.setAttribute('class', 'toolbar');
+
+    // Get the current url
+    let currentUrl = '' + window.location.href;
+    if (currentUrl.endsWith('/')) {
+      currentUrl = currentUrl.slice(0, -1);
+    }
+
+    div.innerHTML += `
+    <div class="tools">
+        <a href="${currentUrl}/flag">
+            <div class="button-small"> 
+                <span class="mdi mdi-flag-variant">
+                </span> 
+                Report
+            </div>
+        <a>
+    </div>
+  `;
+  }
+})();

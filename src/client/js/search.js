@@ -5,6 +5,8 @@
   const locationList = document.createElement('div');
   const tagList = document.createElement('div');
 
+  if (!input) return;
+
   dialog.appendChild(userList);
   dialog.appendChild(locationList);
   dialog.appendChild(tagList);

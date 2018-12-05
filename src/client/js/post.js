@@ -139,6 +139,34 @@ const createPost = (post, link = false) => {
 
   modal.appendChild(info);
 
+  // Handle admin view reports
+  if (post.flags && post.flags.length) {
+    const flagContainer = document.createElement('div');
+    flagContainer.classList.add('reports');
+
+    for (const flag of post.flags) {
+      const flagElement = document.createElement('div');
+      flagElement.innerText = flag.text;
+      flagContainer.appendChild(flagElement);
+
+      const user = document.createElement('span');
+      user.classList.add('user');
+      user.innerText = flag.user.username;
+      flagContainer.appendChild(user);
+
+      const time = document.createElement('span');
+      user.classList.add('time');
+      time.setAttribute(
+        'title',
+        moment(flag.createdAt).format('DD.MM.YYYY HH:mm')
+      );
+      time.innerText = moment(flag.createdAt).fromNow();
+      flagContainer.appendChild(time);
+    }
+
+    modal.appendChild(flagContainer);
+  }
+
   // Handle the madia controls
   const right = modal.querySelector('.gallery > .right');
   const left = modal.querySelector('.gallery > .left');

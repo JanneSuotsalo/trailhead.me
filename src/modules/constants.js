@@ -1,4 +1,8 @@
 module.exports = {
+  userTypeIDs: {
+    NORMAL: 1,
+    ADMIN: 2,
+  },
   fileTypeIDs: {
     IMAGE: 1,
     VIDEO: 2,
