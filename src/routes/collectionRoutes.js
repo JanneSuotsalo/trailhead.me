@@ -3,6 +3,7 @@ const removeCollection = require('modules/collection/removeCollection');
 const addPost = require('modules/collection/addPost');
 const removePost = require('modules/collection/removePost');
 const collection = require('modules/collection/collectionFeed');
+const userCollections = require('modules/collection/userCollections');
 const { authenticated } = require('modules/util');
 
 module.exports = app => {
@@ -13,4 +14,5 @@ module.exports = app => {
   app.delete('/collection', authenticated, removeCollection);
 
   app.get('/:username/collection/:collection', collection.get);
+  app.get('/collection', userCollections);
 };

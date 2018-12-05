@@ -349,5 +349,81 @@ const createPost = (post, link = false) => {
 
   updateFollowStatus();
 
+  // Create a dialog form for collections
+  const addPost = document.createElement('div');
+  const dialog = document.createElement('dialog');
+  const form = document.createElement('form');
+  const choose = document.createElement('label');
+  const select = document.createElement('select');
+  const collectionMenu = document.createElement('menu');
+  const confirmButton = document.createElement('button');
+  const cancelButton = document.createElement('button');
+
+  addPost.classList.add('button-small');
+  addPost.innerHTML =
+    '<span class="mdi mdi-folder-plus"></span> Add to collection';
+  confirmButton.id = 'Confirm';
+  confirmButton.innerHTML = 'Confirm';
+  confirmButton.value = 'Confirm';
+  cancelButton.innerHTML = 'Cancel';
+  dialog.id = 'dialog';
+  form.method = 'dialog';
+  choose.innerHTML = 'Choose collection';
+
+  dialog.appendChild(form);
+  form.appendChild(choose);
+  form.appendChild(collectionMenu);
+  collectionMenu.appendChild(cancelButton);
+  collectionMenu.appendChild(confirmButton);
+  choose.appendChild(select);
+
+  reactContainer.appendChild(addPost);
+  reactContainer.appendChild(dialog);
+
+  let collectionsFound = false;
+
+  addPost.addEventListener('click', event => {
+    event.preventDefault();
+
+    fetch(`/collection`)
+      .then(data => data.json())
+      .then(json => {
+        if (json.status === 'ok') {
+          if (!collectionsFound) {
+            for (let i = 0; i < json.collections.length; i++) {
+              select.innerHTML += `<option>${
+                json.collections[i].name
+              }</option>`;
+            }
+            collectionsFound = true;
+          }
+          dialog.showModal();
+          document.dispatchEvent(event);
+        }
+      });
+  });
+
+  confirmButton.addEventListener('click', event => {
+    const postData = {
+      postID: post.postID,
+      collectionName: select.value,
+    };
+
+    fetch(`/${window.user.username}/collection/${select.value}`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(postData),
+    })
+      .then(data => data.json())
+      .then(json => {
+        if (json.status === 'ok') {
+          document.dispatchEvent(event);
+        }
+      });
+  });
+
   return modal;
 };

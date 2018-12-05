@@ -10,10 +10,12 @@ const description = document.getElementById('description');
 const save = document.getElementById('saveButton');
 const error = document.getElementById('error');
 
+// Show pop-up dialog
 addButton.addEventListener('click', () => {
   dialog.showModal();
 });
 
+// Submit collection
 save.addEventListener('click', () => {
   window.postData.collectionName = collectionName.value;
   window.postData.description = description.value;
