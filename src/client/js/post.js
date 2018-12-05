@@ -242,6 +242,33 @@ const createPost = (post, link = false) => {
     reactDialog.style.top = rect.top - 64 + 8 + 'px';
     reactDialog.style.left = rect.left + reactButton.offsetWidth / 2 + 'px';
     reactDialog.style.display = 'flex';
+
+    // Function to check if element is on the screen (bottom)
+    const isInViewportBottom = elem => {
+      var bounding = elem.getBoundingClientRect();
+      return (
+        bounding.bottom <=
+          (window.innerHeight || document.documentElement.clientHeight) &&
+        bounding.right <=
+          (window.innerWidth || document.documentElement.clientWidth)
+      );
+    };
+    // Function to check if element is off the screen (top)
+    const isInViewportTop = elem => {
+      var bounding = elem.getBoundingClientRect();
+      return bounding.top >= 0;
+    };
+
+    // Media query for reacts and checks if the react box fits in the screen, if not, puts the box on top of the react button
+    if (window.matchMedia('(max-width: 600px)').matches) {
+      reactDialog.style.top = rect.top - 210 + 'px';
+      if (!isInViewportBottom(reactDialog)) {
+        reactDialog.style.top = rect.top - 365 + 'px';
+      }
+      if (!isInViewportTop(reactDialog)) {
+        reactDialog.style.top = rect.top - 55 + 'px';
+      }
+    }
   });
 
   const myReact = document.createElement('div');
