@@ -15,18 +15,19 @@
     error.style.display = 'none;';
 
     const showError = text => {
-      error.style.display = 'block;';
+      error.style.display = 'block';
       error.innerText = text;
     };
 
     if (password !== repassword) {
-      error.innerText = 'Passwords do not match';
+      showError('Passwords do not match');
       return;
     }
 
     if (!/^[a-z0-9_-]{2,32}$/.test(username)) {
-      error.innerText =
-        'Invalid username, please only use lowercase letters, numbers, "-" and "_"';
+      showError(
+        'Invalid username, please only use lowercase letters, numbers, "-" and "_"'
+      );
       return;
     }
 
