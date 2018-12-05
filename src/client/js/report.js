@@ -82,8 +82,12 @@ button.addEventListener('click', evt => {
           } else {
             window.location.href = './';
           }
+        })
+        // Checks if the user has inserted invalid characters in the text box
+        .catch(err => {
+          errorMsg.style.display = 'block';
+          errorMsg.innerText = 'Text contains invalid characters.';
         });
-      textArea.value = '';
     } else {
       // Give error msg if textbox is empty
       errorMsg.style.display = 'block';
