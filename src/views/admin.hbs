@@ -1,0 +1,31 @@
+{{> navigation}}
+
+<content>
+  <div class="left"></div>
+  <div class="feed"></div>
+  <div class="right"></div>
+</content>
+
+{{#section 'style'}}
+<link href="/static/css/post.css" rel="stylesheet" />
+<link href="/static/css/feed.css" rel="stylesheet" />
+{{/section}}
+
+{{#section 'script'}}
+<!-- Give the feed as JSON data to make first page load faster -->
+<script>
+  const preloadAdminFeed = JSON.parse(atob('{{{ base64 posts }}}'));
+  window.preloadAdminFeed = preloadAdminFeed;
+</script>
+
+{{#if search}}
+<script>
+  const preloadSearch = JSON.parse(atob('{{{ base64 search }}}'));
+  window.preloadSearch = preloadSearch;
+</script>
+{{/if}}
+
+<script src="/static/js/post.js"></script>
+<script src="/static/js/feed.js"></script>
+<script src="/static/js/postAdmin.js"></script>
+{{/section}}
