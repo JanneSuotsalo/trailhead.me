@@ -21,17 +21,19 @@
     <div class="image" style="background-image: url(/file/{{user.image}}/s)"></div>
   </div>
 
-  <div class="dialog user-menu">
-    <a class="create" href="/post">
-      <div class="item"><span class="mdi mdi-map-plus"></span> Create a post</div>
-    </a>
-    <a href="/{{user.username}}">
-      <div class="item">Profile</div>
-    </a>
-    <hr />
-    <a href="/logout">
-      <div class="item">Log Out</div>
-    </a>
+  <div class="dialog menu user-menu">
+    <div class="list">
+      <a class="create" href="/post">
+        <div class="item"><span class="mdi mdi-map-plus"></span> Create a post</div>
+      </a>
+      <a href="/{{user.username}}">
+        <div class="item">Profile</div>
+      </a>
+      <hr />
+      <a href="/logout">
+        <div class="item">Log Out</div>
+      </a>
+    </div>
   </div>
   {{else}}
   <a href="/login"><button>Log In</button></a>

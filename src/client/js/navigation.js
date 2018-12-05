@@ -12,7 +12,7 @@
         event.stopPropagation();
 
         const position = fixedPosition(element);
-        menu.style.top = position.top + 32 + 8 + 'px';
+        menu.style.top = position.top + 32 + 12 + 'px';
         menu.style.left = position.left + 'px';
         menu.style.display = 'block';
       });
