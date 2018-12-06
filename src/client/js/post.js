@@ -452,5 +452,54 @@ const createPost = (post, link = false) => {
       });
   });
 
+  // DELETE POST
+
+  // Get the current path
+  const currentPath = window.location.pathname;
+  const currentHost = window.location.host;
+
+  // Creates delete button for posts that the user has posted
+  if (window.user) {
+    if (post.user.username === window.user.username) {
+      const deletePost = document.createElement('div');
+      deletePost.classList.add('button-small');
+      deletePost.innerHTML =
+        '<span class="mdi mdi-close-circle-outline"></span> Delete post';
+      info.insertBefore(deletePost, content);
+
+      // Deletes the post after clicking delete button
+      deletePost.addEventListener('click', evt => {
+        evt.preventDefault();
+
+        if (confirm('Are you sure you want to delete the post?')) {
+          fetch(`../${post.user.username}/${post.postID}/delete`, {
+            method: 'delete',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({}),
+          })
+            .then(data => data.json())
+            .then(json => {});
+
+          // If user is viewing single post and deletes it, redirects back to main page
+          if (
+            currentPath === `/${post.user.username}/${post.postID}` ||
+            currentPath === `/${post.user.username}/${post.postID}/`
+          ) {
+            // variable to get the post's HTML element that gets deleted when post is deleted.
+            console.log(currentHost);
+            window.location.href = `/`;
+          } else {
+            const postToDelete = deletePost.parentNode.parentNode;
+            postToDelete.parentNode.removeChild(postToDelete);
+          }
+        } else {
+        }
+      });
+    }
+  }
+
   return modal;
 };
