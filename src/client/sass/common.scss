@@ -440,15 +440,35 @@ nav {
   }
 }
 
-.dialog.user-menu {
+.dialog.menu {
   display: none;
   width: 150px;
   font-family: $font-family-body;
   font-size: 0.9rem;
+  border: 2px solid $color-dimgray;
   color: $color-black;
+  overflow: visible;
   z-index: 10;
 
   transform: translateX(-100%);
+
+  &:before {
+    position: absolute;
+    content: '';
+    top: -7px;
+    right: 9px;
+    width: 0;
+    height: 0;
+    border-left: 7px solid transparent;
+    border-right: 7px solid transparent;
+
+    border-bottom: 7px solid $color-dimgray;
+  }
+
+  .list {
+    border-radius: 3px;
+    overflow: hidden;
+  }
 
   a {
     text-decoration: none;
@@ -457,12 +477,20 @@ nav {
 
   .item {
     padding: 16px;
+    color: $color-black;
     cursor: pointer;
 
     transition: background-color $animation-easing $animation-time;
 
     &:hover {
       background-color: $color-gray;
+    }
+
+    .mdi {
+      margin-right: 4px;
+      width: 24px;
+      text-align: center;
+      color: $color-dark;
     }
   }
 
@@ -562,6 +590,14 @@ nav {
 
     .dialog.user-menu .create {
       display: block;
+    }
+
+    .dialog.user-menu {
+      transform: translate(-100%, 4px);
+
+      &:before {
+        right: 11px;
+      }
     }
   }
 }

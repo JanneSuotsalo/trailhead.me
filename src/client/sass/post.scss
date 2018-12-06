@@ -374,6 +374,17 @@
     }
   }
 
+  .more {
+    display: flex;
+    margin-left: 6px;
+    padding: 0;
+    width: 24px;
+
+    .mdi {
+      position: relative;
+    }
+  }
+
   .reports {
     padding: 32px;
   }
@@ -643,6 +654,14 @@ input[name='place'] {
   }
 }
 
+.dialog.menu.post-menu {
+  width: 180px;
+
+  &:before {
+    right: 3px;
+  }
+}
+
 @media screen and (max-width: 600px) {
   .modal.post,
   .modal.editPost {
@@ -651,30 +670,5 @@ input[name='place'] {
 
   .add-react {
     transform: translate(-100px, 75px);
-  }
-}
-
-.toolbar {
-  display: flex;
-  justify-content: center;
-  flex-flow: row;
-  margin-bottom: 32px;
-
-  .tools {
-    display: flex;
-    width: 450px;
-    justify-content: flex-end;
-
-    a {
-      text-decoration: none;
-    }
-
-    .button-small {
-      border-color: $color-dimgray;
-    }
-
-    .button-small:hover {
-      border-color: $color-primary;
-    }
   }
 }

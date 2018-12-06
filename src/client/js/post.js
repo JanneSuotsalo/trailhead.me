@@ -12,6 +12,71 @@ let reactDialogData = {
   onReact: () => {},
 };
 
+let postMenuData = null;
+let postMenuElement = null;
+
+const createPostMenu = () => {
+  const menu = document.createElement('div');
+  menu.classList.add('dialog', 'menu', 'post-menu');
+
+  const list = document.createElement('div');
+  list.classList.add('list');
+  menu.appendChild(list);
+
+  const addToCollection = document.createElement('div');
+  addToCollection.classList.add('item');
+  addToCollection.innerHTML =
+    '<span class="mdi mdi-folder-plus"></span> Add to Collection';
+  list.appendChild(addToCollection);
+
+  addToCollection.addEventListener('click', event =>
+    postMenuData.addToCollectionClick(event)
+  );
+
+  list.appendChild(document.createElement('hr'));
+
+  const flag = document.createElement('div');
+  flag.classList.add('item');
+  flag.innerHTML = '<span class="mdi mdi-flag-variant"></span> Report';
+  list.appendChild(flag);
+
+  flag.addEventListener('click', () => {
+    window.location.href = `/${postMenuData.user.username}/${
+      postMenuData.postID
+    }/flag`;
+  });
+
+  document.addEventListener('click', () => {
+    if (menu) menu.style.display = 'none';
+  });
+
+  document.body.appendChild(menu);
+
+  postMenuElement = menu;
+};
+
+if (window.user) createPostMenu();
+
+const registerPostMenuClick = (post, element) => {
+  const fixedPosition = element => {
+    const rect = element.getBoundingClientRect();
+    return { top: rect.top + window.scrollY, left: rect.right };
+  };
+
+  if (!window.user) return;
+
+  element.addEventListener('click', event => {
+    event.stopPropagation();
+
+    const position = fixedPosition(element);
+    postMenuElement.style.top = position.top + 32 + 2 + 'px';
+    postMenuElement.style.left = position.left + 'px';
+    postMenuElement.style.display = 'block';
+
+    postMenuData = post;
+  });
+};
+
 (() => {
   reactDialog = document.createElement('div');
   reactDialog.classList.add('dialog', 'add-react');
@@ -377,7 +442,6 @@ const createPost = (post, link = false) => {
   updateFollowStatus();
 
   // Create a dialog form for collections
-  const addPost = document.createElement('div');
   const dialog = document.createElement('dialog');
   const form = document.createElement('form');
   const choose = document.createElement('label');
@@ -386,9 +450,6 @@ const createPost = (post, link = false) => {
   const confirmButton = document.createElement('button');
   const cancelButton = document.createElement('button');
 
-  addPost.classList.add('button-small');
-  addPost.innerHTML =
-    '<span class="mdi mdi-folder-plus"></span> Add to collection';
   confirmButton.id = 'Confirm';
   confirmButton.innerHTML = 'Confirm';
   confirmButton.value = 'Confirm';
@@ -404,31 +465,44 @@ const createPost = (post, link = false) => {
   collectionMenu.appendChild(confirmButton);
   choose.appendChild(select);
 
-  reactContainer.appendChild(addPost);
   reactContainer.appendChild(dialog);
 
   let collectionsFound = false;
 
-  addPost.addEventListener('click', event => {
-    event.preventDefault();
+  // Create the three dot post menu
+  if (window.user) {
+    const postMenu = document.createElement('div');
+    postMenu.classList.add('more', 'button-small');
+    postMenu.innerHTML = '<span class="mdi mdi-dots-horizontal"></span>';
+    reactContainer.appendChild(postMenu);
 
-    fetch(`/collection`)
-      .then(data => data.json())
-      .then(json => {
-        if (json.status === 'ok') {
-          if (!collectionsFound) {
-            for (let i = 0; i < json.collections.length; i++) {
-              select.innerHTML += `<option>${
-                json.collections[i].name
-              }</option>`;
-            }
-            collectionsFound = true;
-          }
-          dialog.showModal();
-          document.dispatchEvent(event);
-        }
-      });
-  });
+    registerPostMenuClick(
+      {
+        ...post,
+        addToCollectionClick: event => {
+          event.preventDefault();
+
+          fetch(`/collection`)
+            .then(data => data.json())
+            .then(json => {
+              if (json.status === 'ok') {
+                if (!collectionsFound) {
+                  for (let i = 0; i < json.collections.length; i++) {
+                    select.innerHTML += `<option>${
+                      json.collections[i].name
+                    }</option>`;
+                  }
+                  collectionsFound = true;
+                }
+                dialog.showModal();
+                document.dispatchEvent(event);
+              }
+            });
+        },
+      },
+      postMenu
+    );
+  }
 
   confirmButton.addEventListener('click', event => {
     const postData = {
