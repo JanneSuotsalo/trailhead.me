@@ -31,7 +31,7 @@ const feed = async (trx, { query, filter, page, userID }) => {
       queryItems = [tagQuery];
       searchVisualData = {
         header: `#${textQuery.replace('#', '')}`,
-        text: 'Searching posts with a <b>tag</b>',
+        html: 'Searching posts with a <b>tag</b>',
       };
       break;
     case 'location':
@@ -43,7 +43,7 @@ const feed = async (trx, { query, filter, page, userID }) => {
       queryItems = [locationID];
       searchVisualData = {
         header: null,
-        text: 'Searching posts from a <b>location</b>',
+        html: 'Searching posts from a <b>location</b>',
       };
       break;
     case 'user':
@@ -53,7 +53,7 @@ const feed = async (trx, { query, filter, page, userID }) => {
       queryItems = [userQuery];
       searchVisualData = {
         header: `@${textQuery.replace('@', '')}`,
-        text: 'Searching posts by a <b>user</b>',
+        html: 'Searching posts by a <b>user</b>',
       };
       break;
     default:
@@ -65,7 +65,7 @@ const feed = async (trx, { query, filter, page, userID }) => {
       queryItems = [userQuery, tagQuery, locationQuery, locationQuery];
       searchVisualData = {
         header: textQuery,
-        text: 'Searching for users, tags & locations',
+        html: 'Searching for users, tags & locations',
       };
       break;
   }

@@ -57,12 +57,22 @@ const createLoadMore = (container, url) => {
   if (window.preloadSearch) {
     const searchVisual = document.createElement('div');
     searchVisual.classList.add('search-visual');
-    searchVisual.innerHTML = `
-      <h1></h1>
-      <p>${window.preloadSearch.text}</p>
-    `;
 
-    searchVisual.querySelector('h1').innerText = window.preloadSearch.header;
+    const searchHeader = document.createElement('h1');
+    searchHeader.innerText = window.preloadSearch.header;
+    searchVisual.appendChild(searchHeader);
+
+    if (window.preloadSearch.html) {
+      const searchHTML = document.createElement('p');
+      searchHTML.innerHTML = window.preloadSearch.html;
+      searchVisual.appendChild(searchHTML);
+    }
+
+    if (window.preloadSearch.text) {
+      const searchText = document.createElement('p');
+      searchText.innerText = window.preloadSearch.text;
+      searchVisual.appendChild(searchText);
+    }
 
     content.insertBefore(searchVisual, content.firstChild);
   }

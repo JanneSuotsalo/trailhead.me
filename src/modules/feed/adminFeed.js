@@ -74,7 +74,7 @@ const get = request(async (trx, req, res) => {
     posts: status.posts,
     search: {
       header: 'Reports',
-      text: '<b>Admin</b> view for responding to <b>reports</b>',
+      html: '<b>Admin</b> view for responding to <b>reports</b>',
     },
   });
 });
