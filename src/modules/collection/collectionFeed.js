@@ -9,7 +9,7 @@ const schema = joi.object({
     page: joi.number().integer().min(0).required()
   });
 
-const userFeed = async (trx, { username, page, userID }) => {
+const collectionFeed = async (trx, { username, page, userID }) => {
   const feedData = await feed(trx, { page, userID, filter: { username } });
   if (feedData.status !== 'ok') return feedData;
 
@@ -86,7 +86,7 @@ const post = request(async (trx, req, res) => {
     return { status: 'validation error', error: valid.error };
   }
 
-  return await userFeed(trx, {
+  return await collectionFeed(trx, {
     ...req.body,
     ...req.params,
     userID: req.session.userID,
@@ -95,13 +95,13 @@ const post = request(async (trx, req, res) => {
 
 // Express GET middleware
 const get = request(async (trx, req, res) => {
-  const status = await userFeed(trx, {
+  const status = await collectionFeed(trx, {
     ...req.params,
     page: 0,
     userID: req.session.userID,
   });
 
-  res.render('profile', {
+  res.render('index', {
     posts: status.posts,
     profile: status.profile,
   });
