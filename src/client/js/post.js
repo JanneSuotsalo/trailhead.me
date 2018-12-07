@@ -46,6 +46,48 @@ const createPostMenu = () => {
     }/flag`;
   });
 
+  const removePost = document.createElement('div');
+  removePost.classList.add('item');
+  removePost.innerHTML =
+    '<span class="mdi mdi-close-circle-outline"></span> Remove';
+  list.appendChild(removePost);
+
+  removePost.addEventListener('click', event => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (confirm('Are you sure you want to delete the post?')) {
+      fetch(`/${postMenuData.user.username}/${postMenuData.postID}/delete`, {
+        method: 'delete',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(data => data.json())
+        .then(json => {
+          if (json.status !== 'ok') {
+            alert('Could not remove post, please contact support');
+            return;
+          }
+
+          // If user is viewing single post and deletes it, redirects back to main page
+          if (
+            window.location.pathname ===
+              `/${postMenuData.user.username}/${postMenuData.postID}` ||
+            window.location.pathname ===
+              `/${postMenuData.user.username}/${postMenuData.postID}/`
+          ) {
+            window.location.href = `/`;
+          } else {
+            document.getElementById(postMenuData.postID).remove();
+          }
+        });
+
+      postMenuElement.style.display = 'none';
+    }
+  });
+
   document.addEventListener('click', () => {
     if (menu) menu.style.display = 'none';
   });
@@ -123,6 +165,7 @@ const createPost = (post, link = false) => {
 
   const modal = document.createElement('div');
   modal.classList.add('modal', 'post', 'full');
+  modal.id = post.postID;
 
   let currentMedia = post.media[0];
 
@@ -176,16 +219,20 @@ const createPost = (post, link = false) => {
       </div>
     </div>
     <hr />
-    <div class="react"></div>
   `;
 
-  const info = document.createElement('a');
+  const info = document.createElement('div');
   info.classList.add('info');
-  if (link) info.setAttribute('href', `/${post.user.username}/${post.postID}`);
 
   // Format and include the post text content
-  const content = document.createElement('p');
+  const content = document.createElement('a');
+  content.classList.add('text');
   content.textContent = post.text;
+
+  if (link) {
+    content.setAttribute('href', `/${post.user.username}/${post.postID}`);
+  }
+
   let htmlContent = content.innerHTML.replace(
     /\B(\#[a-zA-Z]{1,16}\b)(?!;)/gm,
     x => `<a>${x}</a>`
@@ -202,6 +249,10 @@ const createPost = (post, link = false) => {
   info.appendChild(content);
   info.appendChild(time);
 
+  const reactContainer = document.createElement('div');
+  reactContainer.classList.add('react');
+  info.appendChild(reactContainer);
+
   modal.appendChild(info);
 
   // Handle admin view reports
@@ -210,23 +261,28 @@ const createPost = (post, link = false) => {
     flagContainer.classList.add('reports');
 
     for (const flag of post.flags) {
-      const flagElement = document.createElement('div');
+      const flagElement = document.createElement('p');
       flagElement.innerText = flag.text;
       flagContainer.appendChild(flagElement);
 
-      const user = document.createElement('span');
+      const flagInfoElement = document.createElement('div');
+
+      const user = document.createElement('a');
+      user.setAttribute('href', `/${flag.user.username}`);
       user.classList.add('user');
-      user.innerText = flag.user.username;
-      flagContainer.appendChild(user);
+      user.innerText = '@' + flag.user.username;
+      flagInfoElement.appendChild(user);
 
       const time = document.createElement('span');
-      user.classList.add('time');
+      time.classList.add('time');
       time.setAttribute(
         'title',
         moment(flag.createdAt).format('DD.MM.YYYY HH:mm')
       );
       time.innerText = moment(flag.createdAt).fromNow();
-      flagContainer.appendChild(time);
+      flagInfoElement.appendChild(time);
+
+      flagContainer.appendChild(flagInfoElement);
     }
 
     modal.appendChild(flagContainer);
@@ -285,7 +341,6 @@ const createPost = (post, link = false) => {
 
   let userReact = post.userReact;
 
-  const reactContainer = modal.querySelector('.react');
   reactContainer.innerHTML = `<div class="list"></div>`;
 
   const reactButton = document.createElement('div');
@@ -525,55 +580,6 @@ const createPost = (post, link = false) => {
         }
       });
   });
-
-  // DELETE POST
-
-  // Get the current path
-  const currentPath = window.location.pathname;
-  const currentHost = window.location.host;
-
-  // Creates delete button for posts that the user has posted
-  if (window.user) {
-    if (post.user.username === window.user.username) {
-      const deletePost = document.createElement('div');
-      deletePost.classList.add('button-small');
-      deletePost.innerHTML =
-        '<span class="mdi mdi-close-circle-outline"></span> Delete post';
-      info.insertBefore(deletePost, content);
-
-      // Deletes the post after clicking delete button
-      deletePost.addEventListener('click', evt => {
-        evt.preventDefault();
-
-        if (confirm('Are you sure you want to delete the post?')) {
-          fetch(`../${post.user.username}/${post.postID}/delete`, {
-            method: 'delete',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({}),
-          })
-            .then(data => data.json())
-            .then(json => {});
-
-          // If user is viewing single post and deletes it, redirects back to main page
-          if (
-            currentPath === `/${post.user.username}/${post.postID}` ||
-            currentPath === `/${post.user.username}/${post.postID}/`
-          ) {
-            // variable to get the post's HTML element that gets deleted when post is deleted.
-            console.log(currentHost);
-            window.location.href = `/`;
-          } else {
-            const postToDelete = deletePost.parentNode.parentNode;
-            postToDelete.parentNode.removeChild(postToDelete);
-          }
-        } else {
-        }
-      });
-    }
-  }
 
   return modal;
 };

@@ -274,7 +274,7 @@
     position: absolute;
     display: flex;
     right: 32px;
-    bottom: 32px;
+    bottom: 26px;
     height: 24px;
 
     .mine {
@@ -347,11 +347,13 @@
 
   .info {
     display: block;
+    position: relative;
     padding: 32px;
     font-family: $font-family-body;
     text-decoration: none;
 
-    p {
+    .text {
+      display: block;
       margin: 0;
       color: $color-black;
       white-space: pre-wrap;
@@ -370,23 +372,53 @@
     }
 
     div {
-      margin-left: 295px;
+      // margin-left: 295px;
     }
   }
 
   .more {
     display: flex;
+    justify-content: center;
+    align-items: center;
     margin-left: 6px;
     padding: 0;
     width: 24px;
 
     .mdi {
-      position: relative;
+      position: initial;
+      height: 10px;
+      line-height: 10px;
     }
   }
 
   .reports {
+    border-top: 2px solid $color-gray;
     padding: 32px;
+    font-family: $font-family-body;
+
+    p {
+      margin: 0 0 8px 0;
+    }
+
+    > div {
+      display: flex;
+
+      > span,
+      a {
+        padding: 0;
+        font-size: 0.7rem;
+      }
+
+      .user {
+        text-decoration: none;
+        color: $color-primary;
+
+        &:after {
+          content: ' –';
+          padding: 0 4px;
+        }
+      }
+    }
   }
 }
 
