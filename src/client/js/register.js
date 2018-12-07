@@ -41,8 +41,6 @@
     })
       .then(data => data.json())
       .then(json => {
-        console.log(json);
-
         if (json.status !== 'ok') {
           switch (json.status) {
             case 'availability error':

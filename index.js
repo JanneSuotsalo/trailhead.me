@@ -29,6 +29,13 @@ try {
 
 app.use(bodyParser.json());
 
+// Set some default values for template engine
+app.use((req, res, next) => {
+  res.locals.url = 'https://trailhead.me';
+  res.locals.title = 'Trailhead';
+  return next();
+});
+
 // Register and configure the Handlebars template engine
 app.engine(
   'hbs',
@@ -60,6 +67,10 @@ app.engine(
         // Convert to base64
         output = Buffer.from(output).toString('base64');
         return output;
+      },
+      if_eq: function(a, b, options) {
+        if (a == b) return options.fn(this);
+        else return options.inverse(this);
       },
     },
   })

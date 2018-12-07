@@ -31,8 +31,6 @@
     )
       .then(result => result.json())
       .then(json => {
-        console.log(json);
-
         const list = document.getElementById('list');
         const used = [];
         list.innerHTML = '';

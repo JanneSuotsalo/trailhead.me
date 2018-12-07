@@ -7,6 +7,10 @@
   width: 450px;
   overflow: hidden;
 
+  > div {
+    z-index: 1;
+  }
+
   .gallery {
     position: relative;
     width: 100%;
@@ -178,6 +182,7 @@
       font-family: $font-family-body;
 
       p {
+        margin: 0;
         font-size: 1.1rem;
         font-weight: bold;
         color: $color-white;

@@ -100,7 +100,7 @@
       .then(data => data.json())
       .then(json => {
         if (json.status !== 'ok') {
-          // TODO: Handle error
+          clearLists();
           return;
         }
 

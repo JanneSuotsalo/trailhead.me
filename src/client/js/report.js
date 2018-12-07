@@ -71,7 +71,6 @@ button.addEventListener('click', evt => {
       })
         .then(data => data.json())
         .then(json => {
-          console.log(json);
           // Error msg if the user has already flagged the post
           if (json.status !== 'ok') {
             switch (json.status) {

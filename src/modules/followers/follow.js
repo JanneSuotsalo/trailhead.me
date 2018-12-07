@@ -1,8 +1,6 @@
 const { request } = require('modules/util');
 
 module.exports = request(async (trx, req, res) => {
-  console.log(req.params.username);
-
   // Find the userID of the user, that the other user is trying to follow
   const [[user]] = await trx.execute(
     `SELECT userID FROM user WHERE username = ?`,

@@ -24,7 +24,6 @@ if (!fs.existsSync(path.join(root, '/upload'))) {
 
 const filter = (req, file, callback) => {
   if (supportedMimeTypes.includes(file.mimetype)) {
-    console.log(file.mimetype);
     return callback(null, true);
   } else {
     console.error('Unsupported mime type:', file.mimetype);

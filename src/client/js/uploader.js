@@ -80,8 +80,6 @@ const Uploader = (
     const elements = [];
     const data = new FormData();
 
-    console.log('files', files);
-
     for (const file of files) {
       data.append('list', file);
 
@@ -120,7 +118,6 @@ const Uploader = (
           // event.preventDefault();
           draggedElement = element;
           event.dataTransfer.effectAllowed = 'move';
-          console.log('start');
         });
 
         element.addEventListener('dragover', event => {

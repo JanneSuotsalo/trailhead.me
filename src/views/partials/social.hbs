@@ -1,0 +1,13 @@
+<meta name="description" content="{{post.text}}" />
+
+<meta property="og:title" content="{{post.text}}" />
+{{#if_eq post.media.0.type "image"}}
+<meta property="og:type" content="image" />
+<meta property="og:image" content="{{url}}/file/{{post.media.0.fileID}}/m" />
+{{/if_eq}}
+{{#if_eq post.media.0.type "video"}}
+<meta property="og:type" content="video" />
+<meta property="og:video" content="{{url}}/file/{{post.media.0.fileID}}" />
+{{/if_eq}}
+<meta property="og:url" content="{{url}}/{{post.user.username}}/{{post.postID}}" />
+<meta property="og:site_name" content="{{title}}" />

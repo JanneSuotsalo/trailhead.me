@@ -24,7 +24,6 @@ const upload = document.getElementById('upload');
 Uploader(upload, {
   //onError: showError,
   onUpdate: fileIDs => {
-    console.log('Upload files', fileIDs);
     window.postData.fileIDs = [...fileIDs];
     window.postDataCheck();
   },
@@ -89,7 +88,6 @@ const highlightUpdate = () => {
     .replace(/\B(\#[a-zA-Z]{1,16}\b)(?!;)/gm, x => `<span>${x}</span>`);
 };
 const highlightScroll = () => {
-  console.log('scroll');
   highlight.scrollTop = textarea.scrollTop;
 };
 

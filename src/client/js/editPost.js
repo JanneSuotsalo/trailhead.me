@@ -5,12 +5,6 @@ window.postData = {
 };
 
 window.postDataCheck = () => {
-  console.log(
-    !!window.postData.fileIDs.length,
-    !!window.postData.text,
-    !!window.postData.location
-  );
-
   const submit = document.querySelector('[type="submit"]');
 
   if (
@@ -152,7 +146,6 @@ window.postDataCheck = () => {
       .replace(/\B(\#[a-zA-Z]{1,16}\b)(?!;)/gm, x => `<span>${x}</span>`);
   };
   const highlightScroll = () => {
-    console.log('scroll');
     highlight.scrollTop = textarea.scrollTop;
   };
 

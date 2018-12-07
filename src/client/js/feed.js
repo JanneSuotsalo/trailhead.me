@@ -1,5 +1,4 @@
 const createLoadMore = (container, url) => {
-  console.log('creating load more');
   const loadMore = document.createElement('button');
   loadMore.classList.add('load-more');
   loadMore.innerHTML = `<span class="mdi mdi-download-multiple"></span> Load more`;
@@ -22,7 +21,7 @@ const createLoadMore = (container, url) => {
       .then(data => data.json())
       .then(json => {
         if (json.status !== 'ok') {
-          // TODO: Handle error
+          alert('Failed to get more posts, please try again...');
           return;
         }
 

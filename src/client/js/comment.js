@@ -69,8 +69,6 @@ const listOfComments = () => {
     .then(json => {
       // Build the html of comment list
       json.list.forEach(element => {
-        console.log('element', element);
-
         let div = document.createElement('div');
         let img = document.createElement('div');
         let aUsername = document.createElement('a');
@@ -174,7 +172,6 @@ if (window.user) {
       })
         .then(data => data.json())
         .then(json => {
-          console.log(json);
           listOfComments();
         });
       textArea.value = '';

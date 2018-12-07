@@ -16,6 +16,10 @@ const feed = async (trx, { page, userID, filter = null }) => {
     filterData = [filter.username];
   }
 
+  if (filter && filter.personal) {
+    filterData = [userID];
+  }
+
   //Feed for anonymous users, ordered by date
   const [result] = await trx.execute(
     `SELECT
@@ -28,8 +32,7 @@ const feed = async (trx, { page, userID, filter = null }) => {
         'displayName', u.displayName,
         'image', uf.fileID
         ${userID ? `,'following', f.followerID` : ''}
-      ) as user,
-      (SELECT COUNT(f.flagID) FROM flag f WHERE f.postID = p.postID) as amount
+      ) as user
     FROM post p, user u
     LEFT JOIN userFile uf ON uf.userID = u.userID
     ${
@@ -42,7 +45,12 @@ const feed = async (trx, { page, userID, filter = null }) => {
     }
     ${
       filter && filter.admin
-        ? 'AND (SELECT COUNT(f.flagID) FROM flag f WHERE f.postID = p.postID) > 0'
+        ? 'AND (SELECT COUNT(f.flagID) FROM flag f WHERE f.postID = p.postID LIMIT 1) > 0'
+        : ''
+    }
+    ${
+      filter && filter.personal
+        ? 'AND (SELECT COUNT(f.followerID) FROM follower f WHERE f.followerID = ? AND f.userID = u.userID LIMIT 1) > 0'
         : ''
     }
     ORDER BY createdAt
