@@ -16,6 +16,10 @@ const feed = async (trx, { page, userID, filter = null }) => {
     filterData = [filter.username];
   }
 
+  if (filter && filter.follow) {
+    filterData = [filter.follow];
+  }
+
   //Feed for anonymous users, ordered by date
   const [result] = await trx.execute(
     `SELECT
@@ -45,6 +49,7 @@ const feed = async (trx, { page, userID, filter = null }) => {
         ? 'AND (SELECT COUNT(f.flagID) FROM flag f WHERE f.postID = p.postID) > 0'
         : ''
     }
+    ${filter && filter.follow ? 'AND p.postID IN (?)' : ''}
     ORDER BY createdAt
     DESC LIMIT ?, ?`,
     [...(userID ? [userID] : []), ...filterData, Number(page) * 10, 10]

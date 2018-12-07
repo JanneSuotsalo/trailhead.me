@@ -1,20 +1,36 @@
 const { request } = require('modules/util');
 const joi = require('joi');
+const { feed } = require('./feed');
 
 // prettier-ignore
 const schema = joi.object({
     page: joi.number().integer().min(0).required()
   });
 
-const feed = async (trx, { userID, page }) => {
-  //Feed for posts by users the logged in user has followed
-
-  const [posts] = await trx.execute(
-    'SELECT * FROM post, follower WHERE follower.followerID = ? AND follower.userID = post.userID ORDER BY post.createdAt DESC LIMIT ?, ?;',
-    [userID, Number(page) * 10, 10]
+const personalFeed = async (trx, { userID, page }) => {
+  // Load postIDs by users the logged in user has followed
+  [posts] = await trx.execute(
+    `SELECT
+      p.postID
+    FROM 
+      post as p, 
+      follower as f
+    WHERE 
+      f.followerID = ? 
+      AND f.userID = p.userID`,
+    [userID]
   );
 
-  return { status: 'ok', posts };
+  const feedData = await feed(trx, {
+    page,
+    userID,
+    filter: { follow: followPosts },
+  });
+  if (feedData.status !== 'ok') return feedData;
+
+  feedData.posts = followPosts;
+
+  return { ...feedData };
 };
 
 // Express POST middleware
@@ -24,14 +40,18 @@ const post = request(async (trx, req, res) => {
     return { status: 'validation error', error: valid.error };
   }
 
-  return await userFeed(trx, { ...req.body, ...req.params });
+  return await personalFeed(trx, { ...req.body, ...req.params });
 });
 
 // Express GET middleware
 const get = request(async (trx, req, res) => {
-  const status = await feed(trx, { ...(req.session || {}), page: 0 });
+  const status = await personalFeed(trx, {
+    ...req.params,
+    page: 0,
+    userID: req.session.userID,
+  });
 
-  res.render('profile', {
+  res.render('index', {
     posts: status.posts,
   });
   return;
