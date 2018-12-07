@@ -36,6 +36,8 @@ const submit = document.querySelector('[type="submit"]');
 const error = document.querySelector('[id="error"]');
 const textarea = document.querySelector('[name="text"]');
 const dName = document.querySelector('[name="displayName"]');
+textarea.setAttribute('maxlength', 255);
+dName.setAttribute('maxlength', 30);
 
 if (
   window.postData.fileIDs.length ||
