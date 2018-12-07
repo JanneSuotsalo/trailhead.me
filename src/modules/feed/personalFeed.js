@@ -8,27 +8,12 @@ const schema = joi.object({
   });
 
 const personalFeed = async (trx, { userID, page }) => {
-  // Load postIDs by users the logged in user has followed
-  [posts] = await trx.execute(
-    `SELECT
-      p.postID
-    FROM 
-      post as p, 
-      follower as f
-    WHERE 
-      f.followerID = ? 
-      AND f.userID = p.userID`,
-    [userID]
-  );
-
   const feedData = await feed(trx, {
     page,
     userID,
-    filter: { follow: followPosts },
+    filter: { personal: true },
   });
   if (feedData.status !== 'ok') return feedData;
-
-  feedData.posts = followPosts;
 
   return { ...feedData };
 };

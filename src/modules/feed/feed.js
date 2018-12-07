@@ -20,6 +20,12 @@ const feed = async (trx, { page, userID, filter = null }) => {
     filterData = [userID];
   }
 
+  if (filter && filter.collection) {
+    filterData = [filter.collection];
+  }
+
+  console.log(...filterData);
+
   //Feed for anonymous users, ordered by date
   const [result] = await trx.execute(
     `SELECT
@@ -51,6 +57,12 @@ const feed = async (trx, { page, userID, filter = null }) => {
     ${
       filter && filter.personal
         ? 'AND (SELECT COUNT(f.followerID) FROM follower f WHERE f.followerID = ? AND f.userID = u.userID LIMIT 1) > 0'
+        : ''
+    }
+    ${
+      filter && filter.collection
+        ? `AND (SELECT COUNT(cp.postID) FROM collectionPost cp 
+          WHERE cp.collectionID = ? AND cp.postID = p.postID LIMIT 1) > 0`
         : ''
     }
     ORDER BY createdAt
