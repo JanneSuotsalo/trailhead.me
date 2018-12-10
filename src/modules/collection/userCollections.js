@@ -14,7 +14,6 @@ module.exports = request(async (trx, req, res) => {
         `,
     [req.params.userID]
   );
-  console.log(req.params.userID);
 
   return { status: 'ok', collections };
 });
