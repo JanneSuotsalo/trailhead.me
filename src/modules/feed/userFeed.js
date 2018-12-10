@@ -49,7 +49,7 @@ const userFeed = async (trx, { username, page, userID }) => {
           c.userID = ? AND
           u.userID = ?;
         `,
-    [userID, userID]
+    [profileData.userID, profileData.userID]
   );
 
   // Get the number of followers and the number of people the user is following
