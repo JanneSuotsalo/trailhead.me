@@ -24,8 +24,6 @@ const feed = async (trx, { page, userID, filter = null }) => {
     filterData = [filter.collection];
   }
 
-  console.log(...filterData);
-
   //Feed for anonymous users, ordered by date
   const [result] = await trx.execute(
     `SELECT

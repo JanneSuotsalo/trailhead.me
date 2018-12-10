@@ -4,8 +4,8 @@ const { feed } = require('./feed');
 
 // prettier-ignore
 const schema = joi.object({
-    page: joi.number().integer().min(0).required()
-  });
+  page: joi.number().integer().min(0).required()
+});
 
 const personalFeed = async (trx, { userID, page }) => {
   const feedData = await feed(trx, {

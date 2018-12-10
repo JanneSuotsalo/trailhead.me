@@ -40,8 +40,40 @@ const createLoadMore = (container, url) => {
   });
 };
 
+const createFeedButtons = () => {
+  if (!window.user) return;
+  if (
+    !(window.location.pathname === '/' || window.location.pathname === '/feed')
+  ) {
+    return;
+  }
+
+  const newest = document.createElement('a');
+  newest.setAttribute('href', '/');
+  newest.classList.add('button-small', 'newest');
+  newest.innerHTML = '<span class="mdi mdi-fire"></span> Newest';
+  if (window.location.pathname === '/') newest.classList.add('active');
+
+  const personal = document.createElement('a');
+  personal.setAttribute('href', '/feed');
+  personal.classList.add('button-small', 'personal');
+  personal.innerHTML =
+    '<span class="mdi mdi-account-multiple"></span> Personal';
+  if (window.location.pathname === '/feed') personal.classList.add('active');
+
+  const holder = document.createElement('div');
+  holder.classList.add('feed-button-holder');
+  holder.appendChild(newest);
+  holder.appendChild(personal);
+
+  const content = document.querySelector('.feed');
+  content.appendChild(holder);
+};
+
 (() => {
   const content = document.querySelector('.feed');
+
+  createFeedButtons();
 
   if (window.preloadFeed && window.preloadFeed.length) {
     window.preloadFeed.forEach(post => {
