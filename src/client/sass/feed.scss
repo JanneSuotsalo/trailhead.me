@@ -74,6 +74,43 @@ content {
   }
 }
 
+.feed-button-holder {
+  display: flex;
+  justify-content: center;
+  margin: 32px 0 0 0;
+
+  .button-small {
+    display: flex;
+    align-items: center;
+    margin: 0 10px;
+    padding: 2px 12px 2px 6px;
+    height: auto;
+    width: auto;
+    text-decoration: none;
+    border-color: $color-dimgray;
+
+    &.active {
+      background-color: $color-primary;
+      border-color: $color-primary;
+      color: $color-white;
+    }
+
+    &.newest {
+      padding-left: 4px;
+    }
+
+    &:hover {
+      border-color: $color-primary;
+    }
+
+    .mdi {
+      position: relative;
+      margin-right: 8px;
+      width: 16px;
+    }
+  }
+}
+
 @media screen and (max-width: 1000px) {
   content {
     flex-direction: column;
