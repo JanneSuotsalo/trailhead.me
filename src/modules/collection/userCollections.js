@@ -12,8 +12,9 @@ module.exports = request(async (trx, req, res) => {
         WHERE
           userID = ?;
         `,
-    [req.session.userID]
+    [req.params.userID]
   );
+  console.log(req.params.userID);
 
   return { status: 'ok', collections };
 });

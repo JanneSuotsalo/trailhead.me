@@ -11,11 +11,6 @@ const save = document.getElementById('saveButton');
 const error = document.getElementById('error');
 collectionName.setAttribute('maxlength', 25);
 description.setAttribute('maxlength', 255);
-error.style = {
-  color = 'ec556f',
-  fontSize = '12px',
-  fontWeight = 'bold'
-}
 
 // Show pop-up dialog
 addButton.addEventListener('click', () => {
