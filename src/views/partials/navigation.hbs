@@ -18,7 +18,7 @@
   {{#if user}}
   <div class="profile">
     <a class="create" href="/post"><button class="secondary"><span class="mdi mdi-map-plus"> Create a post</span></button></a>
-    <div class="image" style="background-image: url(/file/{{user.image}}/s)"></div>
+    <div class="image" {{#if user.image}} style="background-image: url(/file/{{user.image}}/s)" {{/if}}></div>
   </div>
 
   <div class="dialog menu user-menu">
