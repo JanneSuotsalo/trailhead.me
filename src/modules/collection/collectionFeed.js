@@ -18,9 +18,8 @@ const collectionFeed = async (trx, { userID, page, collection }) => {
       collection c
     WHERE
       c.name = ?
-      AND c.userID = ?
     `,
-    [collection, userID]
+    [collection]
   );
 
   const feedData = await feed(trx, {
