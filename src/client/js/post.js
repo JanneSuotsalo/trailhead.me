@@ -203,30 +203,34 @@ const createPost = (post, link = false) => {
       </div>
     </div>
     ${post.location ? `
-    <div class="location" ${post.location.fileID ? `style="background-image: url(/file/${post.location.fileID})"` : ''}>
-      <div class="icon">
-        <span class="mdi mdi-${post.location.icon}"></span>
-      </div>
-      <div class="info">
-        <p>${post.location.name}</p>
-        <small>${post.location.address}</small>
+    <div>
+      <div class="location" ${post.location.fileID ? `style="background-image: url(/file/${post.location.fileID})"` : ''}>
+        <div class="icon">
+          <span class="mdi mdi-${post.location.icon}"></span>
+        </div>
+        <div class="info">
+          <p>${post.location.name}</p>
+          <small>${post.location.address}</small>
+        </div>
       </div>
     </div>
     `: ''}
-    <div class="user">
-      <a href="/${post.user.username}">
-        <div class="icon">
-          <div class="image" ${post.user.image ? `style="background-image: url(/file/${post.user.image}/s)"`: ''}></div>
-        </div>
-      </a>
-      <div class="info">
+    <div>
+      <div class="user">
         <a href="/${post.user.username}">
-          <p>${post.user.displayName}</p>
-          <small>@${post.user.username}</small>
+          <div class="icon">
+            <div class="image" ${post.user.image ? `style="background-image: url(/file/${post.user.image}/s)"`: ''}></div>
+          </div>
         </a>
-      </div>
-      <div class="action">
-        <div class="button-small follow"></div>
+        <div class="info">
+          <a href="/${post.user.username}">
+            <p>${post.user.displayName}</p>
+            <small>@${post.user.username}</small>
+          </a>
+        </div>
+        <div class="action">
+          <div class="button-small follow"></div>
+        </div>
       </div>
     </div>
     <hr />
