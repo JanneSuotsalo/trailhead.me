@@ -7,6 +7,7 @@ const fs = require('fs');
 const https = require('https');
 const http = require('http');
 const app = express();
+const { userTypeIDs } = require('modules/constants');
 
 const db = require('modules/db');
 const locationFileTask = require('modules/location/locationFileTask');
@@ -131,7 +132,14 @@ const init = async () => {
 
     // Set session data to be used with the view engine
     app.use((req, res, next) => {
-      res.locals.user = req.session && req.session.userID ? req.session : null;
+      console.log(req.session);
+      res.locals.user =
+        req.session && req.session.userID
+          ? {
+              ...req.session,
+              isAdmin: req.session.userTypeID === userTypeIDs.ADMIN,
+            }
+          : null;
       return next();
     });
 

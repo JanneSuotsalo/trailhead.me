@@ -1,6 +1,6 @@
 # Trailhead
 
-A social platform for people who love outdoors.
+A social platform for people who love the outdoors.
 
 Developed by **Tuomas Pöyry**, **Mikko Romo** & **Janne Suotsalo**
 
@@ -11,6 +11,8 @@ Developed by **Tuomas Pöyry**, **Mikko Romo** & **Janne Suotsalo**
 ### Database
 
 MariaDB version 10.3 or higher is **REQUIRED**!
+
+Use the `schema.sql` to build the SQL schema required for the application.
 
 ### .env
 
@@ -58,6 +60,17 @@ npm install
 npm start
 ```
 
+## Admin
+
+To create an admin user, you have to manually set the `userTypeID` column in the `user` table to `2` for each user you want to have admin rights.
+
+`userTypeID`  
+`1` = Normal user  
+`2` = Admin user
+
+Admins can remove any post, while normal users can only remove their own posts.  
+Admins also have the report feed where they can go over posts reported by users. This feed can be accecssed by navigating to `/admin` on an admin user.
+
 ## Features
 
 ### General
@@ -76,6 +89,9 @@ npm start
   - Personal feed with posts from followers
   - Global feed with all posts
   - Trending tags and locations in the sidebar
+- Collections
+  - Posts can be grouped into collections
+  - Any user can create collections from any posts
 - Search
   - Searches for users, tags & locations
   - Can be filtered to search only one type
