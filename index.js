@@ -132,7 +132,6 @@ const init = async () => {
 
     // Set session data to be used with the view engine
     app.use((req, res, next) => {
-      console.log(req.session);
       res.locals.user =
         req.session && req.session.userID
           ? {
