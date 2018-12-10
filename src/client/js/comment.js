@@ -126,7 +126,10 @@ const listOfComments = () => {
         commentList.appendChild(divComment);
 
         // Create delete icon if the comment is made by the user
-        if (window.user && window.user.username === element.userName) {
+        if (
+          (window.user && window.user.username === element.userName) ||
+          window.user.isAdmin
+        ) {
           pDelete.appendChild(span);
           div.appendChild(pDelete);
 

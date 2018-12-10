@@ -1,5 +1,6 @@
 const { request } = require('modules/util');
 const ID = require('modules/id');
+const { userTypeIDs } = require('modules/constants');
 
 module.exports = request(async (trx, req, res) => {
   // Convert post's hash id onto a numerical one
@@ -26,7 +27,12 @@ module.exports = request(async (trx, req, res) => {
   }
 
   // Is the post user's post
-  if (post.userID !== req.session.userID) {
+  if (
+    !(
+      post.userID !== req.session.userID ||
+      req.session.userTypeID !== userTypeIDs.ADMIN
+    )
+  ) {
     return {
       status: 'forbidden',
       error: 'No right to remove post',
