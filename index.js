@@ -104,21 +104,24 @@ const init = async () => {
     await db.connect();
 
     // Setup session management
-    const sessionStore = new MySQLStore(
-      {
-        clearExpired: true,
-        expiration: 365 * 24 * 60 * 60 * 1000, // 1 year
-        schema: {
-          tableName: 'session',
-          columnNames: {
-            session_id: 'sessionID',
-            expires: 'expiresAt',
-            data: 'data',
-          },
+    const sessionStore = new MySQLStore({
+      clearExpired: true,
+      expiration: 365 * 24 * 60 * 60 * 1000, // 1 year
+      schema: {
+        tableName: 'session',
+        columnNames: {
+          session_id: 'sessionID',
+          expires: 'expiresAt',
+          data: 'data',
         },
       },
-      await db.connection()
-    );
+
+      // New connection initialized here because of a bug with using existing connection pool
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_DATABASE,
+    });
 
     app.use(
       session({
