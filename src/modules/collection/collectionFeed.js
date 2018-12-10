@@ -7,6 +7,7 @@ const schema = joi.object({
     page: joi.number().integer().min(0).required()
   });
 
+// Get collections for profile
 const collectionFeed = async (trx, { userID, page, collection }) => {
   const [[collectionData]] = await trx.query(
     `

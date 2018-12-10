@@ -83,6 +83,10 @@
     }
   })();
 
+  if (window.user.username == '{{profile.username}}') {
+    addCollection.style.display = 'block';
+  }
+
 </script>
 
 <script src="/static/js/post.js"></script>
