@@ -47,7 +47,7 @@ const createPostMenu = () => {
   });
 
   const removePost = document.createElement('div');
-  removePost.classList.add('item');
+  removePost.classList.add('item', 'deleteButton');
   removePost.innerHTML =
     '<span class="mdi mdi-close-circle-outline"></span> Remove';
   list.appendChild(removePost);
@@ -114,6 +114,17 @@ const registerPostMenuClick = (post, element) => {
     postMenuElement.style.top = position.top + 32 + 2 + 'px';
     postMenuElement.style.left = position.left + 'px';
     postMenuElement.style.display = 'block';
+
+    const deleteButton = postMenuElement.querySelector('.deleteButton');
+    if (!window.user.isAdmin) {
+      if (post.user.username !== window.user.username) {
+        deleteButton.style.display = 'none';
+      } else {
+        deleteButton.style.dispaly = 'block';
+      }
+    } else {
+      deleteButton.style.display = 'block';
+    }
 
     postMenuData = post;
   });
