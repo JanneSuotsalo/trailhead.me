@@ -215,22 +215,20 @@ const createPost = (post, link = false) => {
       </div>
     </div>
     `: ''}
-    <div>
-      <div class="user">
+    <div class="user">
+      <a href="/${post.user.username}">
+        <div class="icon">
+          <div class="image" ${post.user.image ? `style="background-image: url(/file/${post.user.image}/s)"`: ''}></div>
+        </div>
+      </a>
+      <div class="info">
         <a href="/${post.user.username}">
-          <div class="icon">
-            <div class="image" ${post.user.image ? `style="background-image: url(/file/${post.user.image}/s)"`: ''}></div>
-          </div>
+          <p>${post.user.displayName}</p>
+          <small>@${post.user.username}</small>
         </a>
-        <div class="info">
-          <a href="/${post.user.username}">
-            <p>${post.user.displayName}</p>
-            <small>@${post.user.username}</small>
-          </a>
-        </div>
-        <div class="action">
-          <div class="button-small follow"></div>
-        </div>
+      </div>
+      <div class="action">
+        <div class="button-small follow"></div>
       </div>
     </div>
     <hr />
@@ -268,7 +266,10 @@ const createPost = (post, link = false) => {
   reactContainer.classList.add('react');
   info.appendChild(reactContainer);
 
-  modal.appendChild(info);
+  // We have to create a non relative positioned container because of the video rendering issue in chrome
+  const infoContainer = document.createElement('div');
+  infoContainer.appendChild(info);
+  modal.appendChild(infoContainer);
 
   // Handle admin view reports
   if (post.flags && post.flags.length) {
