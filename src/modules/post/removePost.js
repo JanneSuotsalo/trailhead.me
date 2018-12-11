@@ -28,10 +28,8 @@ module.exports = request(async (trx, req, res) => {
 
   // Is the post user's post
   if (
-    !(
-      post.userID !== req.session.userID ||
-      req.session.userTypeID !== userTypeIDs.ADMIN
-    )
+    post.userID !== req.session.userID &&
+    req.session.userTypeID !== userTypeIDs.ADMIN
   ) {
     return {
       status: 'forbidden',
