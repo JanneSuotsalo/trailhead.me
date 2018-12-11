@@ -120,7 +120,7 @@ const registerPostMenuClick = (post, element) => {
       if (post.user.username !== window.user.username) {
         deleteButton.style.display = 'none';
       } else {
-        deleteButton.style.dispaly = 'block';
+        deleteButton.style.display = 'block';
       }
     } else {
       deleteButton.style.display = 'block';
