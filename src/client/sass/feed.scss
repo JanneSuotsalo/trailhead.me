@@ -64,6 +64,8 @@ content {
   h1 {
     margin: 0;
     color: $color-primary;
+    box-sizing: border-box;
+    word-wrap: break-word;
   }
 
   p {
@@ -145,6 +147,7 @@ content {
     padding-right: 32px;
     padding-left: 32px;
     width: 100%;
+    box-sizing: border-box;
   }
 
   .post {
