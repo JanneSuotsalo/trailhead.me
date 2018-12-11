@@ -9,8 +9,8 @@ const collectionName = document.getElementById('collectionName');
 const description = document.getElementById('description');
 const save = document.getElementById('saveButton');
 const error = document.getElementById('error');
-collectionName.setAttribute('maxlength', 25);
-description.setAttribute('maxlength', 255);
+//collectionName.setAttribute('maxlength', 25);
+//description.setAttribute('maxlength', 255);
 
 // Show pop-up dialog
 addButton.addEventListener('click', () => {

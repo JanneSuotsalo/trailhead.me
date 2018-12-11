@@ -12,7 +12,7 @@ module.exports = request(async (trx, req, res) => {
         WHERE
           userID = ?;
         `,
-    [req.params.userID]
+    [req.session.userID]
   );
 
   return { status: 'ok', collections };

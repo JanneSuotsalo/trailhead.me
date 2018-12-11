@@ -51,6 +51,7 @@ const userFeed = async (trx, { username, page, userID }) => {
         `,
     [profileData.userID, profileData.userID]
   );
+  console.log(collections);
 
   // Get the number of followers and the number of people the user is following
   let [[following]] = await trx.query(
